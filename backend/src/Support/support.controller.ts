@@ -11,7 +11,7 @@ export const createTicket = async (req: Request, res: Response) => {
         const TicketID = `TKT- ${name}-${uuidv4()}`
 
         if (!oneTimeId) {
-            // prodution to use this logs as your wish 
+            // prodution to use this logs   if as your wish 
             console.warn(`[${new Date().toISOString()}] [WARN] Unauthorized ticket creation attempt`);
             return res.status(401).json({
                 success: false,
