@@ -26,7 +26,7 @@ model User {
   createdAt DateTime @default(now())
 
   project Project[]
-  tickets SupportTicket[]
+  tickets Support[]
 }
 
 model Project {
@@ -67,7 +67,7 @@ enum TicketStatus {
   CLOSED
 }
 
-model SupportTicket {
+model Support {
   id Int @id @default(autoincrement())
 
   TicketID String @unique

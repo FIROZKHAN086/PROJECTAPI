@@ -18,7 +18,7 @@ export const createProject = async (req: Request, res: Response) => {
         req.body.customFields
       );
     }
-  
+
     if (!title || !description || !tech || !liveDemo || !github || !category) {
       return res.status(400).json({
         success: false,
@@ -36,9 +36,9 @@ export const createProject = async (req: Request, res: Response) => {
 
     const oneTimeId = (req as any).user?.OneTimeID;
 
-     // prodution to use this logs as your wish 
+    // prodution to use this logs as your wish 
     console.log(`[${new Date().toISOString()}] [INFO] Fetching projects for user: ${oneTimeId}`);
-  
+
 
     if (!oneTimeId) {
       return res.status(401).json({
@@ -244,3 +244,51 @@ export const deleteProject = async (req: Request, res: Response) => {
   }
 };
 
+
+
+// public usges to this 
+
+export const getPublicProjects = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+     console.log(req.headers);
+     
+    const ID = req.headers["accesskey"] as string; // this is OneTImeID 
+
+    if (!ID) {
+      return res.status(401).json({
+        success: false,
+        message: "Access key is not valid ",
+      });
+    }
+
+    const projects = await prisma.project.findMany({
+      where: {
+        userId: ID,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (projects.length === 0) {
+      return res.status(200).json({
+        success: false,
+        message: "Zero Project on your project ",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      total: projects.length,
+      data: projects,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};

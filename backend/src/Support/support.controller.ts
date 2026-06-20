@@ -29,7 +29,7 @@ export const createTicket = async (req: Request, res: Response) => {
         // prodution to use this logs as your wish 
         console.log(`[${new Date().toISOString()}] [INFO] Creating ticket for user: ${oneTimeId}`);
 
-        const ticket = await prisma.supportTicket.create({
+        const ticket = await prisma.support.create({
             data: {
                 TicketID: TicketID,
                 subject,
@@ -65,7 +65,7 @@ export const getTickets = async (req: Request, res: Response) => {
             });
         }
 
-        const tickets = await prisma.supportTicket.findMany({
+        const tickets = await prisma.support.findMany({
             where: { userId: oneTimeId },
             orderBy: { createdAt: "desc" },
         });
@@ -90,7 +90,7 @@ export const getTicketById = async (req: Request, res: Response) => {
         const { id } = req.params as { id: string };
         console.log(`[${new Date().toISOString()}] [INFO] Fetching ticket with TicketID: ${id}`);
 
-        const ticket = await prisma.supportTicket.findUnique({
+        const ticket = await prisma.support.findUnique({
             where: { TicketID: id },
         });
 
@@ -138,7 +138,7 @@ export const updateTicket = async (req: Request, res: Response) => {
         if (message) updateData.message = message;
         if (status) updateData.status = status;
 
-        const updatedTicket = await prisma.supportTicket.update({
+        const updatedTicket = await prisma.support.update({
             where: { TicketID: id },
             data: updateData,
         });
@@ -175,7 +175,7 @@ export const deleteTicket = async (req: Request, res: Response) => {
         }
 
 
-        await prisma.supportTicket.delete({
+        await prisma.support.delete({
             where: { TicketID: id },
         });
 
