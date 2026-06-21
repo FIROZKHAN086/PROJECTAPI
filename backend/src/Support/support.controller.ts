@@ -1,23 +1,23 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma.js";
 import { v4 as uuidv4 } from "uuid";
+import redis from "../config/redis.js";
 
 
 export const createTicket = async (req: Request, res: Response) => {
     try {
-        const { subject, message } = req.body;
-        const oneTimeId = (req as any).user?.id?.OneTimeID;
-        const name = (req as any).user?.id?.name;
-        const TicketID = `TKT- ${name}-${uuidv4()}`
+        const oneTimeId = (req as any).user?.OneTimeID;
 
         if (!oneTimeId) {
-            // prodution to use this logs   if as your wish 
-            console.warn(`[${new Date().toISOString()}] [WARN] Unauthorized ticket creation attempt`);
             return res.status(401).json({
                 success: false,
-                message: "User not authorized",
+                message: "Unauthorized: User Login is required",
             });
         }
+
+        const { subject, message } = req.body;
+        const name = (req as any).user?.name;
+        const TicketID = `TKT-${name}-${uuidv4()}`
 
         if (!subject || !message) {
             return res.status(400).json({
@@ -26,8 +26,15 @@ export const createTicket = async (req: Request, res: Response) => {
             });
         }
 
-        // prodution to use this logs as your wish 
-        console.log(`[${new Date().toISOString()}] [INFO] Creating ticket for user: ${oneTimeId}`);
+       const cachedData = await redis.get("tickets")
+
+       if (cachedData) {
+        return res.status(200).json({
+            success: true,
+            source: "cache",
+            data: JSON.parse(cachedData),
+        });
+       }
 
         const ticket = await prisma.support.create({
             data: {
@@ -55,13 +62,12 @@ export const createTicket = async (req: Request, res: Response) => {
 
 export const getTickets = async (req: Request, res: Response) => {
     try {
-        const oneTimeId = (req as any).user?.id?.OneTimeID;
-        console.log(`[${new Date().toISOString()}] [INFO] Fetching tickets for user: ${oneTimeId}`);
+        const oneTimeId = (req as any).user?.OneTimeID;
 
         if (!oneTimeId) {
             return res.status(401).json({
                 success: false,
-                message: "User not authorized",
+                message: "Unauthorized: User Login is required",
             });
         }
 
@@ -87,22 +93,40 @@ export const getTickets = async (req: Request, res: Response) => {
 
 export const getTicketById = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params as { id: string };
-        console.log(`[${new Date().toISOString()}] [INFO] Fetching ticket with TicketID: ${id}`);
+        const oneTimeId = (req as any).user?.OneTimeID;
 
-        const ticket = await prisma.support.findUnique({
-            where: { TicketID: id },
-        });
-
-        if (!ticket) {
-            console.warn(`[${new Date().toISOString()}] [WARN] Ticket not found: ${id}`);
-            return res.status(404).json({
+        if (!oneTimeId) {
+            return res.status(401).json({
                 success: false,
-                message: "Ticket not found",
+                message: "Unauthorized: User Login is required",
             });
         }
 
-        console.log(`[${new Date().toISOString()}] [SUCCESS] Ticket found: ${ticket.subject} (ID: ${id})`);
+        const { id } = req.params as { id: string };
+
+        const cachedData = await redis.get(`ticket:${id}`);
+
+        if (cachedData) {
+            return res.status(200).json({
+                success: true,
+                source: "cache",
+                data: JSON.parse(cachedData),
+            });
+        }
+
+        const ticket = await prisma.support.findFirst({
+            where: { TicketID: id, userId: oneTimeId },
+        });
+
+        if (!ticket) {
+            return res.status(404).json({
+                success: false,
+                message: "Ticket not found or access denied",
+            });
+        }
+
+        await redis.set(`ticket:${id}`, JSON.stringify(ticket));
+
         return res.status(200).json({
             success: true,
             data: ticket,
@@ -119,6 +143,14 @@ export const getTicketById = async (req: Request, res: Response) => {
 // this update on admin 
 export const updateTicket = async (req: Request, res: Response) => {
     try {
+        const oneTimeId = (req as any).user?.OneTimeID;
+
+        if (!oneTimeId) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized: User Login is required",
+            });
+        }
         const { id } = req.params as { id: string };
         const { subject, message, status } = req.body;
         console.log(`[${new Date().toISOString()}] [INFO] Updating ticket: ${id}`);
@@ -160,6 +192,14 @@ export const updateTicket = async (req: Request, res: Response) => {
 // delete ticket by admin 
 export const deleteTicket = async (req: Request, res: Response) => {
     try {
+        const oneTimeId = (req as any).user?.OneTimeID;
+
+        if (!oneTimeId) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized: User Login is required",
+            });
+        }
         const { id } = req.params as { id: string };
         console.log(`[${new Date().toISOString()}] [INFO] Deleting ticket: ${id}`);
 

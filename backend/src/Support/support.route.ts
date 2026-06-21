@@ -1,22 +1,23 @@
 import { Router } from "express";
 import { createTicket, getTickets, getTicketById, updateTicket, deleteTicket } from "./support.controller.js";
 import { authMiddleware } from "../middleware/Auth.middlewere.js";
+import { rateLimitMiddleware } from "../middleware/rateLimit.middleware.js";
 
 const router = Router();
 
 
-router.post('/create', authMiddleware, createTicket);
+router.post('/create',rateLimitMiddleware, authMiddleware, createTicket);
 
 
-router.get('/get', authMiddleware, getTickets);
+router.get('/get',rateLimitMiddleware, authMiddleware, getTickets);
 
 
-router.get('/get/:id', authMiddleware, getTicketById);
+router.get('/get/:id',rateLimitMiddleware, authMiddleware, getTicketById);
 
 
-router.patch('/update/:id', authMiddleware, updateTicket);
+router.patch('/update/:id',rateLimitMiddleware, authMiddleware, updateTicket);
 
 
-router.delete('/delete/:id', authMiddleware, deleteTicket);
+router.delete('/delete/:id',rateLimitMiddleware, authMiddleware, deleteTicket);
 
 export default router;

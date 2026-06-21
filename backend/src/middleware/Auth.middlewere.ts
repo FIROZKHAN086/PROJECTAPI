@@ -32,7 +32,7 @@ export const authMiddleware = (
     if (!token) {
       res.status(401).json({
         success: false,
-        message: "Unauthorized. Token not found.",
+        message: "user not login.",
       });
       return;
     }
