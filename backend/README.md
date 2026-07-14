@@ -30,7 +30,7 @@ Welcome to the **Premium Dashboard Backend API**, a robust and scalable server-s
 - **Custom Metadata**: Support for custom JSON fields per project.
 - **Smart Filtering**: Fetch projects by user `OneTimeID`.
 
-### 🎫 Support Ticket System
+### 🎫 Support System // Help system 
 - **Unique Ticket Generation**: Custom identifiers (e.g., `TKT-NAME-UUID`).
 - **Ticket Lifecycle**: Track tickets from `OPEN` to `RESOLVED`.
 - **Admin Control**: Restricted update and delete permissions for administrators.
