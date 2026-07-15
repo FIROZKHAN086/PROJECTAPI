@@ -12,8 +12,6 @@ import {
   CreditCard, 
   Terminal, 
   LogIn,
-  Github,
-  Twitter,
   ChevronRight
 } from "lucide-react";
 import { 
@@ -26,6 +24,7 @@ import {
 } from "@/components/ui/sheet";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Github01Icon, TwitterSquareIcon } from "@hugeicons/core-free-icons";
+import Link from "next/link";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -124,7 +123,7 @@ const Navbar = () => {
       rotate: [0, -5, 5, -5, 0],
       transition: {
         duration: 0.6,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   };
@@ -136,7 +135,7 @@ const Navbar = () => {
       scale: 1.2,
       transition: {
         duration: 0.4,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       },
     },
   };
@@ -172,7 +171,7 @@ const Navbar = () => {
       boxShadow: "0px 0px 30px rgba(74, 222, 128, 0.3)",
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: "easeOut" as const,
       }
     },
   };
@@ -259,7 +258,7 @@ const Navbar = () => {
                         duration: 1.5,
                         repeat: Infinity,
                         delay: i * 0.2,
-                        ease: "easeOut",
+                        ease: "easeOut" as const,
                       }}
                       className="absolute w-1 h-1 rounded-full bg-[#4ADE80]"
                       style={{
@@ -372,9 +371,10 @@ const Navbar = () => {
 
           {/* Right Actions with Enhanced Animation */}
           <motion.div variants={childVariants} className="hidden md:flex items-center gap-4">
+            <Link
+            href="/login">
             <motion.a
-              href="#login"
-              whileHover={{ 
+                whileHover={{ 
                 scale: 1.05, 
                 y: -2,
                 textShadow: "0 0 20px rgba(74,222,128,0.3)"
@@ -389,7 +389,7 @@ const Navbar = () => {
                 transition={{ 
                   repeat: Infinity,
                   duration: 3,
-                  ease: "easeInOut",
+                  ease: "easeInOut" as const,
                   delay: 0.5
                 }}
               >
@@ -397,6 +397,7 @@ const Navbar = () => {
               </motion.span>
               <span>Log in</span>
             </motion.a>
+            </Link>
 
             <motion.button
               variants={buttonGlowVariants}
@@ -412,7 +413,7 @@ const Navbar = () => {
                   transition={{ 
                     repeat: Infinity,
                     duration: 1.5,
-                    ease: "easeInOut"
+                    ease: "easeInOut" as const
                   }}
                 >
                   <ArrowRight className="w-4 h-4" />
@@ -422,7 +423,7 @@ const Navbar = () => {
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent z-0"
                 initial={{ x: "-100%" }}
                 whileHover={{ x: "100%" }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                transition={{ duration: 0.8, ease: "easeInOut" as const }}
               />
             </motion.button>
           </motion.div>
@@ -451,7 +452,7 @@ const Navbar = () => {
                   className="flex flex-col h-full justify-between p-6"
                   initial={{ opacity: 0, x: 50 }}
                   animate={isOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  transition={{ duration: 0.3, ease: "easeOut" as const }}
                 >
                   <div className="space-y-8 pt-4">
                     {/* Mobile Header */}
@@ -468,7 +469,7 @@ const Navbar = () => {
                         <motion.span 
                           className="text-[#4ADE80] font-bold font-mono p-1.5 rounded-lg bg-[#141414] border border-white/10"
                           animate={{ rotate: [0, 5, -5, 0] }}
-                          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" as const }}
                         >
                           <Code2 className="w-5 h-5" />
                         </motion.span>
@@ -520,7 +521,7 @@ const Navbar = () => {
                             </div>
                             <motion.div
                               animate={{ x: [0, 5, 0] }}
-                              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" as const }}
                             >
                               <ChevronRight className="w-4 h-4 text-[#D8CFBC]/30 group-hover:text-[#4ADE80] transition-colors" />
                             </motion.div>
@@ -580,7 +581,7 @@ const Navbar = () => {
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent z-0"
                         initial={{ x: "-100%" }}
                         whileHover={{ x: "100%" }}
-                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                        transition={{ duration: 0.6, ease: "easeInOut" as const }}
                       />
                     </motion.button>
 

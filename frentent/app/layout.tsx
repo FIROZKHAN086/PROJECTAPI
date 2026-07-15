@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Unbounded , Cause} from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/src/Components/SmoothScrollProvider";
+import Providers from "@/src/Components/Providers";
+import Navbar from "@/src/Components/Navbar";
+import Footer from "@/src/Components/Footer";
 
 const unbounded = Unbounded({
   subsets: ["latin"],
@@ -30,12 +33,16 @@ export default function RootLayout({
     <html
       lang="en"
       suppressContentEditableWarning
-      className={`${unbounded.variable} ${cause.variable}  bg-[#11120D] text-[#FFFBF4] antialiased`}
+      className={`${unbounded.variable} ${cause.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <SmoothScrollProvider>
-        {children}
-        </SmoothScrollProvider>
+      <body className="min-h-full flex flex-col bg-[#11120D] text-[#FFFBF4]">
+        <Providers>
+          <SmoothScrollProvider>
+              <Navbar/>
+            {children}
+            <Footer/>
+          </SmoothScrollProvider>
+        </Providers>
         </body>
     </html>
   );

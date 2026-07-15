@@ -4,18 +4,25 @@ import helmet from "helmet";
 import morgan from "morgan";
 import authRoutes from "./Auth/auth.routes.js";
 import dotenv from "dotenv";
+import cors from "cors";
 import fileUpload from "express-fileupload";
 import project from "./Project/project.route.js";
 import support from "./Support/support.route.js";
 dotenv.config();
 
+
 export const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  credentials: true                
+}));
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use(fileUpload());
+
 
 
 

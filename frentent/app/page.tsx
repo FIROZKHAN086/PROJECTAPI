@@ -1,8 +1,6 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import Footer from "@/src/Components/Footer";
-import Navbar from "@/src/Components/Navbar";
 import FAQFooterPage from "@/src/Home/FAQFooterPage";
 import FeaturesPage from "@/src/Home/FeaturesPage";
 import Hero from "@/src/Home/Hero";
@@ -53,7 +51,7 @@ const page = () => {
       suppressHydrationWarning={true}
       className="bg-[#11120D] text-[#FFFBF4]"
     >
-      <Navbar />
+    
       <motion.div variants={sectionVariants} initial="initial" animate="animate">
         <motion.div variants={sectionItem}>
           <Hero />
@@ -73,9 +71,7 @@ const page = () => {
         <motion.div variants={sectionItem}>
           <FAQFooterPage />
         </motion.div>
-        <motion.div variants={sectionItem}>
-          <Footer />
-        </motion.div>
+        
       </motion.div>
     </motion.div>
   );
