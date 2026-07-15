@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import prisma from "../config/prisma.js"; 
 import { generateToken } from "../utils/jwt.js";
 import { v4 as uuidv4 } from "uuid";
@@ -177,6 +178,63 @@ export const logoutUser = async (req: Request, res: Response) => {
     return res.status(500).json({
       success: false,
       message: "Logout failed",
+    });
+  }
+};
+
+
+// Get Current User Route
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+  try {
+    const token = req.cookies?.token;
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authenticated",
+      });
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as { id: string; name: string; email: string; Role: string; OneTimeID: string };
+
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(decoded.id) },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        Role: true,
+        OneTimeID: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.Role,
+        OneTimeID: user.OneTimeID,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token",
     });
   }
 };

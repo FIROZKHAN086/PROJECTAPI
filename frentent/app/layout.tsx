@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Unbounded , Cause} from "next/font/google";
+import { Unbounded, Cause } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/src/Components/SmoothScrollProvider";
 import Providers from "@/src/Components/Providers";
 import Navbar from "@/src/Components/Navbar";
 import Footer from "@/src/Components/Footer";
+import ProtectedRoute from "@/src/Components/ProtectedRoute";
 
 const unbounded = Unbounded({
   subsets: ["latin"],
@@ -12,12 +13,10 @@ const unbounded = Unbounded({
   variable: "--font-unbounded",
 });
 const cause = Cause({
-  subsets :  ["latin"],
-  weight : ["400","700"],
-  variable : "--font-cause"
-})
-
-
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-cause",
+});
 
 export const metadata: Metadata = {
   title: "ProjectAPI",
@@ -32,18 +31,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressContentEditableWarning
+      suppressHydrationWarning={true}
       className={`${unbounded.variable} ${cause.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#11120D] text-[#FFFBF4]">
+      <body
+        suppressHydrationWarning={true}
+        className="min-h-full flex flex-col bg-[#11120D] text-[#FFFBF4]"
+      >
         <Providers>
           <SmoothScrollProvider>
-              <Navbar/>
-            {children}
-            <Footer/>
+            <Navbar />
+            <ProtectedRoute>{children}</ProtectedRoute>
+            <Footer />
           </SmoothScrollProvider>
         </Providers>
-        </body>
+      </body>
     </html>
   );
 }

@@ -32,6 +32,27 @@ function saveUser(user: User | null) {
   }
 }
 
+interface MeResponse {
+  success: boolean;
+  user: {
+    id: number;
+    name: string | null;
+    email: string;
+    role: string;
+    OneTimeID: string | null;
+    createdAt: string;
+  };
+}
+
+export const fetchMe = createAsyncThunk<MeResponse>(
+  "auth/me",
+  async () => {
+    return apiFetch<MeResponse>("/api/auth/me", {
+      method: "GET",
+    });
+  }
+);
+
 export const loginUser = createAsyncThunk<AuthResponse, LoginPayload>(
   "auth/login",
   async (payload) => {
@@ -79,6 +100,28 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchMe.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchMe.fulfilled, (state, action) => {
+        const u = action.payload.user;
+        state.user = {
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          OneTimeID: u.OneTimeID,
+          token: "",
+          role: u.role,
+          createdAt: u.createdAt,
+        };
+        state.isLoading = false;
+        saveUser(state.user);
+      })
+      .addCase(fetchMe.rejected, (state) => {
+        state.user = null;
+        state.isLoading = false;
+        saveUser(null);
+      })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isLoading = false;

@@ -1,10 +1,13 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect } from "react";
 import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { makeStore, type AppStore } from "@/src/lib/store";
+import { fetchMe } from "@/src/lib/authSlice";
+import { initToastDispatcher } from "@/src/lib/toastSlice";
 import ToastContainer from "@/src/Components/ToastContainer";
+import { useRef } from "react";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<AppStore>(undefined);
@@ -23,6 +26,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       },
     });
   }
+
+  useEffect(() => {
+    storeRef.current?.dispatch(fetchMe());
+    storeRef.current?.dispatch(initToastDispatcher as any);
+  }, []);
 
   return (
     <Provider store={storeRef.current}>

@@ -1,19 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useLogin, useRegister } from "@/src/hooks/useAuth";
 import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
-import { loadFromStorage } from "@/src/lib/authSlice";
+import { loadFromStorage, setUser } from "@/src/lib/authSlice";
+import { useSearchParams , useRouter } from "next/navigation";
 import { toast } from "@/src/lib/toastSlice";
 
-const AuthPage = () => {
+
+const AuthPageContent = () => {
+
+  const searchParams = useSearchParams();
+
+const auth = searchParams.get("auth");
+
+const isSignUp = auth === "signup";
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user, isLoading: authLoading } = useAppSelector((s) => s.auth);
-  const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
@@ -22,6 +28,7 @@ const AuthPage = () => {
     confirmPassword: "",
     name: "",
   });
+
 
   const loginMutation = useLogin();
   const registerMutation = useRegister();
@@ -78,6 +85,7 @@ const AuthPage = () => {
         },
         {
           onSuccess: (data) => {
+            dispatch(setUser(data.user));
             toast.success(data.message || "Account created successfully");
             router.push("/");
           },
@@ -94,6 +102,7 @@ const AuthPage = () => {
         },
         {
           onSuccess: (data) => {
+            dispatch(setUser(data.user));
             toast.success(data.message || "Logged in successfully");
             router.push("/");
           },
@@ -106,7 +115,7 @@ const AuthPage = () => {
   };
 
   const toggleForm = () => {
-    setIsSignUp((prev) => !prev);
+     router.push(isSignUp ? "/login?auth=login" : "/login?auth=signup");
     setErrors({});
     setFormData({ email: "", password: "", confirmPassword: "", name: "" });
   };
@@ -286,5 +295,17 @@ const AuthPage = () => {
     </div>
   );
 };
+
+const AuthPage = () => (
+  <Suspense
+    fallback={
+      <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
+        <LoaderCircle className="size-6 text-[#D8CFBC] animate-spin" />
+      </div>
+    }
+  >
+    <AuthPageContent />
+  </Suspense>
+);
 
 export default AuthPage;
