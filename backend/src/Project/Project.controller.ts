@@ -73,7 +73,8 @@ export const createProject = async (req: Request, res: Response) => {
 
     // remove all data to redis
 
-    await redis.del("projects");
+    const cacheKey = `projects:${oneTimeId}`;
+    await redis.del(cacheKey);
 
     return res.status(201).json({
       success: true,
@@ -90,63 +91,59 @@ export const createProject = async (req: Request, res: Response) => {
 };
 
 // get all projects for user iD Which OneTimeID
-export const getProjects = async (req: Request, res: Response) => {
+export const getAllProjects = async (req: Request, res: Response) => {
   try {
     const oneTimeId = (req as any).user?.OneTimeID;
-
-    // prodution to use this logs as your wish
-    console.log(
-      `[${new Date().toISOString()}] [INFO] Fetching projects for user: ${oneTimeId}`
-    );
 
     if (!oneTimeId) {
       return res.status(401).json({
         success: false,
-        message: "User not authorized",
+        message: "Unauthorized: User Login is required",
       });
     }
 
-    // redis to fetch
+    const cacheKey = `projects:${oneTimeId}`;
 
-    const cachedData = await redis.get("projects");
+    // Check Redis
+    const cachedProjects = await redis.get(cacheKey);
 
-    if (cachedData) {
+    if (cachedProjects) {
       return res.status(200).json({
         success: true,
         source: "cache",
-        data: JSON.parse(cachedData),
+        data: JSON.parse(cachedProjects),
       });
     }
+
+    // Fetch Database
     const projects = await prisma.project.findMany({
-      where: { userId: oneTimeId },
-      orderBy: { createdAt: "desc" },
+      where: {
+        userId: oneTimeId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
-    // set on redis
+    // Store Redis (10 min)
+    await redis.set(cacheKey, JSON.stringify(projects), "EX", 600);
 
-    const setRedis = await redis.set("projects", JSON.stringify(projects));
-
-    // prodution to use this logs as your wish
-    console.log(
-      `[${new Date().toISOString()}] [SUCCESS] Found ${projects.length} projects for user: ${oneTimeId}`
-    );
     return res.status(200).json({
       success: true,
+      source: "database",
       data: projects,
     });
   } catch (error) {
-    console.error(
-      `[${new Date().toISOString()}] [ERROR] Failed to fetch projects:`,
-      error
-    );
+    console.error(error);
+
     return res.status(500).json({
       success: false,
-      message: "Internal server error while fetching projects",
+      message: "Failed to fetch projects",
     });
   }
 };
 
-// get a single project by ProjectID (Using 'id' parameter for ProjectID lookup)
+// get a single project by ProjectID 
 export const getProjectById = async (req: Request, res: Response) => {
   try {
     const oneTimeId = (req as any).user?.OneTimeID;
@@ -159,18 +156,20 @@ export const getProjectById = async (req: Request, res: Response) => {
     }
 
     const { id } = req.params as { id: string };
-    // prodution to use this logs as your wish
+    // development to use this logs 
     console.log(
       `[${new Date().toISOString()}] [INFO] Fetching project with ProjectID: ${id}`
     );
 
-    const cachedData = await redis.get(`project:${id}`);
+    const cacheKey = `projects:${oneTimeId}`;
 
-    if (cachedData) {
+    const cachedProjects = await redis.get(cacheKey);
+
+    if (cachedProjects) {
       return res.status(200).json({
         success: true,
         source: "cache",
-        data: JSON.parse(cachedData),
+        data: JSON.parse(cachedProjects),
       });
     }
 
@@ -179,7 +178,7 @@ export const getProjectById = async (req: Request, res: Response) => {
     });
 
     if (!project) {
-      // prodution to use this logs as your wish
+      // development to use this logs 
       console.warn(
         `[${new Date().toISOString()}] [WARN] Project not found: ${id}`
       );
@@ -191,7 +190,7 @@ export const getProjectById = async (req: Request, res: Response) => {
 
     await redis.set(`project:${id}`, JSON.stringify(project));
 
-    // prodution to use this logs as your wish
+    // development to use this logs 
     console.log(
       `[${new Date().toISOString()}] [SUCCESS] Project found: ${project.title} (ID: ${id})`
     );
@@ -234,7 +233,7 @@ export const updateProject = async (req: Request, res: Response) => {
       featured,
       customFields,
     } = req.body;
-    // prodution to use this logs as your wish
+    // development to use this logs 
     console.log(`[${new Date().toISOString()}] [INFO] Updating project: ${id}`);
 
     const updateData: any = {};
@@ -294,15 +293,15 @@ export const updateProject = async (req: Request, res: Response) => {
       data: updateData,
     });
 
-    await redis.del(`projects`);
+    const cacheKey = `projects:${oneTimeId}`;
+    await redis.del(cacheKey);
 
-    
     return res.status(200).json({
       success: true,
       data: updatedProject,
     });
   } catch (error) {
-    // prodution to use this logs as your wish
+    // development to use this logs 
     console.error(
       `[${new Date().toISOString()}] [ERROR] Failed to update project: ${req.params.id}`,
       error
@@ -343,7 +342,10 @@ export const deleteProject = async (req: Request, res: Response) => {
       where: { ProjectID: id },
     });
 
-    // prodution to use this logs as your wish
+    const cacheKey = `projects:${oneTimeId}`;
+    await redis.del(cacheKey);
+
+    // development to use this logs 
     console.log(
       `[${new Date().toISOString()}] [SUCCESS] Project deleted successfully: ${id}`
     );
@@ -367,7 +369,7 @@ export const deleteProject = async (req: Request, res: Response) => {
 
 export const getPublicProjects = async (req: Request, res: Response) => {
   try {
-      const ID = req.headers["accesskey"] as string; // this is OneTImeID
+    const ID = req.headers["accesskey"] as string; // this is OneTImeID
 
     if (!ID) {
       return res.status(401).json({
@@ -387,13 +389,15 @@ export const getPublicProjects = async (req: Request, res: Response) => {
       });
     }
 
-    const cachedData = await redis.get(`public:${ID}`);
+    const cacheKey = `projects:${ID}`;
 
-    if (cachedData) {
+    const cachedProjects = await redis.get(cacheKey);
+
+    if (cachedProjects) {
       return res.status(200).json({
         success: true,
         source: "cache",
-        data: JSON.parse(cachedData),
+        data: JSON.parse(cachedProjects),
       });
     }
 
@@ -409,11 +413,12 @@ export const getPublicProjects = async (req: Request, res: Response) => {
     if (projects.length === 0) {
       return res.status(200).json({
         success: false,
-        message: "Zero Project on your project, add new project to your project ",
+        message:
+          "Zero Project on your project, add new project to your project ",
       });
     }
 
-    await redis.set(`public:${ID}`, JSON.stringify(projects));
+    await redis.set(cacheKey, JSON.stringify(projects), "EX", 1800);
 
     return res.status(200).json({
       success: true,

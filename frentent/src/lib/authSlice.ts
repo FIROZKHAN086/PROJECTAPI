@@ -12,26 +12,6 @@ const initialState: AuthState = {
   isLoading: true,
 };
 
-function loadUser(): User | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    localStorage.removeItem("user");
-    return null;
-  }
-}
-
-function saveUser(user: User | null) {
-  if (typeof window === "undefined") return;
-  if (user) {
-    localStorage.setItem("user", JSON.stringify(user));
-  } else {
-    localStorage.removeItem("user");
-  }
-}
-
 interface MeResponse {
   success: boolean;
   user: {
@@ -86,16 +66,10 @@ const authSlice = createSlice({
     setUser(state, action: PayloadAction<User | null>) {
       state.user = action.payload;
       state.isLoading = false;
-      saveUser(action.payload);
-    },
-    loadFromStorage(state) {
-      state.user = loadUser();
-      state.isLoading = false;
     },
     clearUser(state) {
       state.user = null;
       state.isLoading = false;
-      saveUser(null);
     },
   },
   extraReducers: (builder) => {
@@ -115,30 +89,25 @@ const authSlice = createSlice({
           createdAt: u.createdAt,
         };
         state.isLoading = false;
-        saveUser(state.user);
       })
       .addCase(fetchMe.rejected, (state) => {
         state.user = null;
         state.isLoading = false;
-        saveUser(null);
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isLoading = false;
-        saveUser(action.payload.user);
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isLoading = false;
-        saveUser(action.payload.user);
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.isLoading = false;
-        saveUser(null);
       });
   },
 });
 
-export const { setUser, loadFromStorage, clearUser } = authSlice.actions;
+export const { setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;

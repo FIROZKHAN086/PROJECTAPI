@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import toastReducer from "./toastSlice";
+import projectReducer from "./projectSlice";
 
 export const makeStore = () =>
   configureStore({
     reducer: {
       auth: authReducer,
       toast: toastReducer,
+      projects: projectReducer,
     },
   });
 

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { useLogin, useRegister } from "@/src/hooks/useAuth";
 import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
-import { loadFromStorage, setUser } from "@/src/lib/authSlice";
+import { fetchMe } from "@/src/lib/authSlice";
 import { useSearchParams , useRouter } from "next/navigation";
 import { toast } from "@/src/lib/toastSlice";
 
@@ -32,10 +32,6 @@ const isSignUp = auth === "signup";
 
   const loginMutation = useLogin();
   const registerMutation = useRegister();
-
-  useEffect(() => {
-    dispatch(loadFromStorage());
-  }, [dispatch]);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -85,9 +81,9 @@ const isSignUp = auth === "signup";
         },
         {
           onSuccess: (data) => {
-            dispatch(setUser(data.user));
             toast.success(data.message || "Account created successfully");
-            router.push("/");
+            dispatch(fetchMe());
+            router.push("/dashboard");
           },
           onError: (err) => {
             toast.error(err.message || "Registration failed");
@@ -102,9 +98,9 @@ const isSignUp = auth === "signup";
         },
         {
           onSuccess: (data) => {
-            dispatch(setUser(data.user));
             toast.success(data.message || "Logged in successfully");
-            router.push("/");
+            dispatch(fetchMe());
+            router.push("/dashboard");
           },
           onError: (err) => {
             toast.error(err.message || "Login failed");

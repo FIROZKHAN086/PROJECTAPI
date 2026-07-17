@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   createProject,
-  getProjects,
+  getAllProjects,
   getProjectById,
   updateProject,
   deleteProject,
@@ -14,7 +14,7 @@ const router = Router();
 
 router.post("/creat", rateLimitMiddleware, authMiddleware, createProject);
 
-router.get("/get",rateLimitMiddleware, authMiddleware, getProjects);
+router.get("/get",rateLimitMiddleware, authMiddleware, getAllProjects);
 
 router.get("/getproject/:id",rateLimitMiddleware, authMiddleware, getProjectById);
 
