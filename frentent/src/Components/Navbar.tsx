@@ -106,7 +106,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
     { name: "Docs", href: "#docs", icon: BookOpen, description: "Read the documentation" },
-    { name: "Dashboard", href: "#playground", icon: Terminal, description: "Test your API" },
+    { name: "Dashboard", href: "/dashboard", icon: Terminal, description: "Test your API" },
   ];
 
   const dropdownItems = [
@@ -447,6 +447,10 @@ const Navbar = () => {
                           <a onClick={() => {setProfileOpen(false); router.push('/api-key');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Key className="w-4 h-4" />
                             <span>API Keys</span>
+                          </a>
+                          <a onClick={() => {setProfileOpen(false); router.push('/dashboard');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                            <Terminal className="w-4 h-4" />
+                            <span>Dashboard</span>
                           </a>
                        
                         <a href="#help" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
