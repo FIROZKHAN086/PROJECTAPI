@@ -19,7 +19,9 @@ import {
   Key,
   ChevronDown,
   CircleQuestionMark,
-  Info
+  Info,
+  View,
+  Home
 } from "lucide-react";
 import { 
   Sheet, 
@@ -104,8 +106,9 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
+    { name: "Home", href: "/", icon: Home, description: "Return to the homepage" },
     { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
-    { name: "Docs", href: "#docs", icon: BookOpen, description: "Read the documentation" },
+    { name: "Docs", href: "/docs", icon: BookOpen, description: "Read the documentation" },
     { name: "Dashboard", href: "/dashboard", icon: Terminal, description: "Test your API" },
   ];
 
@@ -444,9 +447,13 @@ const Navbar = () => {
                           <span>Profile</span>
                         </a>
                       
-                          <a onClick={() => {setProfileOpen(false); router.push('/api-key');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                          <a onClick={() => {setProfileOpen(false); router.push('/dashboard?path=api-key');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Key className="w-4 h-4" />
                             <span>API Keys</span>
+                          </a>
+                          <a onClick={() => {setProfileOpen(false); router.push('/api-look');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                            <View className="w-4 h-4" />
+                            <span>API Looks</span>
                           </a>
                           <a onClick={() => {setProfileOpen(false); router.push('/dashboard');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Terminal className="w-4 h-4" />

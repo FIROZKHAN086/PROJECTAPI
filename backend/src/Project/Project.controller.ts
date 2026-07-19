@@ -20,7 +20,7 @@ export const createProject = async (req: Request, res: Response) => {
     const { title, description, tech, liveDemo, github, category, featured } =
       req.body;
 
-    let parsedCustomFields = null;
+    let  parsedCustomFields = null;
 
     if (req.body.customFields) {
       parsedCustomFields = JSON.parse(req.body.customFields);

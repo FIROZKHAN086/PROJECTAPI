@@ -3,12 +3,13 @@
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, Bell, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAppSelector } from "@/src/lib/hooks";
-import Sidebar from "@/src/Components/dashboard/Sidebar";
+import {
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarInset,
+} from "@/components/ui/sidebar";
+import AppSidebar from "@/src/Components/dashboard/Sidebar";
 import Overview from "@/src/Components/dashboard/Overview";
 import Projects from "@/src/Components/dashboard/Projects";
 import ApiKey from "@/src/Components/dashboard/ApiKey";
@@ -16,6 +17,8 @@ import AddNewProject from "@/src/Components/dashboard/AddNewProject";
 import EditProject from "@/src/Components/dashboard/EditProject";
 import GetAllData from "@/src/Components/dashboard/GetAllData";
 import DeleteProject from "@/src/Components/dashboard/DeleteProject";
+import ViewProjects from "@/src/Components/dashboard/ViewProjects";
+import ApiLook from "@/src/Components/dashboard/ApiLook";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -33,6 +36,11 @@ const SECTIONS: Record<string, { title: string; description: string; component: 
     title: "Projects",
     description: "Manage all your projects",
     component: <Projects />,
+  },
+  "view-projects": {
+    title: "View Projects",
+    description: "Preview how your projects look",
+    component: <ViewProjects />,
   },
   "api-key": {
     title: "API Keys",
@@ -59,36 +67,40 @@ const SECTIONS: Record<string, { title: string; description: string; component: 
     description: "Permanently remove a project",
     component: <DeleteProject />,
   },
+  "Api-Data": {
+    title: "Api Data",
+    description: "View your API Data",
+    component: <ApiLook />,
+  },
 };
 
 function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { user } = useAppSelector((s) => s.auth);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const currentPath = searchParams.get("path") || "overview";
   const activeSection = SECTIONS[currentPath] || SECTIONS.overview;
 
   const handleNavigate = (path: string) => {
     router.push(`/dashboard?path=${path}`);
-    setSidebarOpen(false);
   };
 
   return (
-    <div className="flex h-full  w-full bg-[#0A0A0A] overflow-hidden">
-      <Sidebar
-        currentPath={currentPath}
-        onNavigate={handleNavigate}
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
+    <SidebarProvider defaultOpen={true}>
+      <AppSidebar currentPath={currentPath} onNavigate={handleNavigate} />
 
-      <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
-      
+      <SidebarInset className="bg-[#0A0A0A]">
+        {/* Top bar with sidebar trigger */}
+        <header className="flex items-center gap-2 border-b border-white/10 px-4 py-3 md:hidden">
+          <SidebarTrigger className="text-[#D8CFBC] hover:text-[#FFFBF4]" />
+          <span className="text-sm font-medium text-[#FFFBF4]">
+            {activeSection.title}
+          </span>
+        </header>
 
         {/* Content Area */}
-        <main className="flex-1 min-h-screen  overflow-y-scroll p-4 md:p-6 lg:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <main className="min-h-screen overflow-y-scroll p-4 md:p-6 lg:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPath}
@@ -109,8 +121,8 @@ function DashboardContent() {
             </motion.div>
           </AnimatePresence>
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 
