@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Search, Pencil, Trash2, Eye, Star, AlertTriangle } from "lucide-react";
 import { useProjects, useDeleteProject } from "@/src/hooks/useProjects";
 import { toast } from "@/src/lib/toastSlice";
+import { CustomFieldsDisplay } from "./CustomFieldsDrawer";
 
 const container = {
   hidden: { opacity: 0 },
@@ -202,6 +203,7 @@ const Projects = () => {
                       )}
                     </div>
                   )}
+                  <CustomFieldsDisplay fields={project.customFields} />
                   <p className="text-[11px] text-[#8A8578] mb-4">
                     Created {new Date(project.createdAt).toLocaleDateString()}
                   </p>

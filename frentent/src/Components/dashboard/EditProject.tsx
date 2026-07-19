@@ -59,10 +59,12 @@ import {
   RefreshCw,
   FileText,
   Tag,
+  Settings2,
 } from "lucide-react";
 import { useProjects, useUpdateProject, useDeleteProject } from "@/src/hooks/useProjects";
 import { toast } from "@/src/lib/toastSlice";
 import { useRouter, useSearchParams } from "next/navigation";
+import { CustomFieldsDrawer } from "./CustomFieldsDrawer";
 
 const container = {
   hidden: { opacity: 0 },
@@ -176,7 +178,7 @@ const TechCombobox = ({
         Tech Stack
       </Label>
 
-      <Drawer open={open} onOpenChange={setOpen}>
+      <Drawer open={open} onOpenChange={setOpen} swipeDirection="right">
         <DrawerTrigger
           render={
             <button
@@ -659,6 +661,8 @@ const EditForm = ({
   setFeatured,
   imageFile,
   setImageFile,
+  customFields,
+  setCustomFields,
   isUpdating,
   isDeleting,
   handleSave,
@@ -681,6 +685,8 @@ const EditForm = ({
   setFeatured: (v: boolean) => void;
   imageFile: File | null;
   setImageFile: (v: File | null) => void;
+  customFields: Record<string, string>;
+  setCustomFields: (v: Record<string, string>) => void;
   isUpdating: boolean;
   isDeleting: boolean;
   handleSave: () => void;
@@ -774,7 +780,7 @@ const EditForm = ({
                   <SelectTrigger className="w-full bg-[#0A0A0A] border-white/10 text-[#FFFBF4] focus-visible:border-[#4ADE80] focus-visible:ring-[#4ADE80]/20">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#141414] border-white/10">
+                  <SelectContent className="bg-[#141414] text-[#D8CFBC] border-white/10">
                     <SelectItem value="Web App">Web App</SelectItem>
                     <SelectItem value="Mobile App">Mobile App</SelectItem>
                     <SelectItem value="API">API</SelectItem>
@@ -857,6 +863,24 @@ const EditForm = ({
                 />
               </motion.div>
             </div>
+
+            <motion.div variants={item} className="space-y-2">
+              <Label className="text-[#D8CFBC] text-sm font-medium flex items-center gap-2">
+                <Settings2 className="w-4 h-4 text-[#60A5FA]" />
+                Custom Fields
+                <Badge className="bg-white/5 text-[#8A8578] border border-white/10 text-[9px]">
+                  Optional
+                </Badge>
+              </Label>
+              <p className="text-xs text-[#8A8578]">
+                Add extra metadata like version, status, or any key-value pair
+              </p>
+              <CustomFieldsDrawer
+                fields={customFields}
+                onFieldsChange={setCustomFields}
+                isPending={isUpdating}
+              />
+            </motion.div>
 
             <Separator className="bg-white/5" />
 
@@ -988,6 +1012,7 @@ export default function EditProject() {
   const [category, setCategory] = useState("Web App");
   const [featured, setFeatured] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
 
   const selectedProject = projects.find((p) => p.ProjectID === selectedProjectId);
 
@@ -1000,6 +1025,15 @@ export default function EditProject() {
       setGithub(selectedProject.github || "");
       setCategory(selectedProject.category || "Web App");
       setFeatured(selectedProject.featured);
+      if (selectedProject.customFields && typeof selectedProject.customFields === "object") {
+        const converted: Record<string, string> = {};
+        for (const [k, v] of Object.entries(selectedProject.customFields)) {
+          converted[k] = String(v);
+        }
+        setCustomFields(converted);
+      } else {
+        setCustomFields({});
+      }
     }
   }, [selectedProject]);
 
@@ -1027,6 +1061,7 @@ export default function EditProject() {
         category,
         featured: String(featured),
         image: imageFile ?? undefined,
+        customFields: Object.keys(customFields).length > 0 ? JSON.stringify(customFields) : undefined,
       },
       {
         onSuccess: () => {
@@ -1140,6 +1175,8 @@ export default function EditProject() {
               setFeatured={setFeatured}
               imageFile={imageFile}
               setImageFile={setImageFile}
+              customFields={customFields}
+              setCustomFields={setCustomFields}
               isUpdating={isUpdating}
               isDeleting={isDeleting}
               handleSave={handleSave}

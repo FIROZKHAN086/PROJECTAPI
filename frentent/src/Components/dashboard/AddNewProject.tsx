@@ -84,6 +84,7 @@ import {
 import { useCreateProject } from "@/src/hooks/useProjects";
 import { toast } from "@/src/lib/toastSlice";
 import { useRouter } from "next/navigation";
+import { CustomFieldsDrawer } from "./CustomFieldsDrawer";
 
 // Animation Variants
 const containerVariants = {
@@ -413,7 +414,7 @@ const TechCombobox = ({
         Tech Stack
       </Label>
       
-      <Drawer open={open} onOpenChange={setOpen}>
+      <Drawer open={open} onOpenChange={setOpen} swipeDirection="right" >
         <DrawerTrigger
           render={
             <button
@@ -497,7 +498,7 @@ const TechCombobox = ({
             )}
 
             {/* Tech Options Grid */}
-            <div className="grid grid-cols-3 gap-2 max-h-[300px] overflow-y-scroll overflow-x-hidden">
+            <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-scroll overflow-x-hidden">
               {techOptions.map((techOption) => {
                 const isSelected = selectedTech.includes(techOption);
                 return (
@@ -567,7 +568,7 @@ const CategoryDrawer = ({
   };
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={open} onOpenChange={setOpen} swipeDirection="right">
       <DrawerTrigger
         render={
           <button
@@ -635,7 +636,7 @@ const CategoryDrawer = ({
             render={
               <button
                 type="button"
-                className="border border-white/10 text-[#D8CFBC] rounded-md px-4 py-2 text-sm hover:bg-white/5 cursor-pointer"
+                className="border border-white/10 bg-[#D8CFBC] rounded-md px-4 py-2 text-sm hover:bg-[#a49a86] cursor-pointer"
               />
             }
           >
@@ -839,6 +840,7 @@ export default function AddNewProject() {
   const [featured, setFeatured] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [activeTab, setActiveTab] = useState("image");
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
 
   const handleSubmit = () => {
     if (!title.trim()) {
@@ -864,6 +866,7 @@ export default function AddNewProject() {
         category,
         featured: String(featured),
         image: imageFile,
+        customFields: Object.keys(customFields).length > 0 ? JSON.stringify(customFields) : undefined,
       },
       {
         onSuccess: () => {
@@ -1049,6 +1052,24 @@ export default function AddNewProject() {
                               setFeatured={setFeatured}
                               isPending={isPending}
                             />
+
+                            <div className="space-y-2">
+                              <Label className="text-[#D8CFBC] text-sm font-medium flex items-center gap-2">
+                                <Settings2 className="w-4 h-4 text-[#60A5FA]" />
+                                Custom Fields
+                                <Badge className="bg-white/5 text-[#8A8578] border border-white/10 text-[9px]">
+                                  Optional
+                                </Badge>
+                              </Label>
+                              <p className="text-xs text-[#8A8578]">
+                                Add extra metadata like version, status, or any key-value pair
+                              </p>
+                              <CustomFieldsDrawer
+                                fields={customFields}
+                                onFieldsChange={setCustomFields}
+                                isPending={isPending}
+                              />
+                            </div>
                           </div>
 
                           <motion.div

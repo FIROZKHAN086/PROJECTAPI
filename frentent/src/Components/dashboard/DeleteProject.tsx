@@ -151,7 +151,7 @@ export default function DeleteProject() {
               <SelectTrigger className="w-full bg-[#141414] border-white/10 text-[#FFFBF4] focus-visible:border-[#F87171] focus-visible:ring-[#F87171]/20">
                 <SelectValue placeholder="Choose a project" />
               </SelectTrigger>
-              <SelectContent className="bg-[#141414] border-white/10">
+              <SelectContent className="bg-[#141414] text-[#D8CFBC] border-white/10">
                 {projects.map((p) => (
                   <SelectItem key={p.ProjectID} value={p.ProjectID}>
                     <span className="flex items-center gap-2">

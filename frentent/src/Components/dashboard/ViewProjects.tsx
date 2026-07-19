@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjects } from "@/src/hooks/useProjects";
 import type { Project } from "@/src/types/project";
+import { CustomFieldsDisplay } from "./CustomFieldsDrawer";
 
 const container = {
   hidden: { opacity: 0 },
@@ -252,6 +253,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
           </div>
         )}
 
+        {/* Custom Fields */}
+        <CustomFieldsDisplay fields={project.customFields} />
+
         {/* Links */}
         <div className="flex items-center gap-2 pt-3 border-t border-white/5">
           {project.liveDemo && (
@@ -341,6 +345,20 @@ const ProjectRow = ({ project }: { project: Project }) => {
           </Badge>
         )}
       </div>
+
+      {/* Custom Fields */}
+      {project.customFields && Object.keys(project.customFields).length > 0 && (
+        <div className="hidden xl:flex items-center gap-1.5 shrink-0">
+          {Object.entries(project.customFields).slice(0, 2).map(([key, value]) => (
+            <Badge
+              key={key}
+              className="bg-[#60A5FA]/10 text-[#60A5FA] border border-[#60A5FA]/20 text-[9px] px-1.5 py-0"
+            >
+              {key}: {String(value)}
+            </Badge>
+          ))}
+        </div>
+      )}
 
       {/* Links */}
       <div className="flex items-center gap-1.5 shrink-0">
