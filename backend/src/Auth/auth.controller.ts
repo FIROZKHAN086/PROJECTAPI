@@ -114,7 +114,7 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
-    // Compare  password with hashed password
+    // Compare  password with hashed password to verification 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -124,7 +124,7 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
-    // Generate JWT token
+    
     const token = generateToken({
       id: user.id.toString(),
       name: user.name || "",
@@ -133,7 +133,7 @@ export const loginUser = async (req: Request, res: Response) => {
       OneTimeID: user.OneTimeID || "",
     });
 
-    // Set token in an HTTP-only cookie
+   
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
