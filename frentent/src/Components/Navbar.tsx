@@ -451,7 +451,7 @@ const Navbar = () => {
                             <Key className="w-4 h-4" />
                             <span>API Keys</span>
                           </a>
-                          <a onClick={() => {setProfileOpen(false); router.push('/api-look');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                          <a onClick={() => {setProfileOpen(false); router.push('/dashboard?path=Api-Data');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <View className="w-4 h-4" />
                             <span>API Looks</span>
                           </a>

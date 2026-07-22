@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useAppSelector } from "@/src/lib/hooks";
 import { LoaderCircle } from "lucide-react";
 
-const PUBLIC_ROUTES = ["/", "/login", "/about", "/contact"];
+const PUBLIC_ROUTES = ["/", "/login", "/about", "/contact" , "/docs" ];
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     }
 
     if (user && pathname === "/login") {
-      router.replace("/");
+      router.replace("");
     }
   }, [user, isLoading, isPublic, pathname, router]);
 
