@@ -21,7 +21,8 @@ import {
   CircleQuestionMark,
   Info,
   View,
-  Home
+  Home,
+  LifeBuoy
 } from "lucide-react";
 import { 
   Sheet, 
@@ -32,7 +33,7 @@ import {
   SheetDescription 
 } from "@/components/ui/sheet";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Github01Icon, Help, HelpCircleFreeIcons, TwitterSquareIcon } from "@hugeicons/core-free-icons";
+import { Github01Icon, TwitterSquareIcon } from "@hugeicons/core-free-icons";
 import { useRouter  } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/src/lib/hooks";
 import { useLogout } from "@/src/hooks/useAuth";
@@ -451,18 +452,14 @@ const Navbar = () => {
                             <Key className="w-4 h-4" />
                             <span>API Keys</span>
                           </a>
-                          <a onClick={() => {setProfileOpen(false); router.push('/dashboard?path=Api-Data');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
-                            <View className="w-4 h-4" />
-                            <span>API Looks</span>
-                          </a>
-                          <a onClick={() => {setProfileOpen(false); router.push('/dashboard');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                            <a onClick={() => {setProfileOpen(false); router.push('/dashboard');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Terminal className="w-4 h-4" />
                             <span>Dashboard</span>
                           </a>
                        
-                        <a href="#help" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
-                          <HugeiconsIcon icon={HelpCircleFreeIcons} className="w-4 h-4" />
-                          <span>Help</span>
+                        <a onClick={() => {setProfileOpen(false); router.push('/dashboard?path=support');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer">
+                          <LifeBuoy className="w-4 h-4" />
+                          <span>Support</span>
                         </a>
                         <a href="#settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                           <Settings className="w-4 h-4" />

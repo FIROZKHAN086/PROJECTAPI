@@ -24,7 +24,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     }
 
     if (user && pathname === "/login") {
-      router.replace("");
+      router.replace("/");
     }
   }, [user, isLoading, isPublic, pathname, router]);
 

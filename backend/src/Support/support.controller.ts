@@ -26,25 +26,20 @@ export const createTicket = async (req: Request, res: Response) => {
             });
         }
 
-       const cachedData = await redis.get("tickets")
-
-       if (cachedData) {
-        return res.status(200).json({
-            success: true,
-            source: "cache",
-            data: JSON.parse(cachedData),
-        });
-       }
-
-        const ticket = await prisma.support.create({
-            data: {
-                TicketID: TicketID,
-                subject,
-                message,
-                userId: oneTimeId,
+       const cacheKey = `Support:${oneTimeId}`;
+       
+       
+       
+       const ticket = await prisma.support.create({
+           data: {
+               TicketID: TicketID,
+               subject,
+               message,
+               userId: oneTimeId,
             },
         });
-
+        
+        await redis.del(cacheKey);
         console.log(`[${new Date().toISOString()}] [SUCCESS] Ticket created successfully: ${ticket.TicketID}`);
         return res.status(201).json({
             success: true,
@@ -71,10 +66,25 @@ export const getTickets = async (req: Request, res: Response) => {
             });
         }
 
+        const cacheKey = `Support:${oneTimeId}`;
+
+    // Check Redis
+    const cachedSupport = await redis.get(cacheKey);
+
+    if (cachedSupport) {
+      return res.status(200).json({
+        success: true,
+        source: "cache",
+        data: JSON.parse(cachedSupport),
+      });
+    }
+
         const tickets = await prisma.support.findMany({
             where: { userId: oneTimeId },
             orderBy: { createdAt: "desc" },
         });
+
+        await redis.set(cacheKey, JSON.stringify(tickets) , "EX", 600);
 
         console.log(`[${new Date().toISOString()}] [SUCCESS] Found ${tickets.length} tickets for user: ${oneTimeId}`);
         return res.status(200).json({
@@ -104,15 +114,18 @@ export const getTicketById = async (req: Request, res: Response) => {
 
         const { id } = req.params as { id: string };
 
-        const cachedData = await redis.get(`ticket:${id}`);
+        const cacheKey = `Support:${oneTimeId}`;
 
-        if (cachedData) {
-            return res.status(200).json({
-                success: true,
-                source: "cache",
-                data: JSON.parse(cachedData),
-            });
-        }
+        // Check Redis
+    const cachedSupport = await redis.get(cacheKey);
+
+    if (cachedSupport) {
+      return res.status(200).json({
+        success: true,
+        source: "cache",
+        data: JSON.parse(cachedSupport),
+      });
+    }
 
         const ticket = await prisma.support.findFirst({
             where: { TicketID: id, userId: oneTimeId },
@@ -125,7 +138,7 @@ export const getTicketById = async (req: Request, res: Response) => {
             });
         }
 
-        await redis.set(`ticket:${id}`, JSON.stringify(ticket));
+        await redis.set(`ticket:${id}`, JSON.stringify(ticket) ,"EX", 600);
 
         return res.status(200).json({
             success: true,

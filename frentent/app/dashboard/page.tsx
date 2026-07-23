@@ -19,6 +19,7 @@ import GetAllData from "@/src/Components/dashboard/GetAllData";
 import DeleteProject from "@/src/Components/dashboard/DeleteProject";
 import ViewProjects from "@/src/Components/dashboard/ViewProjects";
 import ApiLook from "@/src/Components/dashboard/ApiLook";
+import { SupportContent } from "@/src/Components/dashboard/SupportContent";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -71,6 +72,11 @@ const SECTIONS: Record<string, { title: string; description: string; component: 
     title: "Api Data",
     description: "View your API Data",
     component: <ApiLook />,
+  },
+  support: {
+    title: "Support",
+    description: "Get help and report issues",
+    component: <SupportContent />,
   },
 };
 

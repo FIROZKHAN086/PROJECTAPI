@@ -13,6 +13,7 @@ import {
   Eye,
   Layout,
   FileSearch,
+  LifeBuoy,
 } from "lucide-react";
 import {
   Sidebar,
@@ -68,6 +69,12 @@ const navSections: NavSection[] = [
       { label: "Api-Data", icon: FileSearch, path: "Api-Data" },
     ],
   },
+  {
+    title: "SUPPORT",
+    items: [
+      { label: "Support", icon: LifeBuoy, path: "support" },
+    ],
+  },
 ];
 
 const menuBadges: Record<string, { text: string; className: string }> = {
@@ -82,14 +89,12 @@ const AppSidebar = ({ currentPath, onNavigate }: SidebarProps) => {
     <Sidebar
       side="left"
       collapsible="offcanvas"
-      className="bg-[#0A0A0A] relative  border-r border-white/10"
+      className="bg-[#0A0A0A]  min-h-screen  border-r border-white/10"
     >
       {/* Header */}
-      <SidebarHeader className="border-b border-white/10 p-4">
+      <SidebarHeader className="border-b   border-white/10 p-4 ">
         <div className="flex items-center gap-2.5">
-          <span className="text-[#ececec] font-bold font-mono flex items-center justify-center p-1.5 rounded-lg bg-[#141414] border border-white/10 hover:border-[#4ADE80]/50 hover:shadow-[0_0_15px_rgba(74,222,128,0.25)] transition-all duration-300">
-            <Code2 className="w-5 h-5" />
-          </span>
+          
           <span className="text-lg font-bold text-[#FFFBF4] tracking-tight font-sans group-data-[collapsible=icon]:hidden">
             Project<span className="text-[#4ADE80]">API</span>
           </span>

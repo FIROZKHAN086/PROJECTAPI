@@ -30,25 +30,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ScrollReveal, ParallaxSection, StaggerGrid, StaggerItem } from "@/src/lib/animations";
+import { ScrollReveal } from "@/src/lib/animations";
 
 // Types
 interface Project {
@@ -117,7 +105,7 @@ const pulseAnimation = {
 };
 
 // API Endpoint
-const API_URL = "http://localhost:5000/api/project/public";
+const API_URL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/project/public`;
 
 export default function ApiKeyPage() {
   const [apiKey, setApiKey] = useState("");
@@ -130,14 +118,7 @@ export default function ApiKeyPage() {
   const [responseTime, setResponseTime] = useState<number | null>(null);
   const [statusCode, setStatusCode] = useState<number | null>(null);
 
-  // Mock user data for display
-  const user = {
-    id: "usr_12345",
-    email: "developer@projectapi.dev",
-    name: "John Developer",
-    OneTimeID: "pk_live_abc123def456ghi789jkl",
-    createdAt: "2024-01-15T10:30:00Z",
-  };
+
 
   const handleCopy = async (text: string) => {
     try {
@@ -479,7 +460,7 @@ export default function ApiKeyPage() {
                           <div className="flex items-center gap-1">
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger asChild>
+                                <TooltipTrigger>
                                   <Button
                                     variant="ghost"
                                     size="sm"
@@ -494,7 +475,7 @@ export default function ApiKeyPage() {
                             </TooltipProvider>
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger asChild>
+                                <TooltipTrigger>
                                   <Button
                                     variant="ghost"
                                     size="sm"
@@ -509,7 +490,7 @@ export default function ApiKeyPage() {
                             </TooltipProvider>
                             <TooltipProvider>
                               <Tooltip>
-                                <TooltipTrigger asChild>
+                                <TooltipTrigger>
                                   <Button
                                     variant="ghost"
                                     size="sm"
@@ -525,7 +506,7 @@ export default function ApiKeyPage() {
                             {response.data && (
                               <TooltipProvider>
                                 <Tooltip>
-                                  <TooltipTrigger asChild>
+                                  <TooltipTrigger>
                                     <Button
                                       variant="ghost"
                                       size="sm"
@@ -599,9 +580,7 @@ export default function ApiKeyPage() {
 
             {/* Right Column - API Info & Documentation */}
             <div className="space-y-6">
-             
-
-            
+          
 
               {/* Quick Tips */}
               <ScrollReveal direction="up" delay={0.25}>
