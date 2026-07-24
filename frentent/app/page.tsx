@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, } from "framer-motion";
 import FAQFooterPage from "@/src/Home/FAQFooterPage";
 import FeaturesPage from "@/src/Home/FeaturesPage";
 import Hero from "@/src/Home/Hero";

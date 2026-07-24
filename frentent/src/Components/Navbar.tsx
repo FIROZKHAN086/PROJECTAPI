@@ -547,7 +547,7 @@ const Navbar = () => {
           {/* Mobile Menu Button with Animation */}
           <div className="flex md:hidden items-center">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger className="flex items-center justify-center p-2 text-[#D8CFBC] hover:text-[#FFFBF4] rounded-lg bg-[#141414] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer">
+              <SheetTrigger className="flex items-center  justify-center p-2 text-[#D8CFBC] hover:text-[#FFFBF4] rounded-lg bg-[#141414] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer">
                 <motion.div
                   animate={isOpen ? { rotate: 90 } : { rotate: 0 }}
                   transition={{ duration: 0.3 }}
@@ -557,7 +557,7 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent 
                 side="right" 
-                className="bg-[#0A0A0A] border-l border-white/10 p-0 flex flex-col justify-between w-[340px] text-[#FFFBF4] overflow-hidden"
+                className="bg-[#0A0A0A]  border-l border-white/10 p-0 flex flex-col justify-between w-[340px] text-[#FFFBF4] overflow-hidden"
               >
                 <SheetHeader className="sr-only">
                   <SheetTitle>Mobile Navigation</SheetTitle>
