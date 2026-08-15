@@ -40,9 +40,11 @@ export default function RootLayout({
       >
         <Providers>
           <SmoothScrollProvider>
+            <ProtectedRoute>
             <Navbar />
            {children}
             <Footer />
+            </ProtectedRoute>
           </SmoothScrollProvider>
         </Providers>
       </body>
