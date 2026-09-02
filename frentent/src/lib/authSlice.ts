@@ -29,6 +29,10 @@ export const fetchMe = createAsyncThunk<MeResponse>(
   async () => {
     return apiFetch<MeResponse>("/api/auth/me", {
       method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   }
 );
@@ -38,6 +42,10 @@ export const loginUser = createAsyncThunk<AuthResponse, LoginPayload>(
   async (payload) => {
     return apiFetch<AuthResponse>("/api/auth/login", {
       method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(payload),
     });
   }
@@ -48,14 +56,23 @@ export const registerUser = createAsyncThunk<AuthResponse, RegisterPayload>(
   async (payload) => {
     return apiFetch<AuthResponse>("/api/auth/register", {
       method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(payload),
     });
   }
 );
 
+
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
   return apiFetch<{ success: boolean; message: string }>("/api/auth/logout", {
     method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 });
 

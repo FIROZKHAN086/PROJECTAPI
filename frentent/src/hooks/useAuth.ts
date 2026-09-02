@@ -13,6 +13,10 @@ export function useLogin() {
     mutationFn: (payload) =>
       apiFetch<AuthResponse>("/api/auth/login", {
         method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(payload),
       }),
   });
@@ -23,6 +27,10 @@ export function useRegister() {
     mutationFn: (payload) =>
       apiFetch<AuthResponse>("/api/auth/register", {
         method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(payload),
       }),
   });
@@ -35,6 +43,10 @@ export function useLogout() {
     mutationFn: () =>
       apiFetch<{ success: boolean; message: string }>("/api/auth/logout", {
         method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     onSuccess: () => {
       dispatch(clearUser());
