@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAppDispatch } from "@/src/lib/hooks";
 import { clearUser } from "@/src/lib/authSlice";
-import { apiFetch, ApiError } from "@/src/lib/api";
+import { apiFetch, ApiError, setStoredToken } from "@/src/lib/api";
 import type {
   AuthResponse,
   LoginPayload,
@@ -49,6 +49,7 @@ export function useLogout() {
         },
       }),
     onSuccess: () => {
+      setStoredToken(null);
       dispatch(clearUser());
       queryClient.clear();
     },

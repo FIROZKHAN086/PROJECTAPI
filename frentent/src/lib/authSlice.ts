@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import { apiFetch } from "@/src/lib/api";
+import { apiFetch, getStoredToken, setStoredToken } from "@/src/lib/api";
 import type { User, LoginPayload, RegisterPayload, AuthResponse } from "@/src/types/auth";
 
 interface AuthState {
@@ -67,6 +67,7 @@ export const registerUser = createAsyncThunk<AuthResponse, RegisterPayload>(
 
 
 export const logoutUser = createAsyncThunk("auth/logout", async () => {
+  setStoredToken(null);
   return apiFetch<{ success: boolean; message: string }>("/api/auth/logout", {
     method: "POST",
     credentials: "include",
@@ -101,7 +102,7 @@ const authSlice = createSlice({
           name: u.name,
           email: u.email,
           OneTimeID: u.OneTimeID,
-          token: "",
+          token: getStoredToken() || "",
           role: u.role,
           createdAt: u.createdAt,
         };

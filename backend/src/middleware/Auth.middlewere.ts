@@ -1,5 +1,3 @@
-// src/middlewares/auth.middleware.ts
-
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
@@ -27,7 +25,12 @@ export const authMiddleware = (
   next: NextFunction,
 ): void => {
   try {
-    const token =  req.cookies?.token;
+    const authHeader = req.headers.authorization;
+    const headerToken =
+      authHeader && authHeader.startsWith("Bearer ")
+        ? authHeader.split(" ")[1]
+        : undefined;
+    const token = headerToken || req.cookies?.token;
 
     if (!token) {
       res.status(401).json({

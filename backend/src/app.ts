@@ -13,11 +13,30 @@ dotenv.config();
 
 export const app = express();
 
-app.use(cors({
-  origin: [`${process.env.FRONTEND_URL}`], 
-  credentials: true                
-}));
-app.use(morgan("dev"));
+const isProd = process.env.NODE_ENV === "production";
+
+const allowedOrigins = (process.env.FRONTEND_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Allow server-to-server requests (no Origin header) and dev origins
+      if (!origin || allowedOrigins.includes(origin) || !isProd) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
+    credentials: true,
+  })
+);
+if (process.env.NODE_ENV === "production") {
+  app.use(morgan("combined"));
+} else {
+  app.use(morgan("dev"));
+}
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());

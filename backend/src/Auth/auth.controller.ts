@@ -1,9 +1,31 @@
 import { Request, Response } from "express";
+import type { CookieOptions } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../config/prisma.js"; 
 import { generateToken } from "../utils/jwt.js";
 import { v4 as uuidv4 } from "uuid";
+
+const isProd = process.env.NODE_ENV === "production";
+
+
+const getCookieOptions = (): CookieOptions => ({
+  httpOnly: true,
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  path: "/",
+});
+
+
+const extractToken = (req: Request): string | undefined => {
+  const authHeader = req.headers.authorization;
+  const headerToken =
+    authHeader && authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : undefined;
+  return headerToken || req.cookies?.token;
+};
 
 
  // Register Route
@@ -58,13 +80,7 @@ export const registerUser = async (req: Request, res: Response) => {
     });
 
     // Set token in cookies
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: "/",
-    });
+    res.cookie("token", token, getCookieOptions());
 
     return res.status(201).json({
       success: true,
@@ -136,11 +152,8 @@ export const loginUser = async (req: Request, res: Response) => {
 
    
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: "/",
+      ...getCookieOptions(),
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({
@@ -172,11 +185,9 @@ export const loginUser = async (req: Request, res: Response) => {
 export const logoutUser = async (req: Request, res: Response) => {
   try {
     res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/", 
-  });
+      ...getCookieOptions(),
+      maxAge: 0,
+    });
 
     return res.status(200).json({
       success: true,
@@ -196,7 +207,7 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const getCurrentUser = async (req: Request, res: Response) => {
   try {
-    const token = req.cookies?.token;
+    const token = extractToken(req);
 
     if (!token) {
       return res.status(401).json({
