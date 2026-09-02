@@ -488,17 +488,24 @@ const TechCombobox = ({
                     className="bg-[#C084FC]/10 text-[#C084FC] border border-[#C084FC]/20 flex items-center gap-1.5 py-1.5 px-3"
                   >
                     {techItem}
-                    <X
-                      className="w-3 h-3 cursor-pointer hover:text-[#F87171] transition-colors"
-                      onClick={() => handleRemoveTech(techItem)}
-                    />
+                   <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleRemoveTech(techItem);
+          }}
+          className="ml-1 rounded-full hover:bg-red-500/10 hover:text-[#F87171] transition-colors cursor-pointer"
+        >
+          <X className="w-3 h-3" />
+        </button>
                   </Badge>
                 ))}
               </div>
             )}
 
             {/* Tech Options Grid */}
-            <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-scroll overflow-x-hidden">
+            <div className="grid grid-cols-2 gap-2 max-h-[30rem] overflow-y-scroll overflow-x-hidden">
               {techOptions.map((techOption) => {
                 const isSelected = selectedTech.includes(techOption);
                 return (

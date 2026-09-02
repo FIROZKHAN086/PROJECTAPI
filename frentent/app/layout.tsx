@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Unbounded, Cause } from "next/font/google";
+import { Unbounded,  Comic_Relief } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/src/Components/SmoothScrollProvider";
 import Providers from "@/src/Components/Providers";
@@ -12,7 +12,7 @@ const unbounded = Unbounded({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
   variable: "--font-unbounded",
 });
-const cause = Cause({
+const cause = Comic_Relief({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-cause",

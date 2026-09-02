@@ -1,21 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown,
   ArrowRight,
-  Brackets,
 } from "lucide-react";
 import {
   ScrollReveal,
-  StaggerGrid,
-  StaggerItem,
-  ScaleIn,
   ParallaxSection,
-  LineDraw,
 } from "@/src/lib/animations";
+
+import { useRouter } from "next/navigation";
 
 const faqs = [
   {
@@ -51,6 +47,8 @@ export default function FAQFooterPage() {
   const toggleFaq = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  const router = useRouter();
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] font-sans antialiased text-[#FFFBF4]">
@@ -135,6 +133,7 @@ export default function FAQFooterPage() {
           <div className="mx-auto flex max-w-[1200px] flex-col items-center px-6 text-center">
             <ScrollReveal direction="up" delay={0}>
               <h2
+              
                 className="text-4xl font-bold tracking-tight text-[#FFFBF4] md:text-5xl"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
@@ -148,6 +147,7 @@ export default function FAQFooterPage() {
             </ScrollReveal>
             <ScrollReveal direction="up" delay={0.2}>
               <motion.button
+              onClick={() => router.push("/login?auth=login")}
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0px 0px 30px rgba(251,247,244,0.2)",
