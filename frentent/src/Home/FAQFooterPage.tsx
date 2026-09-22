@@ -85,8 +85,10 @@ export default function FAQFooterPage() {
         22
       );
     } else {
-      setDeleting(false);
-      setPhraseIndex((phraseIndex + 1) % typePhrases.length);
+      timer = window.setTimeout(() => {
+        setDeleting(false);
+        setPhraseIndex((phraseIndex + 1) % typePhrases.length);
+      }, 60);
     }
 
     return () => window.clearTimeout(timer);

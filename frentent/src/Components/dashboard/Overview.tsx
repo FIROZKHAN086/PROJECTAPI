@@ -35,6 +35,20 @@ import {
   Award,
 } from "lucide-react";
 import { useProjects } from "@/src/hooks/useProjects";
+import type { Project } from "@/src/types/project";
+import type { LucideIcon } from "lucide-react";
+
+type Stat = {
+  label: string;
+  value: number | string;
+  icon: LucideIcon;
+  color: string;
+  trend?: number;
+};
+
+type DashboardProject = Project & { status?: string };
+
+const VIEWERS = Math.floor(Math.random() * 50 + 10);
 
 
 
@@ -107,9 +121,13 @@ const TypewriterText: React.FC<{ text: string; delay?: number; className?: strin
   }, [currentIndex, text]);
 
   useEffect(() => {
-    setDisplayText("");
-    setCurrentIndex(0);
-    setIsComplete(false);
+    const timer = setTimeout(() => {
+      setDisplayText("");
+      setCurrentIndex(0);
+      setIsComplete(false);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [text]);
 
   return (
@@ -165,7 +183,7 @@ const GlowCard: React.FC<{
 
 // Stat Card with original theme
 const StatCard: React.FC<{
-  stat: any;
+  stat: Stat;
   index: number;
   isLoading: boolean;
 }> = ({ stat, index, isLoading }) => {
@@ -262,7 +280,7 @@ const StatCard: React.FC<{
 };
 
 // Activity Item
-const ActivityItem: React.FC<{ project: any; index: number }> = ({ project, index }) => {
+const ActivityItem: React.FC<{ project: DashboardProject; index: number }> = ({ project, index }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
@@ -443,7 +461,7 @@ const timeAgo = (dateStr: string): string => {
 // Main Component
 const Overview = () => {
   const { data, isLoading, error } = useProjects();
-  const projects = data?.data ?? [];
+  const projects: DashboardProject[] = (data?.data ?? []) as DashboardProject[];
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -455,11 +473,11 @@ const Overview = () => {
 
   // Calculate stats
   const totalProjects = projects.length;
-  const featuredCount = projects.filter((p: any) => p.featured).length;
-  const uniqueCategories = new Set(projects.map((p: any) => p.category).filter(Boolean)).size;
-  const uniqueTech = new Set(projects.flatMap((p: any) => p.tech).filter(Boolean)).size;
-  const activeProjects = projects.filter((p: any) => p.status === "active").length || totalProjects;
-  const totalTechUsed = projects.reduce((acc: number, p: any) => acc + (p.tech?.length || 0), 0);
+  const featuredCount = projects.filter((p) => p.featured).length;
+  const uniqueCategories = new Set(projects.map((p) => p.category).filter(Boolean)).size;
+  const uniqueTech = new Set(projects.flatMap((p) => p.tech).filter(Boolean)).size;
+  const activeProjects = projects.filter((p) => p.status === "active").length || totalProjects;
+  const totalTechUsed = projects.reduce((acc: number, p) => acc + (p.tech?.length || 0), 0);
   const completionRate = totalProjects > 0 ? Math.round((activeProjects / totalProjects) * 100) : 0;
 
   const stats = [
@@ -521,7 +539,7 @@ const Overview = () => {
   ];
 
   const recentProjects = [...projects]
-    .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
 
   const usages = [
@@ -638,7 +656,7 @@ const Overview = () => {
               >
                 <Badge className="bg-white/5 text-[#8A8578] border border-white/10 px-4 py-2">
                   <Users className="w-3.5 h-3.5 mr-2" />
-                  {Math.floor(Math.random() * 50 + 10)} viewers
+                  {VIEWERS} viewers
                 </Badge>
                 <Badge className="bg-[#4ADE80]/10 text-[#4ADE80] border border-[#4ADE80]/20 px-4 py-2">
                   <ArrowUpRight className="w-3.5 h-3.5 mr-2" />
@@ -759,7 +777,7 @@ const Overview = () => {
                         <Skeleton className="w-16 h-6 rounded-full bg-white/5" />
                       </div>
                     ))
-                  : recentProjects.map((project: any, index: number) => (
+                  : recentProjects.map((project, index) => (
                       <ActivityItem key={project.id} project={project} index={index} />
                     ))}
                 {!isLoading && recentProjects.length === 0 && (

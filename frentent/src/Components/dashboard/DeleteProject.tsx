@@ -30,6 +30,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useProjects, useDeleteProject } from "@/src/hooks/useProjects";
+import { ApiError } from "@/src/lib/api";
 import { toast } from "@/src/lib/toastSlice";
 import { useRouter } from "next/navigation";
 
@@ -57,8 +58,11 @@ export default function DeleteProject() {
   const isConfirmed = confirmChecked && project && confirmName === project.title;
 
   useEffect(() => {
-    setConfirmChecked(false);
-    setConfirmName("");
+    const timer = window.setTimeout(() => {
+      setConfirmChecked(false);
+      setConfirmName("");
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [selectedProjectId]);
 
   const handleDelete = () => {
@@ -69,7 +73,7 @@ export default function DeleteProject() {
         toast.success("Project deleted successfully!");
         router.push("/dashboard?path=project");
       },
-      onError: (err: any) => {
+      onError: (err: ApiError) => {
         toast.error(err?.message || "Failed to delete project");
       },
     });

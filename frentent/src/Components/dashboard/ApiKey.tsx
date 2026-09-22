@@ -27,7 +27,7 @@ const limits = [
 
 const ApiKey = () => {
   const { user } = useAppSelector((s) => s.auth);
-  const oneTimeId = (user as any)?.OneTimeID ?? "";
+  const oneTimeId = user?.OneTimeID ?? "";
 
   const [revealed, setRevealed] = useState(false);
   const [copied, setCopied] = useState(false);

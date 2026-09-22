@@ -82,6 +82,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useCreateProject } from "@/src/hooks/useProjects";
+import { ApiError } from "@/src/lib/api";
 import { toast } from "@/src/lib/toastSlice";
 import { useRouter } from "next/navigation";
 import { CustomFieldsDrawer } from "./CustomFieldsDrawer";
@@ -367,12 +368,11 @@ const TechCombobox = ({
   const [selectedTech, setSelectedTech] = useState<string[]>([]);
   const [customTech, setCustomTech] = useState("");
 
-  // Initialize selectedTech from props
   useEffect(() => {
-    if (tech) {
-      const techArray = tech.split(", ").filter(Boolean);
-      setSelectedTech(techArray);
-    }
+    if (!tech) return;
+    const techArray = tech.split(", ").filter(Boolean);
+    const timer = window.setTimeout(() => setSelectedTech(techArray), 0);
+    return () => window.clearTimeout(timer);
   }, [tech]);
 
   const handleSelect = (value: string) => {
@@ -880,7 +880,7 @@ export default function AddNewProject() {
           toast.success("Project created successfully!");
           router.push("/dashboard?path=project");
         },
-        onError: (err: any) => {
+        onError: (err: ApiError) => {
           toast.error(err?.message || "Failed to create project");
         },
       }

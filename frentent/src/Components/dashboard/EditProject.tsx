@@ -133,10 +133,10 @@ const TechCombobox = ({
   const [customTech, setCustomTech] = useState("");
 
   useEffect(() => {
-    if (tech) {
-      const techArray = tech.split(", ").filter(Boolean);
-      setSelectedTech(techArray);
-    }
+    if (!tech) return;
+    const techArray = tech.split(", ").filter(Boolean);
+    const timer = window.setTimeout(() => setSelectedTech(techArray), 0);
+    return () => window.clearTimeout(timer);
   }, [tech]);
 
   const handleSelect = (value: string) => {
@@ -336,10 +336,14 @@ const ImageUploadSection = ({
   useEffect(() => {
     if (imageFile) {
       const url = URL.createObjectURL(imageFile);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
+      const timer = window.setTimeout(() => setPreviewUrl(url), 0);
+      return () => {
+        window.clearTimeout(timer);
+        URL.revokeObjectURL(url);
+      };
     } else {
-      setPreviewUrl(null);
+      const timer = window.setTimeout(() => setPreviewUrl(null), 0);
+      return () => window.clearTimeout(timer);
     }
   }, [imageFile]);
 
@@ -1024,7 +1028,8 @@ export default function EditProject() {
   const selectedProject = projects.find((p) => p.ProjectID === selectedProjectId);
 
   useEffect(() => {
-    if (selectedProject) {
+    if (!selectedProject) return;
+    const timer = window.setTimeout(() => {
       setTitle(selectedProject.title);
       setDescription(selectedProject.description);
       setTech(selectedProject.tech?.join(", ") || "");
@@ -1041,13 +1046,14 @@ export default function EditProject() {
       } else {
         setCustomFields({});
       }
-    }
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [selectedProject]);
 
   useEffect(() => {
-    if (preselectedId && projects.length > 0) {
-      setSelectedProjectId(preselectedId);
-    }
+    if (!preselectedId || projects.length === 0) return;
+    const timer = window.setTimeout(() => setSelectedProjectId(preselectedId), 0);
+    return () => window.clearTimeout(timer);
   }, [preselectedId, projects.length]);
 
   const handleSave = () => {

@@ -36,9 +36,11 @@ export default function HeroVisual() {
     const prefersReduced =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
-      setTypedLength(CODE_BLOCK.length);
-      setTypingDone(true);
-      return;
+      const frame = requestAnimationFrame(() => {
+        setTypedLength(CODE_BLOCK.length);
+        setTypingDone(true);
+      });
+      return () => cancelAnimationFrame(frame);
     }
 
     gsap.set(card, { transformPerspective: 1000 });

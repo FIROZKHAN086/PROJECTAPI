@@ -165,10 +165,14 @@ export default function ApiKeyPage() {
         setError(data.message || `Error ${res.status}: Failed to fetch projects`);
         setResponse(data);
       }
-    } catch (err: any) {
+    } catch (err) {
       const endTime = Date.now();
       setResponseTime(endTime - startTime);
-      setError(err.message || "Network error. Please check your connection and try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Network error. Please check your connection and try again."
+      );
     } finally {
       setIsLoading(false);
     }

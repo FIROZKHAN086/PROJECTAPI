@@ -386,8 +386,10 @@ export default function DocsPage() {
         26
       );
     } else {
-      setDeleting(false);
-      setPhraseIndex((prev) => (prev + 1) % typePhrases.length);
+      timer = window.setTimeout(() => {
+        setDeleting(false);
+        setPhraseIndex((prev) => (prev + 1) % typePhrases.length);
+      }, 60);
     }
 
     return () => window.clearTimeout(timer);
