@@ -3,7 +3,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import {
-  Brackets,
   Code2,
   FileText,
   Copy,
@@ -13,10 +12,8 @@ import {
 } from "lucide-react";
 import {
   ScrollReveal,
-  TextReveal,
   StaggerGrid,
   StaggerItem,
-  SlideReveal,
   LineDraw,
 } from "@/src/lib/animations";
 
@@ -65,22 +62,22 @@ export default function ProblemSolutionPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] font-sans antialiased text-[#FFFBF4]">
-      <main className="mx-auto flex w-full max-w-[1140px] flex-col gap-12 px-6 py-12">
+      <main className="mx-auto flex w-full max-w-285 flex-col gap-12 px-6 py-12">
         {/* Problem Section */}
         <section className="grid grid-cols-1 gap-8 pt-8 md:grid-cols-2">
           {/* Left Column */}
           <ScrollReveal direction="left" delay={0} distance={30}>
             <div className="flex flex-col gap-4">
-              <p className="text-xs font-medium uppercase tracking-[0.1em] text-[#D8CFBC]">
+              <p className="text-xs font-medium uppercase tracking-widest text-[#D8CFBC]">
                 THE PROBLEM
               </p>
               <h2
-                className="max-w-[520px] text-4xl font-bold leading-[1.1] tracking-tight text-[#FFFBF4] md:text-5xl"
+                className="max-w-130 text-4xl font-bold leading-[1.1] tracking-tight text-[#FFFBF4] md:text-5xl"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
                 Your portfolio shouldn&apos;t be this much work.
               </h2>
-              <LineDraw className="mt-2 h-px bg-gradient-to-r from-[#7a3b3b]/60 to-transparent w-32" delay={0.4} />
+              <LineDraw className="mt-2 h-px bg-linear-to-r from-[#7a3b3b]/60 to-transparent w-32" delay={0.4} />
             </div>
           </ScrollReveal>
 

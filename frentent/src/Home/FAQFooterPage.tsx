@@ -1,16 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ChevronDown,
-  ArrowRight,
-} from "lucide-react";
-import {
-  ScrollReveal,
-  ParallaxSection,
-} from "@/src/lib/animations";
-
+import { ChevronDown, ArrowRight } from "lucide-react";
+import { ScrollReveal } from "@/src/lib/animations";
 import { useRouter } from "next/navigation";
 
 const faqs = [
@@ -41,21 +34,70 @@ const faqs = [
   },
 ];
 
+const footerColumns = [
+  {
+    title: "Product",
+    links: ["Overview", "Pricing", "API Docs", "Changelog"],
+  },
+  {
+    title: "Developers",
+    links: ["Quickstart", "SDKs", "Examples", "Status"],
+  },
+  {
+    title: "Company",
+    links: ["About", "Blog", "Careers", "Contact"],
+  },
+];
+
+const typePhrases = [
+  "one API",
+  "every framework",
+  "zero maintenance",
+  "everywhere at once",
+];
+
 export default function FAQFooterPage() {
+  const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const toggleFaq = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const [display, setDisplay] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
 
-  const router = useRouter();
+  const toggleFaq = (index: number) =>
+    setOpenIndex(openIndex === index ? null : index);
+
+  /* ================= typewriter loop ================= */
+  useEffect(() => {
+    const phrase = typePhrases[phraseIndex];
+    let timer: number | undefined;
+
+    if (!deleting && display.length < phrase.length) {
+      timer = window.setTimeout(
+        () => setDisplay(phrase.slice(0, display.length + 1)),
+        45
+      );
+    } else if (!deleting && display.length === phrase.length) {
+      timer = window.setTimeout(() => setDeleting(true), 1700);
+    } else if (deleting && display.length > 0) {
+      timer = window.setTimeout(
+        () => setDisplay(phrase.slice(0, display.length - 1)),
+        22
+      );
+    } else {
+      setDeleting(false);
+      setPhraseIndex((phraseIndex + 1) % typePhrases.length);
+    }
+
+    return () => window.clearTimeout(timer);
+  }, [display, deleting, phraseIndex]);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] font-sans antialiased text-[#FFFBF4]">
+    <div className="min-h-screen bg-[#0A0A0A] font-sans text-[#FFFBF4]">
       <main className="mx-auto flex w-full max-w-[1200px] flex-col px-6 py-16">
-        {/* FAQ Section */}
-        <section className="flex flex-col items-center">
-          <ScrollReveal direction="up" delay={0}>
+        {/* ============ FAQ ============ */}
+        <section className="mx-auto flex w-full max-w-[720px] flex-col items-center">
+          <ScrollReveal direction="up">
             <h2
               className="text-center text-4xl font-bold tracking-tight text-[#FFFBF4] md:text-5xl"
               style={{ fontFamily: "'Space Grotesk', sans-serif" }}
@@ -64,8 +106,8 @@ export default function FAQFooterPage() {
             </h2>
           </ScrollReveal>
 
-          <ScrollReveal direction="up" delay={0.15} distance={30}>
-            <div className="mt-10 w-full max-w-[720px] overflow-hidden rounded-2xl border border-white/10 bg-transparent">
+          <ScrollReveal direction="up" delay={0.15}>
+            <div className="mt-10 w-full overflow-hidden rounded-2xl border border-white/10">
               {faqs.map((faq, index) => (
                 <div
                   key={index}
@@ -74,9 +116,10 @@ export default function FAQFooterPage() {
                   }`}
                 >
                   <button
+                    type="button"
                     onClick={() => toggleFaq(index)}
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-white/5 cursor-pointer"
                     aria-expanded={openIndex === index}
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-white/5 cursor-pointer"
                   >
                     <span className="text-[15px] font-medium text-[#FFFBF4]">
                       {faq.question}
@@ -88,6 +131,7 @@ export default function FAQFooterPage() {
                       <ChevronDown className="size-4 shrink-0 text-[#D8CFBC]" />
                     </motion.span>
                   </button>
+
                   <AnimatePresence initial={false}>
                     {openIndex === index && (
                       <motion.div
@@ -114,7 +158,7 @@ export default function FAQFooterPage() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal direction="up" delay={0.2}>
+          <ScrollReveal direction="up" delay={0.25}>
             <motion.a
               href="#"
               whileHover={{ x: 4, color: "#FFFBF4" }}
@@ -125,42 +169,56 @@ export default function FAQFooterPage() {
             </motion.a>
           </ScrollReveal>
         </section>
+
+        {/* ============ CTA + Typewriter ============ */}
+        <section className="mt-20 flex flex-col items-center text-center">
+          <ScrollReveal direction="up">
+            <span className="inline-flex items-center rounded-full border border-[#4ADE80]/30 bg-[#4ADE80]/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-[#4ADE80]">
+              <span className="relative mr-2 flex size-1.5">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#4ADE80] opacity-75" />
+                <span className="relative inline-flex size-1.5 rounded-full bg-[#4ADE80]" />
+              </span>
+              Powered by a real API
+            </span>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.1}>
+            <motion.h2
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ repeat: Infinity, duration: 3 }}
+              className="mt-4 text-4xl font-bold tracking-tight text-[#FFFBF4] md:text-5xl"
+              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            >
+              <span className="sr-only">{typePhrases[phraseIndex]}</span>
+              <span aria-hidden="true" className="tabular-nums">
+                {display}
+                <motion.span
+                  animate={{ opacity: [1, 0, 1] }}
+                  transition={{ repeat: Infinity, duration: 0.9 }}
+                  className="text-[#4ADE80]"
+                >
+                  |
+                </motion.span>
+              </span>
+            </motion.h2>
+          </ScrollReveal>
+
+          <ScrollReveal direction="up" delay={0.2}>
+            <motion.button
+              type="button"
+              onClick={() => router.push("/login?auth=login")}
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#FFFBF4] px-8 text-sm font-semibold text-[#0A0A0A] transition-colors hover:bg-[#FFFBF4]/90 cursor-pointer"
+            >
+              Get Started Free
+              <ArrowRight className="size-4" />
+            </motion.button>
+          </ScrollReveal>
+        </section>
       </main>
 
-      {/* Final CTA Band */}
-      <ParallaxSection speed={0.05}>
-        <section className="mt-16 w-full bg-[#141414] py-16">
-          <div className="mx-auto flex max-w-[1200px] flex-col items-center px-6 text-center">
-            <ScrollReveal direction="up" delay={0}>
-              <h2
-              
-                className="text-4xl font-bold tracking-tight text-[#FFFBF4] md:text-5xl"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                Your projects deserve a real home.
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={0.1}>
-              <p className="mt-4 max-w-[560px] text-lg leading-relaxed text-[#D8CFBC]">
-                Set up your first API endpoint in under 5 minutes.
-              </p>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={0.2}>
-              <motion.button
-              onClick={() => router.push("/login?auth=login")}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0px 0px 30px rgba(251,247,244,0.2)",
-                }}
-                whileTap={{ scale: 0.97 }}
-                className="mt-8 inline-flex h-11 items-center justify-center rounded-lg bg-[#FBF7F4] px-8 text-sm font-semibold text-[#0A0A0A] transition-colors hover:bg-[#FBF7F4]/90 cursor-pointer"
-              >
-                Get Started Free
-              </motion.button>
-            </ScrollReveal>
-          </div>
-        </section>
-      </ParallaxSection>
+     
     </div>
   );
 }

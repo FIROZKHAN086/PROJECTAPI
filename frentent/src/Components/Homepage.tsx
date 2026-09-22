@@ -3,11 +3,10 @@
 import { motion } from "framer-motion";
 import FAQFooterPage from "@/src/Home/FAQFooterPage";
 import {HeroSection} from "@/src/Hero";
-import { PlaygroundSection } from "@/src/Playground";
+import  PlaygroundSection  from "@/src/Home/PlaygroundPage";
 import { ProblemSolutionSection } from "@/src/ProblemSolution";
-import SocialProofPricingPage from "@/src/Home/SocialProofPricingPage";
 import FeaturesPage from "@/src/Home/FeaturesPage";
-
+import { SocialProofPricingSection } from "../SocialProofPricing";
 const Homepage = () => {
 
 const sectionItem = {
@@ -56,7 +55,7 @@ const sectionItem = {
           initial={sectionItem.initial}
           animate={sectionItem.animate}
         >
-          <SocialProofPricingPage />
+          <SocialProofPricingSection />
         </motion.div>
         <motion.div
           initial={sectionItem.initial}

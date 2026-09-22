@@ -39,6 +39,7 @@ export async function apiFetch<T>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { noAuth, ...fetchOptions } = options;
 
   

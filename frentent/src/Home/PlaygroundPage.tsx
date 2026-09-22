@@ -1,381 +1,356 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import {
-  Braces,
-  LayoutGrid,
-  FolderKanban,
-  BarChart2,
-  Terminal,
-  Image,
-  LayoutTemplate,
-  Settings,
-  LifeBuoy,
-  Search,
-  Bell,
-  Plus,
-  Copy,
-  Menu,
-  X,
-} from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import {
-  ScrollReveal,
-  StaggerGrid,
-  StaggerItem,
-  ScaleIn,
-  LineDraw,
-  AnimatedCounter,
-} from "@/src/lib/animations";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, Brackets, Check, Copy, Code2, Rocket, Sparkles, Terminal, Zap, Cpu, GitBranch, Layers, ShieldCheck } from "lucide-react";
+import { ScrollReveal, StaggerGrid, StaggerItem, CharReveal, AnimatedCounter } from "@/src/lib/animations";
 
-function TypingCode() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const fullCode = `// fetch a featured project
-const res = await fetch(
-  'https://api.projectapi.dev/v1/projects/{apiKey}?featured=true'
-);
-const data = await res.json();
-console.log(data);`;
-  const [displayed, setDisplayed] = useState("");
+const typePhrases = [
+  "Try the playground. Build it live.",
+  "Test endpoints with zero setup.",
+  "Ship your first template in minutes.",
+];
 
-  useEffect(() => {
-    if (!isInView) return;
-    let i = 0;
-    const timer = setInterval(() => {
-      i++;
-      setDisplayed(fullCode.slice(0, i));
-      if (i >= fullCode.length) clearInterval(timer);
-    }, 18);
-    return () => clearInterval(timer);
-  }, [isInView]);
+const glowVariants = {
+  idle: { opacity: 0, scale: 0.7 },
+  hover: { opacity: 1, scale: 1.2 },
+};
 
-  return (
-    <pre ref={ref} className="font-mono text-[11px] sm:text-sm leading-relaxed text-[#8A8578] whitespace-pre-wrap">
-      <span>{displayed}</span>
-      {isInView && displayed.length < fullCode.length && (
-        <motion.span
-          animate={{ opacity: [1, 0, 1] }}
-          transition={{ repeat: Infinity, duration: 0.8 }}
-          className="inline-block w-[2px] h-4 bg-[#4ADE80] ml-[1px] align-middle"
-        />
-      )}
-    </pre>
-  );
-}
+const codeLines = [
+  { text: "const api = await ProjectAPI.create()", color: "text-[#FFFBF4]" },
+  { text: 'api.playground("portfolio-cms")', color: "text-[#4ADE80]" },
+  { text: "// live endpoint is ready → try it now", color: "text-[#D8CFBC]/60" },
+];
+
+const templateCards = [
+  {
+    icon: Terminal,
+    title: "API Playground",
+    desc: "Test your endpoints live with a cool request builder.",
+    tag: "Workflow",
+  },
+  {
+    icon: Layers,
+    title: "Portfolio CMS",
+    desc: "Showcase your work with a typed content model.",
+    tag: "Templates",
+  },
+  {
+    icon: GitBranch,
+    title: "Versioned Docs",
+    desc: "Ship documentation that evolves with your API.",
+    tag: "Workflow",
+  },
+  {
+    icon: Cpu,
+    title: "Realtime Console",
+    desc: "Watch requests stream in — every keystroke, live.",
+    tag: "Live",
+  },
+  {
+    icon: Zap,
+    title: "Instant Deploy",
+    desc: "One click from playground to production.",
+    tag: "Deploy",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Keys by Default",
+    desc: "Scoped API keys with a cool, safe-by-design flow.",
+    tag: "Security",
+  },
+];
+
+const features = [
+  { icon: Zap, title: "Zero-setup", desc: "No config. Start typing, it just works." },
+  { icon: Code2, title: "Typed API", desc: "Full TypeScript types generated for you." },
+  { icon: Rocket, title: "Ship-ready", desc: "Go from idea to deployed in one session." },
+];
 
 export default function PlaygroundPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [display, setDisplay] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [typedLine, setTypedLine] = useState(0);
+
+  useEffect(() => {
+    const phrase = typePhrases[phraseIndex];
+    let timer: number | undefined;
+
+    if (!deleting && display.length < phrase.length) {
+      timer = window.setTimeout(
+        () => setDisplay(phrase.slice(0, display.length + 1)),
+        44
+      );
+    } else if (!deleting && display.length === phrase.length) {
+      timer = window.setTimeout(() => setDeleting(true), 1700);
+    } else if (deleting && display.length > 0) {
+      timer = window.setTimeout(
+        () => setDisplay(phrase.slice(0, display.length - 1)),
+        22
+      );
+    } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDeleting(false);
+      setPhraseIndex((phraseIndex + 1) % typePhrases.length);
+    }
+    return () => window.clearTimeout(timer);
+  }, [display, deleting, phraseIndex]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(
+      () => setTypedLine((typedLine + 1) % (codeLines.length + 1)),
+      900
+    );
+    return () => window.clearTimeout(timer);
+  }, [typedLine]);
+
+  const copyCode = () => {
+    navigator.clipboard.writeText(codeLines.map((l) => l.text).join("\n"));
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
+  };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#FFFBF4] font-sans antialiased overflow-x-hidden">
-      <main className="mx-auto max-w-[1140px] px-4 sm:px-6 py-6 sm:py-8">
-        {/* API Playground Showcase */}
-        <section id="playground" className="flex flex-col gap-6 sm:gap-8">
-          <div className="space-y-3 sm:space-y-4">
-            <ScrollReveal direction="up" delay={0}>
-              <h2
-                className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-[#FFFBF4]"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                Test your API before you ship it.
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={0.1}>
-              <p className="text-sm sm:text-base text-[#D8CFBC]">
-                Live request, live response, one click to copy — in the format
-                you actually use.
-              </p>
-            </ScrollReveal>
-          </div>
+    <div className="relative">
+      <section className="relative overflow-hidden bg-[#0A0A0A] py-24">
+        {/* ambient glow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.55 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.4 }}
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(720px 360px at 30% -10%, rgba(74,222,128,0.14), transparent 65%), radial-gradient(640px 320px at 90% 20%, rgba(255,255,255,0.04), transparent 60%)",
+          }}
+        />
 
-          {/* Panel */}
-          <ScrollReveal direction="up" delay={0.15} distance={40}>
-            <div className="w-full rounded-2xl border border-white/10 bg-[#171717] p-4 sm:p-6">
-              {/* Tabs - Scrollable on mobile */}
-              <div className="flex items-center gap-4 sm:gap-6 border-b border-white/10 pb-2 overflow-x-auto scrollbar-hide">
-                {["Fetch", "Axios", "React Hook", "Next.js"].map((tab, i) => (
-                  <motion.button
-                    key={tab}
-                    whileHover={{ color: "#FFFBF4" }}
-                    whileTap={{ scale: 0.97 }}
-                    className={`border-b-2 pb-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer whitespace-nowrap ${
-                      i === 0
-                        ? "border-[#FFFBF4] text-[#FFFBF4]"
-                        : "border-transparent text-[#D8CFBC]"
-                    }`}
-                  >
-                    {tab}
-                  </motion.button>
-                ))}
+        <div className="relative mx-auto w-full max-w-[1200px] px-6">
+          {/* ---- Typewriter hero ---- */}
+          <ScrollReveal className="mb-16 max-w-3xl">
+            <div className="flex flex-col gap-5">
+              <motion.div
+                whileHover={{ x: 6 }}
+                className="flex w-fit items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.28em] text-[#4ADE80]"
+              >
+                <Sparkles className="size-3.5" />
+                Playground
+              </motion.div>
+
+              <div className="flex min-h-[3rem] items-center gap-2 text-3xl font-semibold tracking-tight text-[#FFFBF4] md:text-5xl">
+                  <span>
+                  {display}
+                  <motion.span
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ repeat: Infinity, duration: 0.8 }}
+                    className="ml-0.5 inline-block h-6 w-[3px] translate-y-0.5 bg-[#4ADE80] md:h-8"
+                  />
+                </span>
               </div>
 
-              {/* Code + Response */}
-              <div className="mt-4 flex flex-col lg:flex-row gap-4">
-                {/* Code Block */}
-                <div className="relative flex-1 rounded-xl border border-white/10 bg-[#0A0A0A] p-3 sm:p-4 min-h-[200px]">
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="absolute right-1 sm:right-2 top-1 sm:top-2 size-6 sm:size-7 text-[#D8CFBC] hover:text-[#FFFBF4]"
-                  >
-                    <Copy className="size-3.5 sm:size-4" />
-                  </Button>
-                  <TypingCode />
+              <p className="text-lg leading-relaxed text-[#D8CFBC]">
+                A playground where ideas become endpoints. Try the live
+                terminal, test a request builder, and see exactly what your
+                users get to experience — before you ship a single line.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* ---- Glass terminal mock ---- */}
+          <ScrollReveal delay={0.1}>
+            <motion.div
+              variants={glowVariants}
+              initial="idle"
+              whileHover="hover"
+              transition={{ duration: 0.3 }}
+              className="absolute -inset-px rounded-2xl bg-[#4ADE80]/10 blur-xl"
+            />
+            <motion.div
+              whileHover={{ y: -4, boxShadow: "0 24px 80px rgba(0,0,0,0.55), 0 0 40px rgba(74,222,128,0.08)" }}
+              className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0F0F0F]"
+            >
+              {/* window chrome */}
+              <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-5 py-3.5">
+                <div className="flex items-center gap-2">
+                  <motion.span animate={{ backgroundColor: ["#FF5F57", "#FF5F57", "#FF5F57"] }} className="size-3 rounded-full bg-[#FF5F57]" data-lettter />
+                  <span className="size-3 rounded-full bg-[#FEBC2E]" />
+                  <span className="size-3 rounded-full bg-[#28C840]" />
                 </div>
+                <div className="flex items-center gap-2 font-mono text-xs text-[#D8CFBC]">
+                  <Brackets className="size-3.5 text-[#4ADE80]" />
+                  playground — ProjectAPI
+                </div>
+                <motion.button
+                  onClick={copyCode}
+                  whileTap={{ scale: 0.92 }}
+                  className="flex items-center gap-1.5 rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] cursor-pointer"
+                >
+                  {copied ? <Check className="size-3.5 text-[#4ADE80]" /> : <Copy className="size-3.5" />}
+                  {copied ? "Copied" : "Copy"}
+                </motion.button>
+              </div>
 
-                {/* Live Response */}
-                <ScaleIn delay={0.4} scale={0.95}>
-                  <div className="relative w-full lg:w-[280px] flex-shrink-0 rounded-xl border border-white/10 bg-[#0A0A0A] p-3 sm:p-4">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="absolute right-1 sm:right-2 top-1 sm:top-2 size-6 sm:size-7 text-[#D8CFBC] hover:text-[#FFFBF4]"
-                    >
-                      <Copy className="size-3.5 sm:size-4" />
-                    </Button>
-
-                    <div className="flex items-center gap-2">
-                      <div className="relative flex size-2">
-                        <motion.span
-                          animate={{ scale: [1, 2.5], opacity: [0.75, 0] }}
-                          transition={{ repeat: Infinity, duration: 1.5 }}
-                          className="absolute inline-flex size-full rounded-full bg-[#4ADE80]"
-                        />
-                        <span className="relative inline-flex size-2 rounded-full bg-[#4ADE80]" />
+              {/* code body with sequential lines + blinking cursor */}
+              <div className="flex flex-col gap-4 px-5 py-6 font-mono text-sm leading-7 md:px-7 md:py-8">
+                {codeLines.map((line, i) => {
+                  const shown = typedLine > i;
+                  if (!shown)
+                    return (
+                      <div key={i} className="flex items-center gap-3">
+                        <span className="text-[#FFFBF4]/25">{i + 1}</span>
+                        <motion.span className="size-3 rounded-sm bg-[#4ADE80]/40" />
                       </div>
-                      <Badge className="border-[#4ADE80]/30 bg-[#4ADE80]/15 font-mono text-[10px] sm:text-[11px] text-[#4ADE80]">
-                        200 OK
-                      </Badge>
-                    </div>
+                    );
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center gap-3"
+                    >
+                      <span className="text-[#FFFBF4]/25">{i + 1}</span>
+                      <span className={line.color}>{line.text}</span>
+                    </motion.div>
+                  );
+                })}
+                <div className="flex items-center gap-3">
+                  <span className="text-[#FFFBF4]/25">{codeLines.length + 1}</span>
+                  <motion.span
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ repeat: Infinity, duration: 1 }}
+                    className="inline-block h-4 w-[2px] bg-[#4ADE80]"
+                  />
+                </div>
+              </div>
 
-                    <pre className="mt-3 font-mono text-[10px] sm:text-xs leading-relaxed text-[#8A8578] whitespace-pre-wrap">
-                      {"{"}
-                      {"\n"}
-                      <span className="text-[#D8CFBC]">"id"</span>:{" "}
-                      <span className="text-[#FFFBF4]">"prj_9x2a"</span>,
-                      {"\n"}
-                      <span className="text-[#D8CFBC]">"title"</span>:{" "}
-                      <span className="text-[#FFFBF4]">"E-Commerce..."</span>,
-                      {"\n"}
-                      <span className="text-[#D8CFBC]">"stack"</span>: [
-                      <span className="text-[#FFFBF4]">"Next.js"</span>],
-                      {"\n"}
-                      <span className="text-[#D8CFBC]">"featured"</span>:{" "}
-                      <span className="text-[#FFFBF4]">true</span>
-                      {"\n"}
-                      {"}"}
-                    </pre>
+              {/* status footer */}
+              <div className="flex items-center justify-between border-t border-white/10 bg-white/[0.02] px-5 py-3 text-xs text-[#D8CFBC]">
+                <span className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+                  Live playground active
+                </span>
+                <span className="font-mono">200 OK · 0ms</span>
+              </div>
+            </motion.div>
+          </ScrollReveal>
+
+          {/* ---- Template / cool grid ---- */}
+          <div className="mt-16">
+            <ScrollReveal className="mb-8 flex items-end justify-between">
+              <div>
+                <p className="mb-2 text-xs uppercase tracking-[0.3em] text-[#4ADE80]">Start with a vibe</p>
+                <h3 className="text-2xl font-bold text-[#FFFBF4] md:text-3xl">
+                  Cool templates, ready to run.
+                </h3>
+              </div>
+            </ScrollReveal>
+
+            <StaggerGrid className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {templateCards.map((card) => {
+                const Icon = card.icon;
+                return (
+                  <StaggerItem key={card.title}>
+                    <motion.div
+                      whileHover={{ y: -6, borderColor: "rgba(74,222,128,0.4)" }}
+                      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors"
+                    >
+                      {/* hover glow */}
+                      <motion.div
+                        variants={glowVariants}
+                        initial="idle"
+                        whileHover="hover"
+                        className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
+                        style={{ background: "radial-gradient(240px 160px at 30% 0%, rgba(74,222,128,0.12), transparent 65%)" }}
+                      />
+                      <div className="relative flex items-start justify-between">
+                        <motion.span
+                          whileHover={{ rotate: -8, scale: 1.1 }}
+                          className="flex size-11 items-center justify-center rounded-xl border border-[#4ADE80]/25 bg-[#4ADE80]/10 text-[#4ADE80]"
+                        >
+                          <Icon className="size-5" />
+                        </motion.span>
+                        <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-[#D8CFBC]">
+                          {card.tag}
+                        </span>
+                      </div>
+                      <div className="relative mt-auto">
+                        <h4 className="flex items-center gap-1.5 text-base font-semibold text-[#FFFBF4]">
+                          {card.title}
+                          <ArrowUpRight className="size-4 text-[#4ADE80] opacity-0 transition-opacity group-hover:opacity-100" />
+                        </h4>
+                        <p className="mt-1.5 text-sm leading-relaxed text-[#D8CFBC]">{card.desc}</p>
+                      </div>
+                    </motion.div>
+                  </StaggerItem>
+                );
+              })}
+            </StaggerGrid>
+          </div>
+
+          {/* ---- Feature row with animated counters ---- */}
+          <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3">
+            {features.map((feature, i) => {
+              const Icon = feature.icon;
+              return (
+                <ScrollReveal key={feature.title} delay={0.08 * i}>
+                  <div className="flex items-start gap-4">
+                    <div className="flex size-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-[#4ADE80]">
+                      <Icon className="size-5" />
+                    </div>
+                    <div>
+                      <h5 className="text-base font-semibold text-[#FFFBF4]">{feature.title}</h5>
+                      <p className="mt-1 text-sm text-[#D8CFBC]">{feature.desc}</p>
+                    </div>
                   </div>
-                </ScaleIn>
+                </ScrollReveal>
+              );
+            })}
+          </div>
+
+          {/* ---- CTA ---- */}
+          <ScrollReveal delay={0.1}>
+            <div className="mt-24 relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#121212] to-[#0A0A0A] p-10 text-center md:p-14">
+              <motion.div
+                className="pointer-events-none absolute -top-20 left-1/2 h-40 w-[560px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
+                animate={{ opacity: [0.4, 0.7, 0.4] }}
+                transition={{ repeat: Infinity, duration: 4 }}
+                style={{ background: "radial-gradient(closest-side, rgba(74,222,128,0.25), transparent)" }}
+              />
+              <div className="relative">
+                <motion.span
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ type: "spring", stiffness: 260, damping: 18 }}
+                  className="inline-flex size-14 items-center justify-center rounded-2xl border border-[#4ADE80]/30 bg-[#4ADE80]/10 text-[#4ADE80]"
+                >
+                  <Rocket className="size-6" />
+                </motion.span>
+                <h3 className="mt-6 text-2xl font-bold text-[#FFFBF4] md:text-4xl">
+                  Stop planning. <CharReveal text="Start building." className="text-[#4ADE80]" staggerDelay={0.03} />
+                </h3>
+                <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#D8CFBC]">
+                  Jump into the playground, try a template, and see your
+                  product come to life — the exact way your users will.
+                </p>
+                <motion.a
+                  href="/login"
+                  whileHover={{ scale: 1.04, boxShadow: "0 0 40px rgba(74,222,128,0.4)" }}
+                  whileTap={{ scale: 0.96 }}
+                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#4ADE80] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A]"
+                >
+                  Open the playground
+                  <ArrowUpRight className="size-4" />
+                </motion.a>
               </div>
             </div>
           </ScrollReveal>
-        </section>
-
-        {/* Dashboard Preview */}
-        <section className="mt-12 sm:mt-16 flex flex-col items-center gap-6 sm:gap-8">
-          <div className="text-center px-4">
-            <ScrollReveal direction="up" delay={0}>
-              <h2
-                className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight text-[#FFFBF4]"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-              >
-                A dashboard that feels like home.
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={0.1}>
-              <p className="mx-auto mt-3 sm:mt-4 max-w-[560px] text-sm sm:text-base text-[#D8CFBC]">
-                Overview, analytics, API usage, and recent projects — all in one
-                clean view.
-              </p>
-            </ScrollReveal>
-          </div>
-
-          {/* Dashboard Mockup */}
-          <ScaleIn delay={0.2} scale={0.97}>
-            <div className="w-full max-w-[980px] rounded-2xl border border-white/10 bg-[#171717] p-1 shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_0_60px_-10px_rgba(255,255,255,0.15)]">
-              <div className="flex overflow-hidden rounded-xl bg-[#0A0A0A] flex-col md:flex-row">
-                {/* Sidebar - Mobile Hamburger */}
-                <div className="flex md:flex-col items-center justify-between md:justify-start border-b md:border-b-0 md:border-r border-white/10 bg-[#171717] px-4 py-3 md:p-0 md:w-16 md:px-0">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ type: "spring", delay: 0.3 }}
-                    className="flex size-6 sm:size-7 items-center justify-center rounded-md bg-[#FFFBF4]"
-                  >
-                    <Braces className="size-3.5 sm:size-4 text-[#0A0A0A]" />
-                  </motion.div>
-
-                  {/* Desktop Icons */}
-                  <div className="hidden md:flex md:flex-col md:items-center md:gap-6 md:py-6">
-                    {[LayoutGrid, FolderKanban, BarChart2, Terminal, Image, LayoutTemplate, Settings, LifeBuoy].map(
-                      (Icon, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.4 + i * 0.05 }}
-                        >
-                          <Icon
-                            className={`size-4 sm:size-5 ${
-                              i === 0 ? "text-[#FFFBF4]" : "text-[#D8CFBC]"
-                            }`}
-                          />
-                        </motion.div>
-                      )
-                    )}
-                  </div>
-
-                  {/* Mobile Menu Toggle */}
-                  <button
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden text-[#D8CFBC]"
-                  >
-                    {mobileMenuOpen ? (
-                      <X className="size-5" />
-                    ) : (
-                      <Menu className="size-5" />
-                    )}
-                  </button>
-                </div>
-
-                {/* Mobile Sidebar Menu */}
-                {mobileMenuOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="md:hidden flex flex-wrap gap-4 px-4 py-3 bg-[#171717] border-b border-white/10"
-                  >
-                    {[LayoutGrid, FolderKanban, BarChart2, Terminal, Image, LayoutTemplate, Settings, LifeBuoy].map(
-                      (Icon, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.05 }}
-                        >
-                          <Icon
-                            className={`size-4 ${
-                              i === 0 ? "text-[#FFFBF4]" : "text-[#D8CFBC]"
-                            }`}
-                          />
-                        </motion.div>
-                      )
-                    )}
-                  </motion.div>
-                )}
-
-                {/* Main Content */}
-                <div className="flex flex-1 flex-col min-w-0">
-                  {/* Top Bar */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/10 px-3 sm:px-5 py-3">
-                    <div className="flex w-full sm:w-[220px] items-center gap-2 rounded-lg border border-white/10 bg-[#171717] px-3 py-1.5">
-                      <Search className="size-3.5 text-[#D8CFBC]" />
-                      <span className="text-xs text-[#D8CFBC] truncate">
-                        Search projects...
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end">
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <Bell className="size-4 text-[#D8CFBC]" />
-                        <Avatar className="size-6 sm:size-7">
-                          <AvatarFallback className="bg-[#262626] text-[9px] sm:text-[10px] text-[#FFFBF4]">
-                            JD
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-                      <Button size="sm" className="h-7 gap-1 bg-[#FBF7F4] text-[10px] sm:text-xs text-[#0A0A0A] hover:bg-[#FBF7F4]/90 px-2 sm:px-3">
-                        <Plus className="size-3 sm:size-3.5" />
-                        <span className="hidden xs:inline">Quick Create</span>
-                        <span className="xs:hidden">Create</span>
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Stats */}
-                  <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 p-3 sm:p-5">
-                    {[
-                      { label: "Total Projects", value: 128, suffix: "" },
-                      { label: "API Calls This Month", value: 42, suffix: ".3K" },
-                      { label: "Active Portfolios", value: 7, suffix: "" },
-                    ].map((stat, i) => (
-                      <Card key={i} className="border-0 bg-[#171717] p-3 sm:p-4">
-                        <CardHeader className="p-0">
-                          <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.4px] text-[#D8CFBC]">
-                            {stat.label}
-                          </span>
-                        </CardHeader>
-                        <CardContent className="p-0 pt-1">
-                          <AnimatedCounter
-                            target={stat.value}
-                            suffix={stat.suffix}
-                            className="text-xl sm:text-2xl font-bold text-[#FFFBF4]"
-                          />
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-
-                  {/* Recent Projects */}
-                  <Card className="mx-3 sm:mx-5 mb-3 sm:mb-5 flex-1 border-0 bg-[#171717]">
-                    <CardHeader className="flex flex-row items-center justify-between p-3 sm:p-4">
-                      <span className="text-xs sm:text-sm font-medium text-[#FFFBF4]">
-                        Recent Projects
-                      </span>
-                      <span className="text-[10px] sm:text-[11px] text-[#D8CFBC] cursor-pointer hover:text-[#FFFBF4] transition-colors">
-                        View all
-                      </span>
-                    </CardHeader>
-                    <CardContent className="p-0">
-                      {[
-                        { name: "E-Commerce Dashboard", fw: "Next.js", live: true },
-                        { name: "Portfolio Site v2", fw: "Astro", live: true },
-                        { name: "Client CMS Panel", fw: "Vue", live: false },
-                      ].map((project, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: -10 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.6 + i * 0.1 }}
-                          className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-3 sm:px-4 py-2 sm:py-2.5"
-                        >
-                          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                            <div className="size-5 sm:size-6 rounded-md bg-[#262626] flex-shrink-0" />
-                            <span className="text-xs sm:text-sm text-[#FFFBF4] truncate">
-                              {project.name}
-                            </span>
-                          </div>
-                          <span className="font-mono text-[9px] sm:text-[11px] text-[#D8CFBC] flex-shrink-0">
-                            {project.fw}
-                          </span>
-                          <Badge
-                            className={
-                              project.live
-                                ? "border-[#4ADE80]/30 bg-[#4ADE80]/15 text-[9px] sm:text-[10px] text-[#4ADE80] flex-shrink-0"
-                                : "border-white/10 bg-[#262626] text-[9px] sm:text-[10px] text-[#D8CFBC] flex-shrink-0"
-                            }
-                          >
-                            {project.live ? "Live" : "Draft"}
-                          </Badge>
-                        </motion.div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </div>
-          </ScaleIn>
-        </section>
-      </main>
+        </div>
+      </section>
     </div>
   );
 }

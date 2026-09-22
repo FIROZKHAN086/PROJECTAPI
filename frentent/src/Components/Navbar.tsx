@@ -1,7 +1,7 @@
 "use client";
 
-import  { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useSpring, useMotionValue, useTransform } from "framer-motion";
 import { 
   Menu, 
   X, 
@@ -20,6 +20,7 @@ import {
   ChevronDown,
   CircleQuestionMark,
   Info,
+  View,
   Home,
   LifeBuoy
 } from "lucide-react";
@@ -34,9 +35,11 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Github01Icon, TwitterSquareIcon } from "@hugeicons/core-free-icons";
 import { useRouter  } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/src/lib/hooks";
+import { useAppSelector } from "@/src/lib/hooks";
 import { useLogout } from "@/src/hooks/useAuth";
 import Link from "next/link";
+
+
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -77,7 +80,12 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
- 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   // Motion values for floating elements
   const mouseX = useMotionValue(0);
@@ -100,17 +108,19 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navLinks = [
-    { name: "Home", href: "/", icon: Home, description: "Return to the homepage" },
-    { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
-    { name: "Docs", href: "/docs", icon: BookOpen, description: "Read the documentation" },
-    ...(user ? [{ name: "Dashboard",href: "/dashboard",icon: Terminal,description: "Test your API"}] : [])
-  ];
+const navLinks = [
+  { name: "Home", href: "/", icon: Home, description: "Return to the homepage" },
+  { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
+  { name: "Docs", href: "/docs", icon: BookOpen, description: "Read the documentation" },
+    ...(user ? [
+    { name: "Dashboard", href: "/dashboard", icon: Terminal, description: "Test your API" }
+  ] : [])
+];
 
   const dropdownItems = [
-    { name: "Pricing", href: "#pricing", icon: CreditCard ,isBeta :true },
-    { name: "Contact us", href: "#playground", icon: CircleQuestionMark ,isBeta:true },
-    { name: "About", href: "#playground", icon:Info , },
+    { name: "Pricing", href: "#pricing", icon: CreditCard },
+    { name: "About", href: "#playground", icon:Info },
+    { name: "Contact us", href: "#playground", icon: CircleQuestionMark },
     { name: "API Playground", href: "#playground", icon: Terminal },
   ];
 
@@ -310,7 +320,16 @@ const Navbar = () => {
               return (
                 <motion.button
                   key={link.name}
-                  onClick={()=>router.push(link.href)}
+                    onClick={() => {
+                      if (link.href.startsWith("#")) {
+                        const target = document.querySelector(link.href);
+                        if (target) {
+                          target.scrollIntoView({ behavior: "smooth" });
+                        }
+                      } else {
+                        router.push(link.href);
+                      }
+                    }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="relative px-4 py-1.5 text-xs font-medium text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors duration-200 z-10 flex items-center gap-1.5"
@@ -380,20 +399,15 @@ const Navbar = () => {
                     {dropdownItems.map((item) => {
                       const Icon = item.icon;
                       return (
-                        <Link
+                        <motion.a
                           key={item.name}
                           href={item.href}
-                       
-                          className="flex items-center  gap-3 px-4 py-3 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] transition-all duration-200"
+                          whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.05)" }}
+                          className="flex items-center gap-3 px-4 py-3 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] transition-all duration-200"
                         >
                           <Icon className="w-4 h-4 text-[#4ADE80]" />
                           <span>{item.name}</span>
-                          {item.isBeta && (
-        <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-[#4ADE80]/10 text-[#4ADE80] rounded border border-[#4ADE80]/20">
-          Beta
-        </span>
-      )}
-                        </Link>
+                        </motion.a>
                       );
                     })}
                   </motion.div>
@@ -447,16 +461,16 @@ const Navbar = () => {
                           <span>Profile</span>
                         </Link>
                       
-                          <Link href={'/dashboard?path=api-key'} onClick={() => {setProfileOpen(false);}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                          <Link href={'/dashboard?path=api-key'} onClick={() => {setProfileOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Key className="w-4 h-4" />
                             <span>API Keys</span>
                           </Link>
-                            <Link href={'/dashboard'} onClick={() => {setProfileOpen(false);}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                            <Link href="/dashboard" onClick={() => {setProfileOpen(false);}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Terminal className="w-4 h-4" />
                             <span>Dashboard</span>
                           </Link>
                        
-                        <Link href={'/dashboard?path=support'} onClick={() => {setProfileOpen(false);}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer">
+                        <Link href={'/dashboard?path=support'} onClick={() => {setProfileOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer">
                           <LifeBuoy className="w-4 h-4" />
                           <span>Support</span>
                         </Link>
@@ -482,7 +496,7 @@ const Navbar = () => {
             ) : (
               <>
                 
-                  <motion.button  
+                  <motion.a
                   onClick={()=>router.push("/login?auth=login")}
                     whileHover={{ 
                       scale: 1.05, 
@@ -506,7 +520,7 @@ const Navbar = () => {
                       <LogIn className="w-4 h-4 text-[#D8CFBC] group-hover:text-[#4ADE80] transition-colors" />
                     </motion.span>
                     <span>Log in</span>
-                  </motion.button>
+                  </motion.a>
                 
 
                 
@@ -544,7 +558,7 @@ const Navbar = () => {
           </motion.div>
 
           {/* Mobile Menu Button with Animation */}
-          <div className="flex md:hidden items-center ">
+          <div className="flex md:hidden items-center">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger className="flex items-center  justify-center p-2 text-[#D8CFBC] hover:text-[#FFFBF4] rounded-lg bg-[#141414] border border-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer">
                 <motion.div
@@ -556,7 +570,7 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent 
                 side="right" 
-                className="bg-[#0A0A0A] min-h-screen  border-l border-white/10 p-0 flex flex-col justify-between w-[340px] text-[#FFFBF4] overflow-hidden"
+                className="bg-[#0A0A0A]  border-l border-white/10 p-0 flex flex-col justify-between w-[340px] text-[#FFFBF4] overflow-hidden"
               >
                 <SheetHeader className="sr-only">
                   <SheetTitle>Mobile Navigation</SheetTitle>
@@ -593,7 +607,7 @@ const Navbar = () => {
                         </span>
                       </motion.div>
                       
-                      
+                   
                     </motion.div>
 
                     {/* Mobile Navigation Links with Stagger */}
@@ -606,9 +620,10 @@ const Navbar = () => {
                       {navLinks.map((link) => {
                         const Icon = link.icon;
                         return (
-                          <motion.button
+                          <motion.a
                             key={link.name}
-                            onClick={() => {setIsOpen(false); router.push(link.href)}}
+                            href={link.href}
+                            onClick={() => setIsOpen(false)}
                             variants={mobileItemVariants}
                             whileHover={{ 
                               x: 8, 
@@ -633,7 +648,7 @@ const Navbar = () => {
                             >
                               <ChevronRight className="w-4 h-4 text-[#D8CFBC]/30 group-hover:text-[#4ADE80] transition-colors" />
                             </motion.div>
-                          </motion.button>
+                          </motion.a>
                         );
                       })}
 
@@ -641,17 +656,17 @@ const Navbar = () => {
                       {dropdownItems.map((item) => {
                         const Icon = item.icon;
                         return (
-                          <motion.button
+                          <motion.a
                             key={item.name}
-                            
-                            onClick={() => {setIsOpen(false); router.push(item.href)}}
+                            href={item.href}
+                            onClick={() => setIsOpen(false)}
                             variants={mobileItemVariants}
                             whileHover={{ x: 8, backgroundColor: "rgba(255,255,255,0.05)" }}
                             className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#141414]/30 border border-white/5 hover:border-white/10 text-[#D8CFBC] hover:text-[#FFFBF4] text-sm font-medium transition-all duration-200"
                           >
                             <Icon className="w-4 h-4 text-[#D8CFBC]" />
                             <span>{item.name}</span>
-                          </motion.button>
+                          </motion.a>
                         );
                       })}
                     </motion.nav>
@@ -691,7 +706,7 @@ const Navbar = () => {
                     ) : (
                       <>
                        
-                          <motion.button
+                          <motion.a
 
                           onClick={() => {setIsOpen(false); router.push('/login')}}
                             whileHover={{ scale: 1.02 }}
@@ -700,7 +715,7 @@ const Navbar = () => {
                           >
                             <LogIn className="w-4 h-4" />
                             <span>Log in</span>
-                          </motion.button>
+                          </motion.a>
                      
                        
                           <motion.button
@@ -730,19 +745,20 @@ const Navbar = () => {
                       animate={isOpen ? { opacity: 1 } : { opacity: 0 }}
                       transition={{ delay: 0.4 }}
                     >
-                      <motion.button
-                       
+                      <motion.a
+                        href="#"
                         whileHover={{ scale: 1.1, y: -2 }}
                         className="text-[#D8CFBC] hover:text-[#4ADE80] transition-colors"
                       >
                 <HugeiconsIcon icon={Github01Icon} />
-                      </motion.button>
-                      <motion.button
+                      </motion.a>
+                      <motion.a
+                        href="#"
                         whileHover={{ scale: 1.1, y: -2 }}
                         className="text-[#D8CFBC] hover:text-[#4ADE80] transition-colors"
                       >
                       <HugeiconsIcon icon={TwitterSquareIcon} />
-                      </motion.button>
+                      </motion.a>
                     </motion.div>
                   </motion.div>
                 </motion.div>
