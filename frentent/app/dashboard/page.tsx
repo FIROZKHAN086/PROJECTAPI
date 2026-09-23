@@ -3,7 +3,6 @@
 import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAppSelector } from "@/src/lib/hooks";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -83,7 +82,6 @@ const SECTIONS: Record<string, { title: string; description: string; component: 
 function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { user } = useAppSelector((s) => s.auth);
 
   const currentPath = searchParams.get("path") || "overview";
   const activeSection = SECTIONS[currentPath] || SECTIONS.overview;

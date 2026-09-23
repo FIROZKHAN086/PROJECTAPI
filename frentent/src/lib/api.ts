@@ -5,18 +5,28 @@ if (process.env.NEXT_PUBLIC_ENV === "development") {
 }
 
 const TOKEN_KEY = "authToken";
+const COOKIE_KEY = "authToken";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+
+function readCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
-  return window.localStorage.getItem(TOKEN_KEY);
+  return window.localStorage.getItem(TOKEN_KEY) || readCookie(COOKIE_KEY);
 }
 
 export function setStoredToken(token: string | null): void {
   if (typeof window === "undefined") return;
   if (token) {
     window.localStorage.setItem(TOKEN_KEY, token);
+    document.cookie = `${COOKIE_KEY}=${encodeURIComponent(token)}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`;
   } else {
     window.localStorage.removeItem(TOKEN_KEY);
+    document.cookie = `${COOKIE_KEY}=; path=/; max-age=0; SameSite=Lax`;
   }
 }
 
