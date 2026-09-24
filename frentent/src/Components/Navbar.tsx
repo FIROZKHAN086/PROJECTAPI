@@ -35,9 +35,11 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Github01Icon, TwitterSquareIcon } from "@hugeicons/core-free-icons";
 import { useRouter  } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/src/lib/hooks";
+import { useAppSelector } from "@/src/lib/hooks";
 import { useLogout } from "@/src/hooks/useAuth";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
+
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -106,12 +108,14 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const navLinks = [
-    { name: "Home", href: "/", icon: Home, description: "Return to the homepage" },
-    { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
-    { name: "Docs", href: "/docs", icon: BookOpen, description: "Read the documentation" },
-    { name: "Dashboard", href: "/dashboard", icon: Terminal, description: "Test your API" },
-  ];
+const navLinks = [
+  { name: "Home", href: "/", icon: Home, description: "Return to the homepage" },
+  { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
+  { name: "Docs", href: "/docs", icon: BookOpen, description: "Read the documentation" },
+    ...(user ? [
+    { name: "Dashboard", href: "/dashboard", icon: Terminal, description: "Test your API" }
+  ] : [])
+];
 
   const dropdownItems = [
     { name: "Pricing", href: "#pricing", icon: CreditCard },
@@ -314,9 +318,18 @@ const Navbar = () => {
             {navLinks.map((link, index) => {
               const Icon = link.icon;
               return (
-                <motion.a
+                <motion.button
                   key={link.name}
-                  href={link.href}
+                    onClick={() => {
+                      if (link.href.startsWith("#")) {
+                        const target = document.querySelector(link.href);
+                        if (target) {
+                          target.scrollIntoView({ behavior: "smooth" });
+                        }
+                      } else {
+                        router.push(link.href);
+                      }
+                    }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="relative px-4 py-1.5 text-xs font-medium text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors duration-200 z-10 flex items-center gap-1.5"
@@ -350,7 +363,7 @@ const Navbar = () => {
                       •
                     </motion.span>
                   )}
-                </motion.a>
+                </motion.button>
               );
             })}
 
@@ -443,28 +456,28 @@ const Navbar = () => {
                         <p className="text-[10px] text-[#8A8578] truncate">{user.email}</p>
                       </div>
                       <div className="py-1">
-                        <a href="#profile" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                        <Link href="#profile" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                           <User className="w-4 h-4" />
                           <span>Profile</span>
-                        </a>
+                        </Link>
                       
-                          <a onClick={() => {setProfileOpen(false); router.push('/dashboard?path=api-key');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                          <Link href={'/dashboard?path=api-key'} onClick={() => {setProfileOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Key className="w-4 h-4" />
                             <span>API Keys</span>
-                          </a>
-                            <a onClick={() => {setProfileOpen(false); router.push('/dashboard');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                          </Link>
+                            <Link href="/dashboard" onClick={() => {setProfileOpen(false);}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                             <Terminal className="w-4 h-4" />
                             <span>Dashboard</span>
-                          </a>
+                          </Link>
                        
-                        <a onClick={() => {setProfileOpen(false); router.push('/dashboard?path=support');}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer">
+                        <Link href={'/dashboard?path=support'} onClick={() => {setProfileOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer">
                           <LifeBuoy className="w-4 h-4" />
                           <span>Support</span>
-                        </a>
-                        <a href="#settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                        </Link>
+                        <Link href="#settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
                           <Settings className="w-4 h-4" />
                           <span>Settings</span>
-                        </a>
+                        </Link>
                       </div>
                       <div className="border-t border-white/10 py-1">
                         <button
@@ -594,13 +607,7 @@ const Navbar = () => {
                         </span>
                       </motion.div>
                       
-                      <motion.button
-                        onClick={() => setIsOpen(false)}
-                        className="p-2 rounded-lg hover:bg-white/5 transition-colors"
-                        whileHover={{ rotate: 90 }}
-                      >
-                        <X className="w-4 h-4 text-[#D8CFBC]" />
-                      </motion.button>
+                   
                     </motion.div>
 
                     {/* Mobile Navigation Links with Stagger */}
@@ -760,11 +767,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Scroll Progress Bar with Enhanced Style */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#4ADE80] via-[#FFFBF4] to-[#4ADE80] origin-[0%] z-50 shadow-[0_0_15px_rgba(74,222,128,0.3)]"
-          style={{ scaleX }}
-        />
+       
       </motion.header>
     </>
   );

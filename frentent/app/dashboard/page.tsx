@@ -1,15 +1,5 @@
-"use client";
 
-import { useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAppSelector } from "@/src/lib/hooks";
-import {
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarInset,
-} from "@/components/ui/sidebar";
-import AppSidebar from "@/src/Components/dashboard/Sidebar";
+import { Suspense } from "react";
 import Overview from "@/src/Components/dashboard/Overview";
 import Projects from "@/src/Components/dashboard/Projects";
 import ApiKey from "@/src/Components/dashboard/ApiKey";
@@ -19,15 +9,21 @@ import GetAllData from "@/src/Components/dashboard/GetAllData";
 import DeleteProject from "@/src/Components/dashboard/DeleteProject";
 import ViewProjects from "@/src/Components/dashboard/ViewProjects";
 import ApiLook from "@/src/Components/dashboard/ApiLook";
-import { SupportContent } from "@/src/Components/dashboard/SupportContent";
+import { SupportContent } from "@/src/Components/support/SupportContent";
+import { DashboardContent } from "./DashboardContent";
 
-const pageVariants = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100, damping: 20 } },
-  exit: { opacity: 0, y: -12, transition: { duration: 0.15 } },
+ export const pageVariants = {
+  initial: { opacity: 0, y: 18, scale: 0.995 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: "spring" as const, stiffness: 90, damping: 20, mass: 0.9 },
+  },
+  exit: { opacity: 0, y: -14, filter: "blur(4px)", transition: { duration: 0.25 } },
 };
 
-const SECTIONS: Record<string, { title: string; description: string; component: React.ReactNode }> = {
+ export const SECTIONS: Record<string, { title: string; description: string; component: React.ReactNode }> = {
   overview: {
     title: "Overview",
     description: "Your project dashboard at a glance",
@@ -80,64 +76,17 @@ const SECTIONS: Record<string, { title: string; description: string; component: 
   },
 };
 
-function DashboardContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const { user } = useAppSelector((s) => s.auth);
 
-  const currentPath = searchParams.get("path") || "overview";
-  const activeSection = SECTIONS[currentPath] || SECTIONS.overview;
-
-  const handleNavigate = (path: string) => {
-    router.push(`/dashboard?path=${path}`);
-  };
-
-  return (
-    <SidebarProvider defaultOpen={true}>
-      <AppSidebar currentPath={currentPath} onNavigate={handleNavigate} />
-
-      <SidebarInset className="bg-[#0A0A0A]">
-        {/* Top bar with sidebar trigger */}
-        <header className="flex items-center gap-2 border-b border-white/10 px-4 py-3 md:hidden">
-          <SidebarTrigger className="text-[#D8CFBC] hover:text-[#FFFBF4]" />
-          <span className="text-sm font-medium text-[#FFFBF4]">
-            {activeSection.title}
-          </span>
-        </header>
-
-        {/* Content Area */}
-        <main className="min-h-screen overflow-y-scroll p-4 md:p-6 lg:p-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPath}
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-[#FFFBF4] font-space-grotesk">
-                  {activeSection.title}
-                </h1>
-                <p className="text-sm text-[#8A8578] mt-1">
-                  {activeSection.description}
-                </p>
-              </div>
-              {activeSection.component}
-            </motion.div>
-          </AnimatePresence>
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
-  );
-}
 
 export default function DashboardPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-          <div className="w-6 h-6 border-2 border-[#4ADE80]/30 border-t-[#4ADE80] rounded-full animate-spin" />
+        <div className="min-h-screen bg-[#07070B] flex items-center justify-center">
+          <div className="flex items-center gap-3">
+            <div className="size-6 border-2 border-[#4ADE80]/30 border-t-[#4ADE80] rounded-full animate-spin" />
+            <span className="text-sm text-[#A3A3A3]">Loading dashboard...</span>
+          </div>
         </div>
       }
     >

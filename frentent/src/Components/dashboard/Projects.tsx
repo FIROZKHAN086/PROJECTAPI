@@ -3,24 +3,28 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Search, Pencil, Trash2, Eye, Star, AlertTriangle } from "lucide-react";
+import {
+  Search,
+  Pencil,
+  Trash2,
+  Eye,
+  Star,
+  AlertTriangle,
+  FolderOpen,
+} from "lucide-react";
 import { useProjects, useDeleteProject } from "@/src/hooks/useProjects";
 import { toast } from "@/src/lib/toastSlice";
-import { CustomFieldsDisplay } from "./CustomFieldsDrawer";
-
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } },
-};
+import { CustomFieldsDisplay } from "./Components/CustomFieldsDrawer";
+import {
+  Reveal,
+  GlowCard,
+  DashHeader,
+  PageIntro,
+  FadeItem,
+} from "@/src/Components/dashboard/ui";
 
 type FilterType = "All" | "Featured";
 
@@ -37,8 +41,6 @@ const Projects = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
 
   const projects = data?.data ?? [];
-
-  
 
   const filtered = projects.filter((p) => {
     const matchesSearch =
@@ -58,200 +60,229 @@ const Projects = () => {
 
   if (error) {
     return (
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="space-y-6 p-6"
-      >
-        <motion.div variants={item}>
-          <Card className="bg-[#141414] border border-[#F87171]/30">
-            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
-              <AlertTriangle className="w-8 h-8 text-[#F87171]" />
-              <p className="text-[#F87171] font-medium">Failed to load projects</p>
-              <p className="text-sm text-[#8A8578]">{error.message ?? "Please try again later."}</p>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </motion.div>
+      <div className="space-y-6">
+        <Reveal>
+          <GlowCard glow="248, 113, 113" className="w-full">
+            <div className="flex flex-col items-center justify-center gap-3 px-6 py-12">
+              <motion.div
+                animate={{ rotate: [0, 8, -8, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity }}
+                className="flex size-12 items-center justify-center rounded-2xl border border-[#F87171]/30 bg-[#F87171]/10"
+              >
+                <AlertTriangle className="size-6 text-[#F87171]" />
+              </motion.div>
+              <p className="font-medium text-[#FAFAFA] font-space-grotesk">
+                Failed to load projects
+              </p>
+              <p className="text-sm text-[#A3A3A3]">
+                {error.message ?? "Please try again later."}
+              </p>
+            </div>
+          </GlowCard>
+        </Reveal>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="space-y-6 p-6"
-    >
-      <motion.div variants={item}>
-        <Card className="bg-[#141414] border border-white/10">
-          <CardHeader>
-            <CardTitle className="text-[#FFFBF4] text-xl">Projects</CardTitle>
-            <CardDescription className="text-[#8A8578]">
-              Manage all your projects
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      </motion.div>
+    <div className="space-y-6">
+      <Reveal>
+        <DashHeader
+          icon={FolderOpen}
+          title="Projects"
+          subtitle="Manage all your projects"
+          accent="#4ADE80"
+        />
+      </Reveal>
 
-      <motion.div variants={item} className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8578]" />
-          <Input
-            placeholder="Search projects..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-[#141414] border-white/10 text-[#FFFBF4] placeholder:text-[#8A8578] focus-visible:ring-[#4ADE80]/50"
-          />
+      <Reveal delay={0.05}>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-[#6B6B6B]" />
+            <Input
+              placeholder="Search projects..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="h-10 rounded-xl border-white/10 bg-white/[0.04] pl-9 text-[#FAFAFA] placeholder:text-[#6B6B6B] focus-visible:ring-[#4ADE80]/40 focus-visible:border-[#4ADE80]/40 backdrop-blur-sm"
+            />
+          </div>
+          <div className="flex w-fit gap-1 rounded-xl border border-white/10 bg-white/[0.04] p-1 backdrop-blur-sm">
+            {filters.map((f) => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setActiveFilter(f.value)}
+                className="relative cursor-pointer rounded-lg px-4 py-2 text-xs font-medium"
+              >
+                {activeFilter === f.value && (
+                  <motion.span
+                    layoutId="projects-filter-pill"
+                    className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#4ADE80] to-[#22D3EE]"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span
+                  className={`relative z-10 transition-colors ${
+                    activeFilter === f.value
+                      ? "font-semibold text-[#07110A]"
+                      : "text-[#A3A3A3] hover:text-[#D8CFBC]"
+                  }`}
+                >
+                  {f.label}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex gap-2">
-          {filters.map((f) => (
-            <Badge
-              key={f.value}
-              variant="secondary"
-              onClick={() => setActiveFilter(f.value)}
-              className={`cursor-pointer text-xs px-3 py-1.5 transition-all ${
-                activeFilter === f.value
-                  ? "bg-[#4ADE80]/15 text-[#4ADE80] border border-[#4ADE80]/30"
-                  : "bg-white/5 text-[#8A8578] border border-white/10 hover:bg-white/10 hover:text-[#D8CFBC]"
-              }`}
-            >
-              {f.label}
-            </Badge>
-          ))}
-        </div>
-      </motion.div>
+      </Reveal>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i} className="bg-[#141414] border border-white/10 h-full">
-              <CardContent className="p-5 flex flex-col h-full gap-3">
-                <div className="flex items-start justify-between">
-                  <Skeleton className="h-5 w-32 rounded bg-white/5" />
-                  <Skeleton className="h-5 w-16 rounded bg-white/5" />
-                </div>
-                <Skeleton className="h-4 w-full rounded bg-white/5" />
-                <Skeleton className="h-4 w-3/4 rounded bg-white/5" />
-                <Skeleton className="h-3 w-24 rounded bg-white/5" />
-                <div className="flex gap-2 mt-auto">
-                  <Skeleton className="h-8 w-16 rounded bg-white/5" />
-                  <Skeleton className="h-8 w-16 rounded bg-white/5" />
-                  <Skeleton className="h-8 w-16 rounded bg-white/5" />
-                </div>
-              </CardContent>
-            </Card>
+            <div
+              key={i}
+              className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5"
+            >
+              <div className="flex items-start justify-between">
+                <Skeleton className="h-5 w-32 rounded bg-white/[0.06]" />
+                <Skeleton className="h-5 w-14 rounded bg-white/[0.06]" />
+              </div>
+              <Skeleton className="h-4 w-full rounded bg-white/[0.06]" />
+              <Skeleton className="h-4 w-3/4 rounded bg-white/[0.06]" />
+              <div className="flex gap-1.5 pt-1">
+                <Skeleton className="h-5 w-12 rounded-full bg-white/[0.06]" />
+                <Skeleton className="h-5 w-12 rounded-full bg-white/[0.06]" />
+              </div>
+              <div className="flex gap-2 pt-2">
+                <Skeleton className="h-7 w-14 rounded-lg bg-white/[0.06]" />
+                <Skeleton className="h-7 w-14 rounded-lg bg-white/[0.06]" />
+                <Skeleton className="h-7 w-14 rounded-lg bg-white/[0.06]" />
+              </div>
+            </div>
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <PageIntro className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((project) => (
-            <motion.div
-              key={project.id}
-              variants={item}
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring" as const, stiffness: 300, damping: 20 }}
-            >
-              <Card className="bg-[#141414] border border-white/10 hover:border-[#4ADE80]/30 transition-colors h-full">
-                <CardContent className="p-5 flex flex-col h-full">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-[#FFFBF4] font-semibold text-base truncate mr-2">
-                      {project.title}
-                    </h3>
-                    <div className="flex gap-1.5 shrink-0">
-                      {project.featured && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-[#FACC15]/15 text-[#FACC15] border border-[#FACC15]/20 text-[10px]"
-                        >
-                          <Star className="w-2.5 h-2.5 mr-0.5" />
-                          Featured
-                        </Badge>
-                      )}
-                      {project.category && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-white/5 text-[#8A8578] border border-white/10 text-[10px]"
-                        >
-                          {project.category}
-                        </Badge>
-                      )}
+            <FadeItem key={project.id} className="h-full">
+              <motion.div
+                whileHover={{ y: -3, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring" as const, stiffness: 300, damping: 20 }}
+                className="h-full"
+              >
+                <GlowCard className="h-full">
+                  <div className="flex h-full flex-col p-5">
+                    <div className="mb-3 flex items-start justify-between">
+                      <h3 className="mr-2 truncate font-semibold text-base text-[#FAFAFA] font-space-grotesk">
+                        {project.title}
+                      </h3>
+                      <div className="flex shrink-0 gap-1.5">
+                        {project.featured && (
+                          <Badge
+                            variant="secondary"
+                            className="border border-[#FACC15]/25 bg-[#FACC15]/10 text-[10px] text-[#FACC15]"
+                          >
+                            <Star className="mr-0.5 size-2.5" />
+                            Featured
+                          </Badge>
+                        )}
+                        {project.category && (
+                          <Badge
+                            variant="secondary"
+                            className="border border-white/10 bg-white/[0.04] text-[10px] text-[#D8CFBC]"
+                          >
+                            {project.category}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <p className="text-sm text-[#8A8578] line-clamp-2 mb-3 flex-1">
-                    {project.description}
-                  </p>
-                  {project.tech.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {project.tech.slice(0, 4).map((t) => (
-                        <Badge
-                          key={t}
-                          variant="secondary"
-                          className="bg-[#4ADE80]/10 text-[#4ADE80] border border-[#4ADE80]/20 text-[10px] px-1.5 py-0"
-                        >
-                          {t}
-                        </Badge>
-                      ))}
-                      {project.tech.length > 4 && (
-                        <Badge
-                          variant="secondary"
-                          className="bg-white/5 text-[#8A8578] border border-white/10 text-[10px] px-1.5 py-0"
-                        >
-                          +{project.tech.length - 4}
-                        </Badge>
-                      )}
-                    </div>
-                  )}
-                  <CustomFieldsDisplay fields={project.customFields} />
-                  <p className="text-[11px] text-[#8A8578] mb-4">
-                    Created {new Date(project.createdAt).toLocaleDateString()}
-                  </p>
-                  <div className="flex gap-2">
-                    {project.liveDemo && (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        className="bg-white/5 border border-white/10 text-[#D8CFBC] hover:bg-[#4ADE80]/10 hover:text-[#4ADE80] hover:border-[#4ADE80]/20 text-xs"
-                        onClick={() => window.open(project.liveDemo!, "_blank")}
-                      >
-                        <Eye className="w-3 h-3 mr-1" />
-                        View
-                      </Button>
+                    <p className="mb-3 line-clamp-2 flex-1 text-sm text-[#A3A3A3]">
+                      {project.description}
+                    </p>
+                    {project.tech.length > 0 && (
+                      <div className="mb-3 flex flex-wrap gap-1">
+                        {project.tech.slice(0, 4).map((t) => (
+                          <Badge
+                            key={t}
+                            variant="secondary"
+                            className="border border-[#4ADE80]/20 bg-[#4ADE80]/10 px-1.5 py-0 text-[10px] text-[#4ADE80]"
+                          >
+                            {t}
+                          </Badge>
+                        ))}
+                        {project.tech.length > 4 && (
+                          <Badge
+                            variant="secondary"
+                            className="border border-white/10 bg-white/[0.04] px-1.5 py-0 text-[10px] text-[#6B6B6B]"
+                          >
+                            +{project.tech.length - 4}
+                          </Badge>
+                        )}
+                      </div>
                     )}
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="bg-white/5 border border-white/10 text-[#D8CFBC] hover:bg-white/10 hover:text-[#FFFBF4] text-xs"
-                      onClick={() => router.push(`/dashboard?path=edits&project=${project.ProjectID}`)}
-                    >
-                      <Pencil className="w-3 h-3 mr-1" />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      disabled={isPending}
-                      className="bg-white/5 border border-white/10 text-[#D8CFBC] hover:bg-[#F87171]/10 hover:text-[#F87171] hover:border-[#F87171]/20 text-xs"
-                      onClick={() => handleDelete(project.ProjectID, project.title)}
-                    >
-                      <Trash2 className="w-3 h-3 mr-1" />
-                      Delete
-                    </Button>
+                    <CustomFieldsDisplay fields={project.customFields} />
+                    <p className="mb-4 text-[11px] text-[#6B6B6B]">
+                      Created {new Date(project.createdAt).toLocaleDateString()}
+                    </p>
+                    <div className="flex gap-2">
+                      {project.liveDemo && (
+                        <motion.button
+                          type="button"
+                          whileHover={{ y: -2, scale: 1.03 }}
+                          whileTap={{ scale: 0.96 }}
+                          onClick={() => window.open(project.liveDemo!, "_blank")}
+                          className="flex cursor-pointer items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[#D8CFBC] hover:border-[#4ADE80]/30 hover:bg-[#4ADE80]/10 hover:text-[#4ADE80] transition-colors"
+                        >
+                          <Eye className="size-3" />
+                          View
+                        </motion.button>
+                      )}
+                      <motion.button
+                        type="button"
+                        whileHover={{ y: -2, scale: 1.03 }}
+                        whileTap={{ scale: 0.96 }}
+                        onClick={() =>
+                          router.push(`/dashboard?path=edits&project=${project.ProjectID}`)
+                        }
+                        className="flex cursor-pointer items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[#D8CFBC] hover:border-white/25 hover:bg-white/10 hover:text-[#FAFAFA] transition-colors"
+                      >
+                        <Pencil className="size-3" />
+                        Edit
+                      </motion.button>
+                      <motion.button
+                        type="button"
+                        whileHover={{ y: -2, scale: 1.03 }}
+                        whileTap={{ scale: 0.96 }}
+                        disabled={isPending}
+                        onClick={() => handleDelete(project.ProjectID, project.title)}
+                        className="flex cursor-pointer items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[#D8CFBC] hover:border-[#F87171]/30 hover:bg-[#F87171]/10 hover:text-[#F87171] transition-colors disabled:pointer-events-none disabled:opacity-50"
+                      >
+                        <Trash2 className="size-3" />
+                        Delete
+                      </motion.button>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+                </GlowCard>
+              </motion.div>
+            </FadeItem>
           ))}
-        </div>
+        </PageIntro>
       )}
 
       {!isLoading && filtered.length === 0 && (
-        <motion.div variants={item} className="text-center py-12">
-          <p className="text-[#8A8578] text-sm">No projects found matching your criteria.</p>
-        </motion.div>
+        <Reveal>
+          <div className="py-14 text-center">
+            <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
+              <Search className="size-5 text-[#6B6B6B]" />
+            </div>
+            <p className="text-sm text-[#A3A3A3]">
+              No projects found matching your criteria.
+            </p>
+          </div>
+        </Reveal>
       )}
-    </motion.div>
+    </div>
   );
 };
 
