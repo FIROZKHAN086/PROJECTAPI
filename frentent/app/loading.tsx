@@ -17,4 +17,6 @@ export default function Loading() {
     return <LoginSkeleton />;
   }
 
+  return <HomeSkeleton/>;
+
 }

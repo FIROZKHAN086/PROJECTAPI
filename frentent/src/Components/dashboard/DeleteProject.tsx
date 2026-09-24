@@ -1,16 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -21,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertTriangle,
   Trash2,
@@ -33,15 +26,11 @@ import { useProjects, useDeleteProject } from "@/src/hooks/useProjects";
 import { ApiError } from "@/src/lib/api";
 import { toast } from "@/src/lib/toastSlice";
 import { useRouter } from "next/navigation";
-
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 100 } },
-};
+import {
+  DashHeader,
+  Reveal,
+  GlowCard,
+} from "@/src/Components/dashboard/ui";
 
 export default function DeleteProject() {
   const router = useRouter();
@@ -81,87 +70,88 @@ export default function DeleteProject() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] text-[#FFFBF4] font-sans antialiased">
-        <main className="max-w-2xl mx-auto px-6 py-12">
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="size-10 rounded-xl bg-white/5 animate-pulse" />
-              <div className="space-y-2">
-                <div className="h-6 w-36 bg-white/5 rounded animate-pulse" />
-                <div className="h-4 w-56 bg-white/5 rounded animate-pulse" />
-              </div>
-            </div>
-            <div className="h-20 w-full bg-white/5 rounded-lg animate-pulse" />
-            <div className="h-10 w-full bg-white/5 rounded-lg animate-pulse" />
-            <div className="bg-[#141414] border border-white/10 rounded-xl p-6 space-y-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="space-y-2">
-                  <div className="h-4 w-24 bg-white/5 rounded animate-pulse" />
-                  <div className="h-10 w-full bg-white/5 rounded-lg animate-pulse" />
-                </div>
-              ))}
-            </div>
+      <div className="mx-auto max-w-2xl space-y-6">
+        <div className="flex items-center gap-3">
+          <Skeleton className="size-11 rounded-xl bg-white/[0.06]" />
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-40 bg-white/[0.06]" />
+            <Skeleton className="h-4 w-64 bg-white/[0.06]" />
           </div>
-        </main>
+        </div>
+        <Skeleton className="h-20 w-full rounded-2xl bg-white/[0.06]" />
+        <Skeleton className="h-11 w-full rounded-xl bg-white/[0.06]" />
+        <GlowCard>
+          <div className="space-y-4 p-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="space-y-2">
+                <Skeleton className="h-4 w-24 bg-white/[0.06]" />
+                <Skeleton className="h-10 w-full rounded-xl bg-white/[0.06]" />
+              </div>
+            ))}
+          </div>
+        </GlowCard>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#FFFBF4] font-sans antialiased">
-      <main className="max-w-2xl mx-auto px-6 py-12">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="space-y-6"
-        >
-          <motion.div variants={item} className="mb-2">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="flex items-center justify-center size-10 rounded-xl bg-[#F87171]/10 border border-[#F87171]/20">
-                <Trash2 className="size-5 text-[#F87171]" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight text-[#FFFBF4]">
-                  Delete Project
-                </h1>
-                <p className="text-sm text-[#8A8578]">
-                  Permanently remove a project and all of its data
-                </p>
-              </div>
-            </div>
-          </motion.div>
+    <div className="mx-auto max-w-2xl space-y-6">
+      <Reveal>
+        <DashHeader
+          title="Delete Project"
+          subtitle="Permanently remove a project and all of its data"
+          icon={Trash2}
+          accent="#F87171"
+          right={
+            <Badge className="gap-1.5 border border-[#F87171]/25 bg-[#F87171]/10 text-[#F87171]">
+              <AlertTriangle className="size-3" />
+              Irreversible
+            </Badge>
+          }
+        />
+      </Reveal>
 
-          <motion.div variants={item}>
-            <div className="flex items-start gap-3 p-4 rounded-lg border border-[#F87171]/30 bg-[#F87171]/5">
-              <AlertTriangle className="size-5 text-[#F87171] shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-semibold text-[#FFFBF4]">Warning: This action is irreversible</p>
-                <p className="text-xs text-[#8A8578] mt-1">
-                  Deleting a project will permanently remove all associated data, files, API logs, and configuration.
-                  This action cannot be undone.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+      <Reveal delay={0.06}>
+        <div className="flex items-start gap-4 rounded-2xl border border-[#F87171]/30 bg-[#F87171]/[0.06] p-5">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#F87171]/30 bg-[#F87171]/10">
+            <AlertTriangle className="size-5 text-[#F87171]" />
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm font-semibold text-[#FAFAFA]">
+              Warning: This action is irreversible
+            </p>
+            <p className="text-xs leading-relaxed text-[#D8CFBC]">
+              Deleting a project will permanently remove all associated data,
+              files, API logs, and configuration. This action cannot be undone.
+            </p>
+          </div>
+        </div>
+      </Reveal>
 
-          <motion.div variants={item}>
-            <Label className="text-[#D8CFBC] mb-2 block">Select Project to Delete</Label>
+      <Reveal delay={0.12}>
+        <GlowCard glow="248, 113, 113">
+          <div className="space-y-4 p-6">
+            <Label className="block text-sm font-medium text-[#D8CFBC]">
+              Select Project to Delete
+            </Label>
             <Select
               value={selectedProjectId}
               onValueChange={(v) => v && setSelectedProjectId(v)}
               disabled={isPending}
             >
-              <SelectTrigger className="w-full bg-[#141414] border-white/10 text-[#FFFBF4] focus-visible:border-[#F87171] focus-visible:ring-[#F87171]/20">
+              <SelectTrigger className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pr-2 pl-3 text-[#FAFAFA] focus-visible:border-[#F87171]/50 focus-visible:ring-[#F87171]/20">
                 <SelectValue placeholder="Choose a project" />
               </SelectTrigger>
-              <SelectContent className="bg-[#141414] text-[#D8CFBC] border-white/10">
+              <SelectContent className="border border-white/10 bg-[#0C0C12] text-[#D8CFBC]">
                 {projects.map((p) => (
                   <SelectItem key={p.ProjectID} value={p.ProjectID}>
                     <span className="flex items-center gap-2">
                       {p.title}
                       {p.featured && (
-                        <Badge variant="secondary" className="bg-[#4ADE80]/10 text-[#4ADE80] border border-[#4ADE80]/20 text-[10px]">
+                        <Badge
+                          variant="secondary"
+                          className="border border-[#4ADE80]/20 bg-[#4ADE80]/10 text-[10px] text-[#4ADE80]"
+                        >
                           Featured
                         </Badge>
                       )}
@@ -170,155 +160,205 @@ export default function DeleteProject() {
                 ))}
               </SelectContent>
             </Select>
-          </motion.div>
+          </div>
+        </GlowCard>
+      </Reveal>
 
-          {project && (
-            <motion.div
-              variants={item}
-              initial="hidden"
-              animate="show"
-            >
-              <Card className="bg-[#141414] border-white/10">
-                <CardHeader>
-                  <CardTitle className="text-[#FFFBF4] text-base">Project Details</CardTitle>
-                  <CardDescription className="text-[#8A8578] text-xs">
+      {project && (
+        <>
+          <Reveal delay={0.1}>
+            <GlowCard>
+              <div className="space-y-5 p-6">
+                <div className="space-y-1">
+                  <h3 className="font-space-grotesk text-base font-bold text-[#FAFAFA]">
+                    Project Details
+                  </h3>
+                  <p className="text-xs text-[#A3A3A3]">
                     Review the project that will be deleted
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center size-9 rounded-lg bg-[#4ADE80]/10">
-                        <FolderOpen className="size-4 text-[#4ADE80]" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-[#FFFBF4]">{project.title}</p>
-                        <p className="text-xs text-[#8A8578]">{project.description}</p>
-                      </div>
-                    </div>
+                  </p>
+                </div>
 
-                    <Separator className="bg-white/5" />
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="flex items-center gap-2 text-xs text-[#8A8578]">
-                        <Shield className="size-3.5" />
-                        <span>Category: <span className="text-[#D8CFBC]">{project.category}</span></span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-[#8A8578]">
-                        <Calendar className="size-3.5" />
-                        <span>Created: <span className="text-[#D8CFBC]">{new Date(project.createdAt).toLocaleDateString()}</span></span>
-                      </div>
-                    </div>
-
-                    {project.tech && project.tech.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {project.tech.map((t) => (
-                          <Badge key={t} variant="secondary" className="bg-white/5 text-[#D8CFBC] border border-white/10 text-[10px]">
-                            {t}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-
-                    {project.featured && (
-                      <Badge
-                        variant="secondary"
-                        className="bg-[#4ADE80]/10 text-[#4ADE80] border border-[#4ADE80]/20 text-[10px]"
-                      >
-                        Featured
-                      </Badge>
-                    )}
+                <div className="flex items-start gap-3">
+                  <div className="relative flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#4ADE80]/25 bg-[#4ADE80]/10">
+                    <FolderOpen className="size-4 text-[#4ADE80]" />
+                    <motion.span
+                      animate={{ scale: [1, 1.3, 1], opacity: [0.9, 0.4, 0.9] }}
+                      transition={{ duration: 2.4, repeat: Infinity }}
+                      className="absolute -top-0.5 -right-0.5 size-2 rounded-full border-2 border-[#0B0B10] bg-[#4ADE80]"
+                    />
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-[#FAFAFA]">
+                      {project.title}
+                    </p>
+                    <p className="mt-0.5 break-words text-xs text-[#A3A3A3]">
+                      {project.description}
+                    </p>
+                  </div>
+                </div>
 
-          {project && (
-            <motion.div variants={item}>
-              <Card className="bg-[#141414] border border-[#F87171]/30">
-                <CardHeader>
-                  <CardTitle className="text-[#F87171] text-base flex items-center gap-2">
+                <Separator className="bg-white/10" />
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs text-[#A3A3A3]">
+                    <Shield className="size-3.5 text-[#60A5FA]" />
+                    <span>
+                      Category:{" "}
+                      <span className="text-[#D8CFBC]">{project.category}</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs text-[#A3A3A3]">
+                    <Calendar className="size-3.5 text-[#4ADE80]" />
+                    <span>
+                      Created:{" "}
+                      <span className="text-[#D8CFBC]">
+                        {new Date(project.createdAt).toLocaleDateString()}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                {project.tech && project.tech.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tech.map((t) => (
+                      <Badge
+                        key={t}
+                        variant="secondary"
+                        className="border border-white/10 bg-white/5 text-[10px] text-[#D8CFBC]"
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+
+                {project.featured && (
+                  <Badge
+                    variant="secondary"
+                    className="border border-[#4ADE80]/20 bg-[#4ADE80]/10 text-[10px] text-[#4ADE80]"
+                  >
+                    Featured
+                  </Badge>
+                )}
+              </div>
+            </GlowCard>
+          </Reveal>
+
+          <Reveal delay={0.18}>
+            <GlowCard glow="248, 113, 113">
+              <div className="space-y-5 p-6">
+                <div className="space-y-1">
+                  <h3 className="flex items-center gap-2 font-space-grotesk text-base font-bold text-[#F87171]">
                     <AlertTriangle className="size-4" />
                     Confirm Deletion
-                  </CardTitle>
-                  <CardDescription className="text-[#8A8578] text-xs">
+                  </h3>
+                  <p className="text-xs text-[#A3A3A3]">
                     You must confirm before this project can be deleted
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <motion.div variants={item}>
-                    <button
-                      onClick={() => setConfirmChecked(!confirmChecked)}
-                      disabled={isPending}
-                      className="flex items-center gap-3 p-3 w-full rounded-lg border border-white/10 bg-[#0A0A0A] hover:border-white/20 transition-colors text-left cursor-pointer disabled:opacity-50"
-                    >
-                      <div
-                        className={`size-5 rounded border-2 flex items-center justify-center transition-colors ${
-                          confirmChecked
-                            ? "bg-[#F87171] border-[#F87171]"
-                            : "border-white/20 bg-transparent"
-                        }`}
-                      >
-                        {confirmChecked && (
-                          <svg className="size-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                      </div>
-                      <span className="text-sm text-[#D8CFBC]">
-                        I understand this action cannot be undone
-                      </span>
-                    </button>
-                  </motion.div>
+                  </p>
+                </div>
 
-                  <motion.div variants={item} className="flex flex-col gap-2">
-                    <Label htmlFor="confirm-name" className="text-[#D8CFBC]">
-                      Type project title to confirm: <span className="text-[#F87171] font-mono">{project.title}</span>
-                    </Label>
-                    <Input
-                      id="confirm-name"
-                      placeholder={project.title}
-                      value={confirmName}
-                      onChange={(e) => setConfirmName(e.target.value)}
-                      disabled={isPending}
-                      className="bg-[#0A0A0A] border-white/10 text-[#FFFBF4] placeholder:text-[#8A8578] focus-visible:border-[#F87171] focus-visible:ring-[#F87171]/20"
-                    />
-                  </motion.div>
-
-                  <motion.div variants={item}>
-                    <Separator className="bg-white/5" />
-                  </motion.div>
-
-                  <motion.div variants={item}>
-                    <Button
-                      disabled={!isConfirmed || isPending}
-                      onClick={handleDelete}
-                      className={`w-full font-semibold cursor-pointer ${
-                        isConfirmed && !isPending
-                          ? "bg-[#F87171] hover:bg-[#F87171]/90 text-white"
-                          : "bg-white/5 text-[#8A8578] cursor-not-allowed"
-                      }`}
-                    >
-                      {isPending ? (
-                        <Loader2 className="size-4 mr-2 animate-spin" />
-                      ) : (
-                        <Trash2 className="size-4 mr-2" />
+                <motion.button
+                  onClick={() => setConfirmChecked(!confirmChecked)}
+                  disabled={isPending}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex w-full items-center gap-3 rounded-xl border p-3.5 text-left transition-colors disabled:opacity-50 cursor-pointer border-white/10 bg-white/[0.04] hover:border-white/25"
+                >
+                  <motion.div
+                    animate={
+                      confirmChecked
+                        ? {
+                            backgroundColor: "rgba(248,113,113,1)",
+                            borderColor: "rgba(248,113,113,1)",
+                          }
+                        : {
+                            backgroundColor: "rgba(255,255,255,0)",
+                            borderColor: "rgba(255,255,255,0.2)",
+                          }
+                    }
+                    transition={{ duration: 0.2 }}
+                    className="flex size-5 shrink-0 items-center justify-center rounded border-2"
+                  >
+                    <AnimatePresence>
+                      {confirmChecked && (
+                        <motion.svg
+                          key="check"
+                          initial={{ scale: 0, rotate: -60 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          exit={{ scale: 0 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                          className="size-3 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </motion.svg>
                       )}
-                      {isPending ? "Deleting..." : "Delete Project"}
-                    </Button>
-                    {!isConfirmed && selectedProjectId && !isPending && (
-                      <p className="text-xs text-[#8A8578] mt-2 text-center">
-                        Check the confirmation box and type the project title to enable deletion
-                      </p>
-                    )}
+                    </AnimatePresence>
                   </motion.div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-        </motion.div>
-      </main>
+                  <span className="text-sm text-[#D8CFBC]">
+                    I understand this action cannot be undone
+                  </span>
+                </motion.button>
+
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="confirm-name" className="text-sm text-[#D8CFBC]">
+                    Type project title to confirm:{" "}
+                    <span className="font-mono text-[#F87171]">{project.title}</span>
+                  </Label>
+                  <Input
+                    id="confirm-name"
+                    placeholder={project.title}
+                    value={confirmName}
+                    onChange={(e) => setConfirmName(e.target.value)}
+                    disabled={isPending}
+                    className="rounded-xl border border-white/10 bg-white/[0.04] text-[#FAFAFA] placeholder:text-[#6B6B6B] focus-visible:border-[#F87171]/50 focus-visible:ring-[#F87171]/20"
+                  />
+                </div>
+
+                <Separator className="bg-white/10" />
+
+                <div className="space-y-2">
+                  <motion.button
+                    onClick={handleDelete}
+                    disabled={!isConfirmed || isPending}
+                    whileHover={
+                      isConfirmed && !isPending
+                        ? { y: -2, scale: 1.01 }
+                        : undefined
+                    }
+                    whileTap={isConfirmed && !isPending ? { scale: 0.98 } : undefined}
+                    className={`flex w-full cursor-pointer items-center justify-center rounded-xl py-3 text-sm font-semibold transition-all ${
+                      isConfirmed && !isPending
+                        ? "bg-gradient-to-r from-[#F87171] to-[#EF4444] text-white shadow-[0_8px_24px_-8px_rgba(248,113,113,0.7)]"
+                        : "border border-white/10 bg-white/[0.04] text-[#6B6B6B]"
+                    } disabled:cursor-not-allowed disabled:opacity-40`}
+                  >
+                    {isPending ? (
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="mr-2 size-4" />
+                    )}
+                    {isPending ? "Deleting..." : "Delete Project"}
+                  </motion.button>
+                  {!isConfirmed && selectedProjectId && !isPending && (
+                    <p className="mt-2 text-center text-xs text-[#6B6B6B]">
+                      Check the confirmation box and type the project title to
+                      enable deletion
+                    </p>
+                  )}
+                </div>
+              </div>
+            </GlowCard>
+          </Reveal>
+        </>
+      )}
     </div>
   );
 }

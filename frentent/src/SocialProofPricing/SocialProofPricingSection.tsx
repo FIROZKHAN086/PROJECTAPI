@@ -156,11 +156,7 @@ export default function SocialProofPricingSection() {
               </ScrollReveal>
             </div>
 
-            <div className="pricing-grid-container grid grid-cols-1 gap-6 lg:grid-cols-3">
-              {pricingPlans.map((plan) => (
-                <PricingCard key={plan.name} plan={plan} />
-              ))}
-            </div>
+           
           </div>
 
         </div>
