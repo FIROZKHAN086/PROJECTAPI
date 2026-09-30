@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollReveal,  LineDraw } from "@/src/lib/animations";
-import { EASE_OUT } from "@/src/ProblemSolution/lib/variants";
+import { EASE_OUT } from "@/src/Page/ProblemSolution/lib/variants";
 import { motion, Variants } from "framer-motion";
 
 export default function PricingHeader() {

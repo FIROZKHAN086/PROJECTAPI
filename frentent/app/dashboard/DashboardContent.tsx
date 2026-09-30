@@ -23,7 +23,7 @@ const auth = useAppSelector((state) => state.auth);
   };
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider  defaultOpen={true}>
       <AppSidebar currentPath={currentPath} onNavigate={handleNavigate} />
 
       <SidebarInset className="relative bg-transparent">
@@ -38,7 +38,7 @@ const auth = useAppSelector((state) => state.auth);
         </header>
 
         {/* Content Area */}
-        <main className="min-h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <main suppressHydrationWarning={true} className="min-h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPath}

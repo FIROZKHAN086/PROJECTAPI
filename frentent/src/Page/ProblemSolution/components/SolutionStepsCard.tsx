@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PlusCircle, Zap, RefreshCw, Check } from "lucide-react";
-import { staggerContainer, riseIn } from "@/src/ProblemSolution/lib/variants";
+import { staggerContainer, riseIn } from "@/src/Page/ProblemSolution/lib/variants";
 
 gsap.registerPlugin(ScrollTrigger);
 

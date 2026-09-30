@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeIn, EASE_OUT } from "@/src/Hero/lib/variants";
+import { fadeIn, EASE_OUT } from "@/src/Page/Hero/lib/variants";
 
 export default function HeroCTA() {
   return (

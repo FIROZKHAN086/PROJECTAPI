@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { wordReveal, heroContainer } from "@/src/Hero/lib/variants";
+import { wordReveal, heroContainer } from "@/src/Page/Hero/lib/variants";
 
 const LINE_ONE = ["One", "Dashboard.", "One", "API."];
 const LINE_TWO = ["Unlimited", "Portfolios", "Projects."];

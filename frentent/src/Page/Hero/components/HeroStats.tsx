@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { fadeIn } from "@/src/Hero/lib/variants";
+import { fadeIn } from "@/src/Page/Hero/lib/variants";
 
 gsap.registerPlugin(ScrollTrigger);
 
