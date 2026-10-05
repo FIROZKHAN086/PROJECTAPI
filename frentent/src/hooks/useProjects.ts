@@ -8,8 +8,6 @@ import type {
   UpdateProjectPayload,
 } from "@/src/types/project";
 
-const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || "http://localhost:5000";
-
 export function useProjects() {
   return useQuery<ProjectsResponse, ApiError>({
     queryKey: ["projects"],

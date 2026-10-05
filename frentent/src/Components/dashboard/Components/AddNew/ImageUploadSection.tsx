@@ -52,9 +52,14 @@ function AnimatedLabel({ text }: { text: string }) {
 
 function TypewriterText({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
+  const [prevText, setPrevText] = useState(text);
+
+  if (prevText !== text) {
+    setPrevText(text);
+    setDisplayed("");
+  }
 
   useEffect(() => {
-    setDisplayed("");
     let index = 0;
     const timer = window.setInterval(() => {
       index += 1;
