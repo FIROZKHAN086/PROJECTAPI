@@ -1,7 +1,7 @@
 const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL ;
 
 if (process.env.NEXT_PUBLIC_ENV === "development") {
- console.log("Running in development mode" + API_BASE);
+ console.log("Running in development mode " + API_BASE);
 }
 
 const TOKEN_KEY = "authToken";
@@ -55,7 +55,7 @@ export async function apiFetch<T>(
   
   const token = getStoredToken();
 
-  const res = await fetch(`${API_BASE}${endpoint}`, {
+  const res = await fetch(`${endpoint}`, {
     ...fetchOptions,
     credentials: "include",
     headers: {

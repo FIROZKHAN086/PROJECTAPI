@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import FAQFooterPage from "@/src/Home/FAQFooterPage";
-import {HeroSection} from "@/src/Hero";
+import {HeroSection} from "@/src/Page/Hero";
 import  PlaygroundSection  from "@/src/Home/PlaygroundPage";
-import { ProblemSolutionSection } from "@/src/ProblemSolution";
+import { ProblemSolutionSection } from "@/src/Page/ProblemSolution";
 import FeaturesPage from "@/src/Home/FeaturesPage";
-import { SocialProofPricingSection } from "../SocialProofPricing";
+import { SocialProofPricingSection } from "../Page/SocialProofPricing";
 const Homepage = () => {
 
 const sectionItem = {

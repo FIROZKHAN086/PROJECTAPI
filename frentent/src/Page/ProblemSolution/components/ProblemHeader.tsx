@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { riseIn } from "@/src/ProblemSolution/lib/variants";
+import { riseIn } from "@/src/Page/ProblemSolution/lib/variants";
 
 export default function ProblemHeader() {
   return (

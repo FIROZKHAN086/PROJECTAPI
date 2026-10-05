@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeIn } from "@/src/Hero/lib/variants";
+import { fadeIn } from "@/src/Page/Hero/lib/variants";
 
 export default function HeroBadge() {
   return (

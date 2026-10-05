@@ -1,7 +1,7 @@
 "use client";
 
-import HomeSkeleton from "@/src/Skeleton/HomeSkeleton";
-import LoginSkeleton from "@/src/Skeleton/LoginSkeleton";
+import HomeSkeleton from "@/src/Page/Skeleton/HomeSkeleton";
+import LoginSkeleton from "@/src/Page/Skeleton/LoginSkeleton";
 import { usePathname } from "next/navigation";
 
 

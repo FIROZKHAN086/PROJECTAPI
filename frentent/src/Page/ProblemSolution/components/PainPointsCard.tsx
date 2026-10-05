@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
-import { staggerContainer, riseIn } from "@/src/ProblemSolution/lib/variants";
+import { staggerContainer, riseIn } from "@/src/Page/ProblemSolution/lib/variants";
 
 const PAIN_POINTS = [
   "Hardcoded project card data on every site",

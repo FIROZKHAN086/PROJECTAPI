@@ -1,1 +1,1 @@
-export { default } from "@/src/DocsPage";
+export { default } from "@/src/Page/Hero/DocsPage";

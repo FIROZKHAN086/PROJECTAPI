@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Unbounded,  Comic_Relief } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/src/Components/SmoothScrollProvider";
@@ -19,8 +19,50 @@ const cause = Comic_Relief({
 });
 
 export const metadata: Metadata = {
-  title: "ProjectAPI",
-  description: "A project management tool for developers and teams.",
+  title: {
+    default: "ProjectAPI — Project & API Management for Developers",
+    template: "%s · ProjectAPI",
+  },
+  description:
+    "ProjectAPI is a modern project management and API toolkit for developers and teams — create projects, manage API keys, test endpoints, and ship faster.",
+  applicationName: "ProjectAPI",
+  authors: [{ name: "ProjectAPI" }],
+  creator: "ProjectAPI",
+  keywords: [
+    "project management",
+    "API management",
+    "developer tools",
+    "REST API testing",
+    "API keys",
+    "project dashboard",
+    "developer portfolio",
+  ],
+  category: "technology",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "ProjectAPI",
+    title: "ProjectAPI — Project & API Management for Developers",
+    description:
+      "Create projects, manage API keys, test endpoints, and ship faster with a premium developer dashboard.",
+  },
+  twitter: {
+    card: "summary",
+    title: "ProjectAPI — Project & API Management for Developers",
+    description:
+      "Create projects, manage API keys, test endpoints, and ship faster with a premium developer dashboard.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "dark",
+  themeColor: "#07070B",
 };
 
 export default function RootLayout({

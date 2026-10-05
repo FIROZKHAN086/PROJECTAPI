@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
-import { visualEntrance } from "@/src/Hero/lib/variants";
+import { visualEntrance } from "@/src/Page/Hero/lib/variants";
 
 const CODE_BLOCK = `{
   "status": "success",
