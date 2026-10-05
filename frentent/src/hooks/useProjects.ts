@@ -46,7 +46,7 @@ export function useCreateProject() {
       if (payload.featured) formData.append("featured", payload.featured);
       if (payload.customFields) formData.append("customFields", payload.customFields);
 
-      const res = await fetch(`${API_BASE}/api/project/creat`, {
+      const res = await fetch(`/api/project/creat`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -83,7 +83,7 @@ export function useUpdateProject() {
       if (payload.image) formData.append("image", payload.image);
       if (payload.customFields) formData.append("customFields", payload.customFields);
 
-      const res = await fetch(`${API_BASE}/api/project/update/${id}`, {
+      const res = await fetch(`/api/project/update/${id}`, {
         method: "PATCH",
         credentials: "include",
         body: formData,
