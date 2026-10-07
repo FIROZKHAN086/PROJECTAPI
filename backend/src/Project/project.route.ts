@@ -12,7 +12,7 @@ import { rateLimitMiddleware } from "../middleware/rateLimit.middleware.js";
 
 const router = Router();
 
-router.post("/creat", rateLimitMiddleware, authMiddleware, createProject);
+router.post("/create", rateLimitMiddleware, authMiddleware, createProject);
 
 router.get("/get",rateLimitMiddleware, authMiddleware, getAllProjects);
 
@@ -22,6 +22,6 @@ router.patch("/update/:id",rateLimitMiddleware, authMiddleware, updateProject);
 
 router.delete("/delete/:id",rateLimitMiddleware, authMiddleware, deleteProject);
 
-router.post("/public",rateLimitMiddleware, getPublicProjects);
+router.get("/public",rateLimitMiddleware, getPublicProjects);
 
 export default router;
