@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const PUBLIC_PATHS = ["/", "/docs", "/login", "/contact", "/about"];
-const AUTH_COOKIE = "authToken";
 
 const isPathAllowed = (pathname: string, allowed: string[]) =>
   allowed.some(
@@ -11,7 +10,10 @@ const isPathAllowed = (pathname: string, allowed: string[]) =>
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const hasToken = Boolean(request.cookies.get(AUTH_COOKIE)?.value);
+  const hasToken = Boolean(
+    request.cookies.get("token")?.value ||
+      request.cookies.get("authToken")?.value
+  );
 
   if (pathname === "/login" && hasToken) {
     return NextResponse.redirect(new URL("/dashboard", request.url));

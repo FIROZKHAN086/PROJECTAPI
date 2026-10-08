@@ -36,9 +36,12 @@ interface FetchOptions extends RequestInit {
 
 export class ApiError extends Error {
   status: number;
-  data: { success: boolean; message: string };
+  data: { success: boolean; message: string; code?: string };
 
-  constructor(status: number, data: { success: boolean; message: string }) {
+  constructor(
+    status: number,
+    data: { success: boolean; message: string; code?: string }
+  ) {
     super(data.message);
     this.status = status;
     this.data = data;
@@ -52,25 +55,16 @@ export async function apiFetch<T>(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { noAuth, ...fetchOptions } = options;
 
-  
-  const token = getStoredToken();
-
   const res = await fetch(`${endpoint}`, {
     ...fetchOptions,
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...fetchOptions.headers,
     },
   });
 
   const data = await res.json();
-
-  type WithToken = { success?: boolean; user?: { token?: string } };
-  if (res.ok && data && (data as WithToken).user?.token) {
-    setStoredToken((data as WithToken).user!.token!);
-  }
 
   if (!res.ok) {
     throw new ApiError(res.status, data);

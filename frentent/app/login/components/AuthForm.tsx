@@ -1,13 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, LoaderCircle, ArrowRight } from "lucide-react";
-import { useLogin, useRegister } from "@/src/hooks/useAuth";
+import {
+  useLogin,
+  useRegister,
+  useAuth,
+  saveOtpPending,
+  readOtpPending,
+  clearOtpPending,
+} from "@/src/hooks/useAuth";
 import { useAppDispatch } from "@/src/lib/hooks";
-import { fetchMe } from "@/src/lib/authSlice";
+import { setUser, beginOtpVerification } from "@/src/lib/authSlice";
 import { useRouter } from "next/navigation";
 import { toast } from "@/src/lib/toastSlice";
+import OtpForm from "./OtpForm";
 
 interface AuthFormProps {
   isSignUp: boolean;
@@ -28,6 +36,14 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
 
   const loginMutation = useLogin();
   const registerMutation = useRegister();
+  const { otpRequired } = useAuth();
+
+  useEffect(() => {
+    const pendingEmail = readOtpPending();
+    if (pendingEmail) {
+      dispatch(beginOtpVerification(pendingEmail));
+    }
+  }, [dispatch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,8 +87,15 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
         },
         {
           onSuccess: (data) => {
+            if (data.code === "OTP_REQUIRED" || !data.user.userVerified) {
+              saveOtpPending(data.user.email);
+              dispatch(beginOtpVerification(data.user.email));
+              toast.success(data.message || "OTP sent to your email");
+              router.push("/login?auth=otp");
+              return;
+            }
             toast.success(data.message || "Account created successfully");
-            dispatch(fetchMe());
+            dispatch(setUser(data.user));
             router.push(redirectTarget);
           },
           onError: (err) => {
@@ -88,8 +111,9 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
         },
         {
           onSuccess: (data) => {
+            clearOtpPending();
             toast.success(data.message || "Logged in successfully");
-            dispatch(fetchMe());
+            dispatch(setUser(data.user));
             router.push(redirectTarget);
           },
           onError: (err) => {
@@ -107,6 +131,18 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
   };
 
   const isPending = loginMutation.isPending || registerMutation.isPending;
+
+  if (otpRequired) {
+    return (
+      <OtpForm
+        redirectTarget={redirectTarget}
+        onBack={() => {
+          clearOtpPending();
+          setErrors({});
+        }}
+      />
+    );
+  }
 
   return (
     <>
