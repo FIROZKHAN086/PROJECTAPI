@@ -56,6 +56,7 @@ const Navbar = () => {
 
   const router = useRouter();
 
+
   // Mouse tracking for parallax
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -81,11 +82,7 @@ const Navbar = () => {
   }, []);
 
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+ 
 
   // Motion values for floating elements
   const mouseX = useMotionValue(0);
@@ -121,7 +118,7 @@ const navLinks = [
     { name: "Pricing", href: "#pricing", icon: CreditCard },
     { name: "About", href: "#playground", icon:Info },
     { name: "Contact us", href: "#playground", icon: CircleQuestionMark },
-    { name: "API Playground", href: "#playground", icon: Terminal },
+    { name: "API Playground", href: "/dashboard?path=Api-Data", icon: Terminal },
   ];
 
   const navbarVariants = {
@@ -399,15 +396,15 @@ const navLinks = [
                     {dropdownItems.map((item) => {
                       const Icon = item.icon;
                       return (
-                        <motion.a
+                        <motion.button
                           key={item.name}
-                          href={item.href}
+                          onClick={() => router.push(item.href)}
                           whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.05)" }}
                           className="flex items-center gap-3 px-4 py-3 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] transition-all duration-200"
                         >
                           <Icon className="w-4 h-4 text-[#4ADE80]" />
                           <span>{item.name}</span>
-                        </motion.a>
+                        </motion.button>
                       );
                     })}
                   </motion.div>

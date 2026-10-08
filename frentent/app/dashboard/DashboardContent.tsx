@@ -1,8 +1,12 @@
-'use client';
+"use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import AppSidebar from "@/src/Components/dashboard/Sidebar";
 
 import { useAppSelector } from "@/src/lib/hooks";
@@ -10,20 +14,19 @@ import { Aurora } from "@/src/Components/dashboard/ui";
 import { pageVariants, SECTIONS } from "./page";
 import { Activity, ChevronRight, Radar } from "lucide-react";
 
-
 export function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const currentPath = searchParams.get("path") || "overview";
   const activeSection = SECTIONS[currentPath] || SECTIONS.overview;
-const auth = useAppSelector((state) => state.auth);
+  const auth = useAppSelector((state) => state.auth);
   const handleNavigate = (path: string) => {
     router.push(`/dashboard?path=${path}`);
   };
 
   return (
-    <SidebarProvider  defaultOpen={true}>
+    <SidebarProvider defaultOpen={true}>
       <AppSidebar currentPath={currentPath} onNavigate={handleNavigate} />
 
       <SidebarInset className="relative bg-transparent">
@@ -33,12 +36,17 @@ const auth = useAppSelector((state) => state.auth);
         <header className="sticky top-0 z-40 flex items-center gap-2 border-b border-white/10 bg-[#07070B]/80 backdrop-blur-md px-4 py-3 lg:hidden">
           <SidebarTrigger className="text-[#D8CFBC] hover:text-[#FFFBF4]" />
           <div className="flex items-center gap-1.5 text-sm text-[#A3A3A3]">
-            <span className="font-medium text-[#FAFAFA]">{activeSection.title}</span>
+            <span className="font-medium text-[#FAFAFA]">
+              {activeSection.title}
+            </span>
           </div>
         </header>
 
         {/* Content Area */}
-        <main suppressHydrationWarning={true} className="min-h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <main
+          suppressHydrationWarning={true}
+          className="min-h-screen overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPath}
@@ -66,7 +74,7 @@ const auth = useAppSelector((state) => state.auth);
                     All systems operational
                   </div>
                   <div className="flex size-8 items-center justify-center rounded-full border border-white/10 bg-gradient-to-br from-[#4ADE80] to-[#22D3EE] font-space-grotesk text-xs font-bold text-[#07110A]">
-                   { auth.user?.name?.charAt(0) || "D" }
+                    {auth.user?.name?.charAt(0) || "D"}
                   </div>
                 </div>
               </div>
@@ -75,7 +83,9 @@ const auth = useAppSelector((state) => state.auth);
                 <div className="mx-auto max-w-7xl space-y-2">
                   <div className="mb-6 flex items-center gap-2 lg:hidden">
                     <Activity className="size-4 text-[#4ADE80]" />
-                    <p className="text-sm text-[#A3A3A3]">{activeSection.description}</p>
+                    <p className="text-sm text-[#A3A3A3]">
+                      {activeSection.description}
+                    </p>
                   </div>
                   {activeSection.component}
                 </div>

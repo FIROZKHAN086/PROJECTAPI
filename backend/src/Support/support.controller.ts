@@ -166,7 +166,7 @@ export const updateTicket = async (req: Request, res: Response) => {
         }
         const { id } = req.params as { id: string };
         const { subject, message, status } = req.body;
-        console.log(`[${new Date().toISOString()}] [INFO] Updating ticket: ${id}`);
+    
 
         const ifAdmin = (req as any).user?.Role;
         console.log(`[${new Date().toISOString()}] [INFO] Fetching tickets for user is : ${ifAdmin}`);
@@ -218,7 +218,7 @@ export const deleteTicket = async (req: Request, res: Response) => {
 
 
         const ifAdmin = (req as any).user?.Role;
-        console.log(`[${new Date().toISOString()}] [INFO] Fetching tickets for user is : ${ifAdmin}`);
+      
 
         if (ifAdmin !== "ADMIN") {
             return res.status(401).json({
@@ -232,7 +232,7 @@ export const deleteTicket = async (req: Request, res: Response) => {
             where: { TicketID: id },
         });
 
-        console.log(`[${new Date().toISOString()}] [SUCCESS] Ticket deleted successfully: ${id}`);
+      
         return res.status(200).json({
             success: true,
             message: "Ticket deleted successfully",

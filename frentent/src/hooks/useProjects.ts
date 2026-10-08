@@ -44,7 +44,7 @@ export function useCreateProject() {
       if (payload.featured) formData.append("featured", payload.featured);
       if (payload.customFields) formData.append("customFields", payload.customFields);
 
-      const res = await fetch(`/api/project/creat`, {
+      const res = await fetch(`/api/project/create`, {
         method: "POST",
         credentials: "include",
         body: formData,

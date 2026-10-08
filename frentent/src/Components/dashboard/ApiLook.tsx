@@ -100,7 +100,7 @@ export default function ApiLook() {
 
     try {
       const res = await fetch(API_URL, {
-        method: "POST",
+        method: "GET",
         headers: {
           "accesskey": apiKey.trim(),
           "Content-Type": "application/json",

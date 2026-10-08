@@ -9,7 +9,7 @@ import { generateOtp } from "../utils/OtpGeneration.js";
 import redis from "../config/redis.js";
 import { getCookieOptions } from "../utils/getCookieOptions.js";
 import { sendEmail } from "../utils/sendEmail.js";
-import { otpEmailTemplate } from "../config/otpEmail.js";
+import { otpEmailTemplate}  from "../config/otpEmail.js";
 import { welcomeEmailTemplate } from "../config/welcomeEmail.js";
 
 // Register Route

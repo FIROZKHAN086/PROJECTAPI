@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/src/lib/hooks";
+import { useAuth } from "@/src/hooks/useAuth";
 import BrandPanel from "./components/BrandPanel";
 import AuthForm from "./components/AuthForm";
 import MobileFeatures from "./components/MobileFeatures";
@@ -21,9 +22,10 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
   const redirectTarget = isSafePath(nextPath) ? (nextPath as string) : "/dashboard";
   const router = useRouter();
   const { user, isLoading: authLoading } = useAppSelector((s) => s.auth);
+  const { otpRequired, pendingEmail } = useAuth();
 
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && user?.userVerified) {
       router.replace(redirectTarget);
     }
   }, [user, authLoading, router, redirectTarget]);
@@ -52,12 +54,18 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
 
             <div className="mb-6">
               <h2 className="text-xl sm:text-2xl font-semibold text-[#FFFBF4] font-space-grotesk leading-tight">
-                {isSignUp ? "Create account" : "Welcome back"}
+                {otpRequired
+                  ? "Verify your email"
+                  : isSignUp
+                    ? "Create account"
+                    : "Welcome back"}
               </h2>
               <p className="text-sm text-[#D8CFBC] mt-1">
-                {isSignUp
-                  ? "Start building with ProjectAPI today."
-                  : "Log in to manage your projects and API."}
+                {otpRequired
+                  ? `Enter the code we sent to ${pendingEmail ?? "your email"} to finish signing up.`
+                  : isSignUp
+                    ? "Start building with ProjectAPI today."
+                    : "Log in to manage your projects and API."}
               </p>
             </div>
 

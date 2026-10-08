@@ -156,10 +156,7 @@ export const getProjectById = async (req: Request, res: Response) => {
     }
 
     const { id } = req.params as { id: string };
-    // development to use this logs 
-    console.log(
-      `[${new Date().toISOString()}] [INFO] Fetching project with ProjectID: ${id}`
-    );
+   
 
     const cacheKey = `projects:${oneTimeId}`;
 
@@ -190,10 +187,7 @@ export const getProjectById = async (req: Request, res: Response) => {
 
     await redis.set(`project:${id}`, JSON.stringify(project));
 
-    // development to use this logs 
-    console.log(
-      `[${new Date().toISOString()}] [SUCCESS] Project found: ${project.title} (ID: ${id})`
-    );
+    
     return res.status(200).json({
       success: true,
       data: project,
@@ -233,8 +227,7 @@ export const updateProject = async (req: Request, res: Response) => {
       featured,
       customFields,
     } = req.body;
-    // development to use this logs 
-    console.log(`[${new Date().toISOString()}] [INFO] Updating project: ${id}`);
+    
 
     const updateData: any = {};
     if (title) updateData.title = title;
@@ -268,9 +261,6 @@ export const updateProject = async (req: Request, res: Response) => {
     }
 
     if (req.files?.image) {
-      console.log(
-        `[${new Date().toISOString()}] [INFO] Processing new image for project: ${id}`
-      );
       const image = req.files.image as fileUpload.UploadedFile;
       const uploadResult = await uploadToImageKit(image, "projects");
       updateData.image = uploadResult.url;

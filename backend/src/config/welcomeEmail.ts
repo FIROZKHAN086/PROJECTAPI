@@ -1,64 +1,95 @@
+/** Escape user-supplied strings before they touch the HTML. */
+const esc = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 export const welcomeEmailTemplate = (
   name?: string,
   ctaUrl: string = process.env.APP_LINK || "https://projectapi.firozkhan.site/",
   ctaLabel: string = "Open your dashboard",
 ): string => {
-  const recipient = name || "there";
+  const recipient = esc(name?.trim() || "there");
   const year = new Date().getFullYear();
   const appName = "ProjectAPI";
+
+  const href = esc(ctaUrl);
+  const label = esc(ctaLabel);
+  const btnWidth = Math.max(210, ctaLabel.length * 10 + 70);
+
+  /* font stacks — web fonts load in Apple Mail / iOS; others fall back gracefully */
+  const display = "'Space Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif";
+  const body = "'Inter','Helvetica Neue',Helvetica,Arial,sans-serif";
+  const mono = "'JetBrains Mono','SFMono-Regular',Menlo,Consolas,monospace";
 
   const steps = [
     {
       n: "01",
       title: "Create your first project",
-      body: "Spin up a project in seconds — pick a template or start from scratch.",
+      text: "Add a title, a cover image, and your live demo and GitHub links.",
     },
     {
       n: "02",
-      title: "Wire up your API keys",
-      body: "Generate keys from the dashboard and drop them into your app.",
+      title: "Grab your API key",
+      text: "Copy it from the API tab. It's all you need to read your work from anywhere.",
     },
     {
       n: "03",
-      title: "Ship something cool",
-      body: "Deploy, share, and iterate. We'll be here if you get stuck.",
+      title: "Call it from your portfolio",
+      text: "Fetch, Axios, a React hook or Next.js — ready-made snippets are waiting in the playground.",
     },
   ];
 
-  const stepsHtml = steps
+  const stepRows = steps
     .map(
-      (s, i) => `
-        <tr>
-          <td style="padding:${i === 0 ? "0" : "14px"} 0 0;">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0" class="dm-step" style="background:#fafafa;border:1px solid #f0f0f1;border-radius:12px;">
-              <tr>
-                <td style="width:44px;vertical-align:top;padding:16px 0 16px 16px;">
-                  <span style="display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;background:#4ADE8015;color:#22A05C;font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;font-weight:700;border-radius:9px;">${s.n}</span>
-                </td>
-                <td style="vertical-align:top;padding:16px 16px 16px 12px;">
-                  <p class="dm-ink" style="margin:0 0 3px;color:#111827;font-size:13.5px;font-weight:700;letter-spacing:-0.1px;">${s.title}</p>
-                  <p class="dm-ink-soft" style="margin:0;color:#6b7280;font-size:12.5px;line-height:1.55;">${s.body}</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>`,
+      (s) => `
+            <tr>
+              <td style="padding:0 0 12px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="dm-step" bgcolor="#FBF7EE" style="background:#FBF7EE;border:1px solid #E8E0CF;border-radius:14px;">
+                  <tr>
+                    <td width="64" valign="top" style="padding:20px 0 20px 20px;font-family:${mono};font-size:20px;font-weight:700;line-height:1;color:#FF8A4C;">${s.n}</td>
+                    <td valign="top" style="padding:20px 20px 20px 4px;">
+                      <div class="dm-ink" style="font-family:${display};font-size:17px;font-weight:700;line-height:1.3;letter-spacing:-0.2px;color:#14110C;">${s.title}</div>
+                      <div class="dm-ink-soft" style="margin-top:6px;font-family:${body};font-size:14px;line-height:1.6;color:#4A443A;">${s.text}</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>`,
     )
     .join("");
 
-  return `
-<!DOCTYPE html>
-<html lang="en">
+  return `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="x-apple-disable-message-reformatting" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="color-scheme" content="light dark" />
   <meta name="supported-color-schemes" content="light dark" />
   <title>Welcome to ${appName}</title>
-
+  <!--[if mso]>
+  <xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <style>
-    .preheader { display:none !important; visibility:hidden; opacity:0; color:transparent; height:0; width:0; }
+    body, table, td, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table, td { mso-table-lspace:0; mso-table-rspace:0; }
+    img { border:0; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
+    body { margin:0; padding:0; width:100% !important; }
+    a { text-decoration:none; }
+
+    @media (max-width:620px) {
+      .container { width:100% !important; }
+      .px { padding-left:24px !important; padding-right:24px !important; }
+      .h1 { font-size:38px !important; line-height:1.06 !important; letter-spacing:-1.2px !important; }
+      .ghost { font-size:40px !important; }
+      .hide-sm { display:none !important; }
+    }
+
     @media (prefers-color-scheme: dark) {
       .dm-bg { background:#0A0A0A !important; }
       .dm-card { background:#141414 !important; }
@@ -69,123 +100,158 @@ export const welcomeEmailTemplate = (
       .dm-hairline { background:#262626 !important; }
       .dm-note { background:#0D0D0D !important; border-color:#262626 !important; }
       .dm-btn { color:#0A0A0A !important; }
+      .dm-border { border-color:#262626 !important; }
+      .dm-ghost { color:#1F1F1F !important; }
     }
+    /* Outlook.com / Outlook app dark mode */
+    [data-ogsc] .dm-bg { background:#0A0A0A !important; }
+    [data-ogsc] .dm-card { background:#141414 !important; }
+    [data-ogsc] .dm-ink { color:#FFFBF4 !important; }
+    [data-ogsc] .dm-ink-soft { color:#D8CFBC !important; }
+    [data-ogsc] .dm-ink-mute { color:#8A8578 !important; }
+    [data-ogsc] .dm-step, [data-ogsc] .dm-note { background:#0D0D0D !important; border-color:#262626 !important; }
+    [data-ogsc] .dm-hairline { background:#262626 !important; }
+    [data-ogsc] .dm-btn { color:#0A0A0A !important; }
+    [data-ogsc] .dm-border { border-color:#262626 !important; }
+    [data-ogsc] .dm-ghost { color:#1F1F1F !important; }
   </style>
 </head>
+<body class="dm-bg" style="margin:0;padding:0;background:#FFFBF4;">
 
-<body class="dm-bg" style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
-
-  <div class="preheader">
-    Welcome to ${appName}, ${recipient} — here are three quick steps to get started.
+  <!-- preheader (inbox preview text) -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;font-size:1px;line-height:1px;color:#FFFBF4;">
+    Your account is ready. Three steps and your portfolio is live on the API.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
   </div>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f4f5;padding:40px 16px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="dm-bg" bgcolor="#FFFBF4" style="background:#FFFBF4;">
     <tr>
-      <td align="center">
+      <td align="center" style="padding:32px 12px;">
 
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="dm-card" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.06),0 20px 40px -20px rgba(0,0,0,0.15);">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" class="container dm-card dm-border" bgcolor="#FFFFFF" style="width:600px;max-width:600px;background:#FFFFFF;border:1px solid #EAE3D3;border-radius:20px;">
 
-          <!-- ───────── Accent top hairline ───────── -->
+          <!-- top bar -->
           <tr>
-            <td style="height:4px;line-height:4px;font-size:0;background:linear-gradient(90deg,#4ADE80,#22D3EE,#4ADE80);">&nbsp;</td>
-          </tr>
-
-          <!-- ───────── Header ───────── -->
-          <tr>
-            <td style="padding:32px 36px 8px;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <td class="px" style="padding:28px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td align="left" style="vertical-align:middle;">
-                    <table cellpadding="0" cellspacing="0" border="0">
+                  <td align="left" valign="middle">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                       <tr>
-                        <td style="vertical-align:middle;padding-right:10px;">
-                          <span style="display:inline-block;width:32px;height:32px;line-height:32px;text-align:center;background:#4ADE80;color:#0A0A0A;font-weight:800;border-radius:10px;font-size:16px;">P</span>
-                        </td>
-                        <td style="vertical-align:middle;">
-                          <span class="dm-ink" style="color:#111827;font-size:15px;font-weight:700;letter-spacing:-0.2px;">${appName}</span>
-                        </td>
+                        <td width="30" height="30" align="center" valign="middle" bgcolor="#FF8A4C" style="width:30px;height:30px;background:#FF8A4C;border-radius:8px;font-family:${mono};font-size:13px;font-weight:700;line-height:30px;color:#0A0A0A;">{}</td>
+                        <td style="padding-left:10px;font-family:${display};font-size:18px;font-weight:700;letter-spacing:-0.3px;color:#14110C;" class="dm-ink">${appName}</td>
                       </tr>
                     </table>
                   </td>
-                  <td align="right" style="vertical-align:middle;">
-                    <span style="display:inline-block;padding:5px 10px;border-radius:999px;background:#4ADE8015;color:#22A05C;font-size:11px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;">
-                      Welcome
-                    </span>
+                  <td align="right" valign="middle" class="dm-ink-mute" style="font-family:${mono};font-size:11px;color:#8A8578;">
+                    <span style="color:#7FBF97;">&#9679;</span>&nbsp;all systems online
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
 
-          <!-- ───────── Headline ───────── -->
+          <!-- hero -->
           <tr>
-            <td style="padding:20px 36px 0;">
-              <h1 class="dm-ink" style="margin:0;color:#0A0A0A;font-size:28px;line-height:1.22;font-weight:700;letter-spacing:-0.5px;">
-                You're in, ${recipient} 🎉
+            <td class="px" style="padding:44px 40px 0 40px;">
+              <div style="font-family:${mono};font-size:12px;letter-spacing:0.4px;color:#FF8A4C;">// welcome</div>
+              <h1 class="h1 dm-ink" style="margin:14px 0 0 0;font-family:${display};font-size:52px;font-weight:700;line-height:1.02;letter-spacing:-2px;color:#14110C;">
+                Welcome aboard,<br />${recipient}<span style="color:#FF8A4C;">.</span>
               </h1>
-              <p class="dm-ink-soft" style="margin:12px 0 0;color:#4b5563;font-size:15px;line-height:1.65;">
-                Thanks for joining ${appName}. We built this to make shipping API-backed products feel effortless — here are three quick steps to get you moving.
+              <p class="dm-ink-soft" style="margin:20px 0 0 0;max-width:460px;font-family:${body};font-size:16px;line-height:1.65;color:#4A443A;">
+                Your ${appName} account is ready. Manage your projects in one place and expose them to any portfolio through a clean public REST API.
               </p>
             </td>
           </tr>
 
-          <!-- ───────── Steps ───────── -->
+          <!-- terminal -->
           <tr>
-            <td style="padding:26px 36px 0;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                ${stepsHtml}
-              </table>
-            </td>
-          </tr>
-
-          <!-- ───────── Primary CTA ───────── -->
-          <tr>
-            <td style="padding:26px 36px 0;" align="center">
-              <a href="${ctaUrl}" class="dm-btn" style="display:inline-block;padding:14px 26px;border-radius:12px;background:#4ADE80;color:#0A0A0A;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:-0.1px;">
-                ${ctaLabel} &nbsp;→
-              </a>
-              <p class="dm-ink-mute" style="margin:12px 0 0;color:#9ca3af;font-size:11.5px;line-height:1.5;">
-                Or paste this into your browser:<br/>
-                <span style="color:#6b7280;word-break:break-all;">${ctaUrl}</span>
-              </p>
-            </td>
-          </tr>
-
-          <!-- ───────── Divider ───────── -->
-          <tr>
-            <td style="padding:26px 36px 0;">
-              <div class="dm-hairline" style="height:1px;background:#e5e7eb;"></div>
-            </td>
-          </tr>
-
-          <!-- ───────── Help note ───────── -->
-          <tr>
-            <td style="padding:18px 36px 0;">
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" class="dm-note" style="background:#fafafa;border-radius:12px;border:1px solid #f0f0f1;">
+            <td class="px" style="padding:32px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background:#0A0A0A;border:1px solid #262626;border-radius:14px;">
                 <tr>
-                  <td style="padding:16px;">
-                    <p class="dm-ink" style="margin:0 0 4px;color:#111827;font-size:13px;font-weight:700;">
-                      Need a hand?
-                    </p>
-                    <p class="dm-ink-soft" style="margin:0;color:#6b7280;font-size:12.5px;line-height:1.6;">
-                      Reply to this email or head to the support console inside your dashboard — a real human reads every message.
-                    </p>
+                  <td style="padding:14px 18px;border-bottom:1px solid #262626;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="left" style="font-family:${mono};font-size:11px;color:#8A8578;">
+                          <span style="color:#3A3A3A;">&#9679;&nbsp;&#9679;&nbsp;&#9679;</span>&nbsp;&nbsp;playground
+                        </td>
+                        <td align="right" style="font-family:${mono};font-size:11px;color:#7FBF97;">200 OK</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:18px 18px 20px 18px;font-family:${mono};font-size:12.5px;line-height:1.75;color:#D8CFBC;">
+                    <span style="color:#8A8578;">// your portfolio, one request away</span><br />
+                    <span style="color:#8B93FF;">GET</span> /v1/projects/<span style="color:#FF8A4C;">{apiKey}</span><br /><br />
+                    <span style="color:#FFFBF4;">{</span><br />
+                    &nbsp;&nbsp;<span style="color:#8B93FF;">"title"</span>: <span style="color:#FFFBF4;">"Your first project"</span>,<br />
+                    &nbsp;&nbsp;<span style="color:#8B93FF;">"featured"</span>: <span style="color:#FF8A4C;">true</span><br />
+                    <span style="color:#FFFBF4;">}</span>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
 
-          <!-- ───────── Footer ───────── -->
+          <!-- steps -->
           <tr>
-            <td style="padding:24px 36px 32px;">
-              <p class="dm-ink-mute" style="margin:0;color:#9ca3af;font-size:11.5px;line-height:1.6;text-align:center;">
-                You're receiving this because you signed up for ${appName}.<br/>
-                If this wasn't you, you can ignore this email.
-              </p>
-              <p class="dm-ink-mute" style="margin:14px 0 0;color:#c7c9ce;font-size:11px;line-height:1.6;text-align:center;">
-                © ${year} ${appName}. All rights reserved.
-              </p>
+            <td class="px" style="padding:44px 40px 0 40px;">
+              <div style="font-family:${mono};font-size:12px;letter-spacing:0.4px;color:#FF8A4C;">// next</div>
+              <div class="dm-ink" style="margin:10px 0 20px 0;font-family:${display};font-size:26px;font-weight:700;line-height:1.15;letter-spacing:-0.8px;color:#14110C;">Live in three steps.</div>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${stepRows}
+              </table>
+            </td>
+          </tr>
+
+          <!-- CTA -->
+          <tr>
+            <td class="px" align="left" style="padding:20px 40px 0 40px;">
+              <!--[if mso]>
+              <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${href}" style="height:52px;v-text-anchor:middle;width:${btnWidth}px;" arcsize="24%" stroke="f" fillcolor="#FF8A4C">
+                <w:anchorlock/>
+                <center style="color:#0A0A0A;font-family:Arial,sans-serif;font-size:15px;font-weight:bold;">${label} &rarr;</center>
+              </v:roundrect>
+              <![endif]-->
+              <!--[if !mso]><!-->
+              <a href="${href}" target="_blank" class="dm-btn" style="display:inline-block;background:#FF8A4C;color:#0A0A0A;font-family:${display};font-size:15px;font-weight:700;line-height:52px;letter-spacing:-0.1px;text-align:center;text-decoration:none;border-radius:12px;padding:0 28px;">${label}&nbsp;&nbsp;&rarr;</a>
+              <!--<![endif]-->
+              <div class="dm-ink-mute" style="margin-top:14px;font-family:${mono};font-size:11px;line-height:1.6;color:#8A8578;word-break:break-all;">
+                or paste this link: ${href}
+              </div>
+            </td>
+          </tr>
+
+          <!-- tip -->
+          <tr>
+            <td class="px" style="padding:32px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="dm-note" bgcolor="#FFF4EA" style="background:#FFF4EA;border:1px solid #FFD9BF;border-radius:14px;">
+                <tr>
+                  <td style="padding:18px 20px;font-family:${body};font-size:14px;line-height:1.65;color:#4A443A;" class="dm-ink-soft">
+                    <span style="font-family:${mono};font-size:12px;font-weight:700;color:#FF8A4C;">tip &rarr;</span>&nbsp;
+                    Use the API playground on your dashboard to test requests and copy ready-made snippets before you ship.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ghost wordmark + footer -->
+          <tr>
+            <td class="px" style="padding:44px 40px 0 40px;">
+              <div class="ghost dm-ghost" style="font-family:${display};font-size:68px;font-weight:700;line-height:1;letter-spacing:-3px;color:#F1EBDD;">${appName}</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="px" style="padding:20px 40px 0 40px;">
+              <div class="dm-hairline" style="height:1px;line-height:1px;font-size:1px;background:#E8E0CF;">&nbsp;</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="px" style="padding:20px 40px 32px 40px;">
+              <div class="dm-ink-mute" style="font-family:${mono};font-size:11px;line-height:1.8;color:#8A8578;">
+                &copy; ${year} ${appName}. Built for developers who ship.<br />
+                You're receiving this because you created a ${appName} account.
+              </div>
             </td>
           </tr>
 
@@ -194,8 +260,6 @@ export const welcomeEmailTemplate = (
       </td>
     </tr>
   </table>
-
 </body>
-</html>
-`;
+</html>`;
 };

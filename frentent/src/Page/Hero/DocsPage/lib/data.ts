@@ -14,7 +14,12 @@ import {
 
 
 
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:5000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL 
+
+if (!BASE_URL) {
+  throw new Error("NEXT_PUBLIC_BASE_URL is not defined in the environment variables.");
+}
+
 const API_URL = `${BASE_URL}/api`;
 
 

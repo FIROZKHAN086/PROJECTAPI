@@ -15,17 +15,19 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     (r) => pathname === r || pathname.startsWith(r + "/")
   );
 
+  const isVerified = Boolean(user) && user?.userVerified === true;
+
   useEffect(() => {
     if (isLoading) return;
 
-    if (!user && !isPublic) {
+    if (!isVerified && !isPublic) {
       router.replace("/login?auth=login");
     }
 
-    if (user && pathname === "/login") {
+    if (isVerified && pathname === "/login") {
       router.replace("/dashboard");
     }
-  }, [user, isLoading, isPublic, pathname, router]);
+  }, [isVerified, isLoading, isPublic, pathname, router]);
 
   return <>{children}</>;
 }

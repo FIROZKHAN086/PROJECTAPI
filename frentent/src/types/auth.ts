@@ -3,7 +3,7 @@ export interface User {
   name: string | null;
   email: string;
   OneTimeID: string | null;
-  token: string;
+ userVerified: boolean;
   role?: string;
   Role?: string;
   createdAt?: string;
@@ -12,7 +12,18 @@ export interface User {
 export interface AuthResponse {
   success: boolean;
   message: string;
+  code?: "OTP_REQUIRED" | string;
   user: User;
+}
+
+export interface VerifyOtpPayload {
+  otp: string;
+}
+
+export interface OtpActionResponse {
+  success: boolean;
+  message: string;
+  code?: string;
 }
 
 export interface LoginPayload {
