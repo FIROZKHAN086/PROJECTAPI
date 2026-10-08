@@ -30,26 +30,37 @@ export const authMiddleware = (
       authHeader && authHeader.startsWith("Bearer ")
         ? authHeader.split(" ")[1]
         : undefined;
-    const token = headerToken || req.cookies?.token;
+    const cookieToken = req.cookies?.token;
 
-    if (!token) {
+    let decoded: JwtPayload | null = null;
+
+    if (headerToken) {
+      try {
+        decoded = jwt.verify(headerToken, process.env.JWT_SECRET as string) as JwtPayload;
+      } catch {
+        decoded = null;
+      }
+    }
+
+    if (!decoded && cookieToken) {
+      try {
+        decoded = jwt.verify(cookieToken, process.env.JWT_SECRET as string) as JwtPayload;
+      } catch {
+        decoded = null;
+      }
+    }
+
+    if (!decoded) {
       res.status(401).json({
         success: false,
-        message: "user not login.",
+        message: headerToken || cookieToken ? "Invalid or expired token." : "user not login.",
       });
       return;
     }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as JwtPayload;
+    req.user = decoded;
 
-    
-    req.user = decoded
-
- // prodution to use this logs as your wish 
-    // console.log(`[${new Date().toISOString()}] [INFO] Fetching  user to decoded : ` , decoded);
+ 
     
     next();
   } catch (error) {

@@ -6,4 +6,10 @@ node_modules
 
 /generated/prisma
 
+<<<<<<< HEAD
 devboot.log
+=======
+
+TodayTaks.md 
+devboot.log 
+>>>>>>> f1e7accc85ef776ffc53c28f51d7b9aba71cac66

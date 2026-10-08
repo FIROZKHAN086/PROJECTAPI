@@ -14,7 +14,7 @@ dotenv.config();
 export const app = express();
 
 const isProd = process.env.NODE_ENV === "production";
-
+morgan.token('host', (req) => req.headers.origin || req.headers.referer || 'Direct/Unknown');
 const allowedOrigins = (process.env.FRONTEND_URL || "")
   .split(",")
   .map((origin) => origin.trim())
@@ -35,7 +35,7 @@ app.use(
 if (process.env.NODE_ENV === "production") {
   app.use(morgan("combined"));
 } else {
-  app.use(morgan("dev"));
+ app.use(morgan(':method :url :status :res[content-length] - :response-time ms [From: :host]'));
 }
 app.use(helmet());
 app.use(cookieParser());

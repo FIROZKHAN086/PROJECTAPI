@@ -21,7 +21,7 @@ export function useCreateTicket() {
   return useMutation<{ success: boolean; data: SupportTicket }, ApiError, CreateTicketPayload>({
     mutationFn: async (payload) => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL }/api/support/create`,
+        `/api/support/create`,
         {
           method: "POST",
           credentials: "include",

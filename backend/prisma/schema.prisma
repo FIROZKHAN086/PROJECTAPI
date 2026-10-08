@@ -17,40 +17,32 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String
-  Role      Role     @default(USER)
-  OneTimeID String?  @unique
-  createdAt DateTime @default(now())
-
-  project Project[]
-  tickets Support[]
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String?
+  password     String
+  Role         Role      @default(USER)
+  userVerified Boolean   @default(false)
+  OneTimeID    String?   @unique
+  createdAt    DateTime  @default(now())
+  project      Project[]
+  tickets      Support[]
 }
 
 model Project {
   id Int @id @default(autoincrement())
-
   title       String
   description String @db.Text
-
   image String
-
   tech String[]
-
   liveDemo String?
   github   String?
-
   category  String
   ProjectID String  @unique
   featured  Boolean @default(false)
-
   userId String
   user   User   @relation(fields: [userId], references: [OneTimeID])
-
   customFields Json?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -58,7 +50,6 @@ model Project {
   @@index([featured])
   @@map("projects")
 }
-
 
 enum TicketStatus {
   OPEN
@@ -81,7 +72,7 @@ model Support {
   updatedAt DateTime @updatedAt
 
   userId String
-  user User @relation(fields: [userId], references: [OneTimeID])
+  user   User   @relation(fields: [userId], references: [OneTimeID])
 
   @@index([status])
 }
