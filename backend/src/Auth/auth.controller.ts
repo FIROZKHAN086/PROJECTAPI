@@ -8,8 +8,9 @@ import { v4 as uuidv4 } from "uuid";
 import { generateOtp } from "../utils/OtpGeneration.js";
 import redis from "../config/redis.js";
 import { getCookieOptions } from "../utils/getCookieOptions.js";
-
-
+import { sendEmail } from "../utils/sendEmail.js";
+import { otpEmailTemplate } from "../config/otpEmail.js";
+import { welcomeEmailTemplate } from "../config/welcomeEmail.js";
 
 // Register Route
 
@@ -24,7 +25,6 @@ export const registerUser = async (req: Request, res: Response) => {
       });
     }
 
-    
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -36,13 +36,11 @@ export const registerUser = async (req: Request, res: Response) => {
       });
     }
 
-   
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate a unique OneTime ID
     const OneTimeID = uuidv4();
 
-   
     const user = await prisma.user.create({
       data: {
         name,
@@ -53,15 +51,28 @@ export const registerUser = async (req: Request, res: Response) => {
       },
     });
 
-    
     const OneTimeOtp = await generateOtp();
 
-    
     const OnetimeOtpKey = `otp:${user.OneTimeID}`;
     await redis.set(OnetimeOtpKey, OneTimeOtp, "EX", 5 * 60);
 
-  // todo : // Send OTP through Email/SMS provider
-    console.log(`OTP for ${user.email}: ${OneTimeOtp}`); // For demonstration purposes only
+    // todo : // Send OTP through Email/SMS provider
+
+    const otpEmailHtml = otpEmailTemplate(OneTimeOtp, user.email, 5);
+
+    const SendOtpEmail = await sendEmail(
+      user.email,
+      "Your OTP Code",
+      OneTimeOtp,
+      otpEmailHtml
+    );
+
+    if (!SendOtpEmail) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to send OTP email",
+      });
+    }
 
     // Generate JWT token otp_verification
     const otp_verification = generateToken({
@@ -75,7 +86,7 @@ export const registerUser = async (req: Request, res: Response) => {
     // Set token in cookies
     res.cookie("otp_verification", otp_verification, {
       ...getCookieOptions(),
-      maxAge: 5 * 60 * 1000, // 5 minutes
+      maxAge: 30 * 60 * 1000, // 30 minutes
     });
 
     return res.status(201).json({
@@ -275,12 +286,8 @@ export const getCurrentUser = async (req: Request, res: Response) => {
   }
 };
 
-
 // * Verify OTP Route
-export const VerifyOtp = async (
-  req: Request,
-  res: Response
-) => {
+export const VerifyOtp = async (req: Request, res: Response) => {
   try {
     const OneTimeID = (req as any).otpUser?.OneTimeID;
     const otp = req.body.otp?.trim();
@@ -312,7 +319,6 @@ export const VerifyOtp = async (
       });
     }
 
-    
     const result = await prisma.user.updateMany({
       where: {
         OneTimeID,
@@ -330,7 +336,6 @@ export const VerifyOtp = async (
         message: "User not found or already verified",
       });
     }
-
 
     const user = await prisma.user.findUnique({
       where: {
@@ -354,10 +359,8 @@ export const VerifyOtp = async (
       });
     }
 
-    
     await redis.del(otpKey);
 
-   
     const token = generateToken({
       id: user.id.toString(),
       name: user.name || "",
@@ -366,17 +369,25 @@ export const VerifyOtp = async (
       OneTimeID: user.OneTimeID || "",
     });
 
-    
-   res.cookie("token", token, {
+    res.cookie("token", token, {
       ...getCookieOptions(),
       maxAge: 30 * 60 * 1000, // 30 minutes
     });
-
 
     res.clearCookie("otp_verification", {
       ...getCookieOptions(),
       maxAge: 0,
     });
+
+    // ? after successful verification, send a welcome email
+    const welcomeEmailHtml = welcomeEmailTemplate(user.name ?? undefined);
+
+    await sendEmail(
+      user.email,
+      "Welcome to ProjectAPI!",
+      `Hello ${user.name}, welcome to ProjectAPI!`,
+      welcomeEmailHtml
+    );
 
     return res.status(200).json({
       success: true,
@@ -391,7 +402,6 @@ export const VerifyOtp = async (
         userVerified: user.userVerified,
       },
     });
-
   } catch (error) {
     console.error("OTP verification failed:", error);
 
@@ -418,6 +428,7 @@ export const NewOtpsend = async (req: Request, res: Response) => {
       where: { OneTimeID },
       select: {
         userVerified: true,
+        email: true,
       },
     });
 
@@ -443,6 +454,15 @@ export const NewOtpsend = async (req: Request, res: Response) => {
     await redis.set(otpKey, otp, "EX", 5 * 60);
 
     // TODO: Send OTP through Email/SMS provider
+
+    const otpEmailHtml = otpEmailTemplate(otp, user.email, 5);
+
+    const SendOtpEmail = await sendEmail(
+      user.email,
+      "Your OTP Code",
+      otp,
+      otpEmailHtml
+    );
 
     return res.status(200).json({
       success: true,
