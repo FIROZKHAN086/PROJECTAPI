@@ -1,37 +1,24 @@
 export const otpEmailTemplate = (
   otp: string,
   to?: string,
-  expiresInMinutes: number = 5
+  expiresInMinutes: number = 5,
+  // Page that copies the code to the clipboard (email can't run JS, so the button opens this).
+  copyPageUrl: string = `${(
+    process.env.APP_LINK || "https://projectapi.firozkhan.site"
+  ).replace(/\/$/, "")}/copy-code`
 ): string => {
   const recipient = to || "there";
   const year = new Date().getFullYear();
   const appName = "ProjectAPI";
 
-  // strip whitespace, then split into characters so we can render each in its own cell
-  const chars = otp.replace(/\s+/g, "").split("");
-  const codePlain = chars.join(""); // for hrefs and preheader
+  // strip whitespace so the code is one clean string
+  const codePlain = otp.replace(/\s+/g, "");
 
-  // per-digit cells — one <td> per character
-  const digitCells = chars
-    .map(
-      (ch) => `
-      <td style="padding:0 3px;" valign="middle">
-        <span style="
-          display:inline-block;
-          width:42px;height:54px;line-height:54px;
-          text-align:center;
-          background:#0A0A0A;
-          border:1px solid #262626;
-          border-radius:12px;
-          color:#FFFBF4;
-          font-family:'SF Mono',SFMono-Regular,Menlo,Consolas,'Courier New',monospace;
-          font-size:24px;
-          font-weight:800;
-          letter-spacing:0;
-        ">${ch}</span>
-      </td>`
-    )
-    .join("");
+  // The code goes in the URL *fragment* (#...), which browsers never send to the server,
+  // so it doesn't end up in server logs.
+ 
+  const mono =
+    "'SF Mono',SFMono-Regular,Menlo,Consolas,'Courier New',monospace";
 
   // expiry visual — one dot per minute, filled
   const totalSegments = Math.max(expiresInMinutes, 1);
@@ -65,7 +52,8 @@ export const otpEmailTemplate = (
     /* Mobile tightening */
     @media (max-width:520px) {
       .px { padding-left:22px !important; padding-right:22px !important; }
-      .digit { width:36px !important; height:48px !important; line-height:48px !important; font-size:20px !important; }
+      .otp-text { font-size:26px !important; letter-spacing:6px !important; }
+      .otp-box { padding:12px 6px 12px 14px !important; }
       .h1 { font-size:23px !important; }
     }
 
@@ -78,7 +66,7 @@ export const otpEmailTemplate = (
       .dm-otp-box { background:#0D0D0D !important; border-color:#262626 !important; }
       .dm-hairline { background:#262626 !important; }
       .dm-note { background:#0D0D0D !important; border-color:#262626 !important; }
-      .dm-digit { background:#07070B !important; border-color:#2a2a2a !important; color:#FFFBF4 !important; }
+      .dm-digit { background:#07070B !important; border-color:#2a2a2a !important; }
     }
   </style>
 </head>
@@ -153,16 +141,17 @@ export const otpEmailTemplate = (
                       Your one-time code
                     </p>
 
-                    <!-- Digit cells -->
+                    <!-- Code: ONE text node in ONE cell, so copying never picks up tabs/spaces.
+                         Visual spacing comes from letter-spacing, which is not part of the copied text.
+                         user-select:all makes a single click/tap select the whole code. -->
                     <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
-                      <tr>${digitCells}</tr>
+                      <tr>
+                        <td class="dm-digit otp-box" align="center" style="background:#0A0A0A;border:1px solid #262626;border-radius:12px;padding:14px 10px 14px 20px;">
+                          <span class="otp-text" style="-webkit-user-select:all;user-select:all;display:inline-block;white-space:nowrap;color:#FFFBF4;font-family:${mono};font-size:32px;font-weight:800;line-height:1.1;letter-spacing:10px;">${codePlain}</span>
+                        </td>
+                      </tr>
                     </table>
 
-                    
-                    <p class="dm-ink-mute" style="margin:14px 0 0;color:#8A8578;font-size:11px;line-height:1.55;">
-                      Desktop? Triple-click the code and copy.<br/>
-                      Mobile? Tap <strong class="dm-ink-soft" style="color:#6b7280;">Copy code</strong> above.
-                    </p>
                   </td>
                 </tr>
               </table>

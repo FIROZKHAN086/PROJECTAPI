@@ -4,6 +4,11 @@ import jwt from "jsonwebtoken";
 interface OtpVerificationPayload {
   id: string;
   OneTimeID: string;
+  name: string;
+  email: string;
+  Role: string;
+  password: string;
+  
 }
 
 export const otpVerificationMiddleware = (
@@ -34,10 +39,15 @@ export const otpVerificationMiddleware = (
         code: "INVALID_OTP_SESSION",
       });
     }
-
+   
     (req as any).otpUser = {
       id: decoded.id,
       OneTimeID: decoded.OneTimeID,
+      name:decoded.name,
+      email:decoded.email,
+      Role:decoded.Role,
+      password:decoded.password
+    
     };
 
     next();
