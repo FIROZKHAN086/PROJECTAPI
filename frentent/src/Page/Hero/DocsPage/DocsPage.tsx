@@ -33,8 +33,6 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
-
-
 const FALLBACK_PHRASES = ["Typed docs.", "Live endpoints."];
 
 const METHOD_STYLES: Record<HttpMethod, string> = {
@@ -43,8 +41,6 @@ const METHOD_STYLES: Record<HttpMethod, string> = {
   PATCH: "border-[#FACC15]/30 bg-[#FACC15]/15 text-[#FACC15]",
   DELETE: "border-[#F87171]/30 bg-[#F87171]/15 text-[#F87171]",
 };
-
-
 
 function CodeBlock({
   id,
@@ -116,8 +112,6 @@ function CodeBlock({
   );
 }
 
-
-
 function EndpointRow({ item }: { item: EndpointItem }) {
   return (
     <div className="flex items-start gap-3 rounded-xl border border-white/10 bg-[#141414] p-3.5 transition-colors hover:border-white/20 sm:p-4">
@@ -148,7 +142,6 @@ function EndpointRow({ item }: { item: EndpointItem }) {
     </div>
   );
 }
-
 
 function FieldsTable({ title, rows }: { title: string; rows: FieldRow[] }) {
   return (
@@ -206,8 +199,6 @@ function FieldsTable({ title, rows }: { title: string; rows: FieldRow[] }) {
   );
 }
 
-
-
 function ErrorGrid({ items }: { items: ErrorItem[] }) {
   return (
     <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -231,7 +222,6 @@ function ErrorGrid({ items }: { items: ErrorItem[] }) {
     </div>
   );
 }
-
 
 function StepList({ items }: { items: StepItem[] }) {
   return (
@@ -259,8 +249,6 @@ function StepList({ items }: { items: StepItem[] }) {
   );
 }
 
-
-
 function BulletList({ items }: { items: string[] }) {
   return (
     <StaggerGrid className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
@@ -275,8 +263,6 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
-
-
 function InlineCta({ href, label }: { href: string; label: string }) {
   return (
     <div className="mt-6">
@@ -290,8 +276,6 @@ function InlineCta({ href, label }: { href: string; label: string }) {
     </div>
   );
 }
-
-
 
 function BlockRenderer({
   block,
@@ -328,10 +312,7 @@ function BlockRenderer({
       return (
         <div className="mt-6 space-y-3">
           {block.items.map((item) => (
-            <EndpointRow
-              key={`${item.method}-${item.path}`}
-              item={item}
-            />
+            <EndpointRow key={`${item.method}-${item.path}`} item={item} />
           ))}
         </div>
       );
@@ -356,8 +337,6 @@ function BlockRenderer({
   }
 }
 
-
-
 export default function DocsPage() {
   const typePhrases =
     docTypePhrases.length > 0 ? docTypePhrases : FALLBACK_PHRASES;
@@ -367,7 +346,6 @@ export default function DocsPage() {
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState("");
   const codeRef = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     const phrase = typePhrases[phraseIndex] ?? "";
@@ -395,7 +373,6 @@ export default function DocsPage() {
     return () => window.clearTimeout(timer);
   }, [display, deleting, phraseIndex, typePhrases]);
 
-  
   useEffect(() => {
     if (!codeRef.current) return;
 
@@ -422,7 +399,6 @@ export default function DocsPage() {
     return () => ctx.revert();
   }, []);
 
-  
   const handleCopy = useCallback((id: string, code: string) => {
     if (typeof navigator === "undefined" || !navigator.clipboard) return;
 
@@ -432,9 +408,7 @@ export default function DocsPage() {
         setCopied(id);
         window.setTimeout(() => setCopied(""), 1600);
       })
-      .catch(() => {
-        
-      });
+      .catch(() => {});
   }, []);
 
   return (
@@ -452,7 +426,6 @@ export default function DocsPage() {
       />
 
       <div className="relative mx-auto w-full max-w-[1200px] px-4 pt-20 sm:px-6 sm:pt-24">
-      
         <ScrollReveal direction="up">
           <span className="inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.28em] text-[#4ADE80] sm:text-xs">
             <BookOpen className="size-3.5" />
@@ -485,9 +458,7 @@ export default function DocsPage() {
           </p>
         </ScrollReveal>
 
-        
         <div className="mt-12 grid grid-cols-1 gap-8 sm:mt-16 lg:grid-cols-[250px_minmax(0,1fr)] lg:gap-10">
-         
           <div className="lg:sticky lg:top-24 lg:self-start">
             <ScrollReveal direction="left">
               <aside className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
@@ -588,7 +559,6 @@ export default function DocsPage() {
           </ScrollReveal>
         </div>
 
-     
         <div className="mt-16">
           <ScrollReveal direction="up" delay={0.05}>
             <div className="relative overflow-hidden rounded-3xl border border-[#4ADE80]/20 bg-gradient-to-br from-[#121212] to-[#0A0A0A] p-8 text-center sm:p-10 md:p-14">
@@ -621,10 +591,9 @@ export default function DocsPage() {
                 </Link>
               </motion.div>
             </div>
-            </ScrollReveal>
-          </div>
+          </ScrollReveal>
         </div>
-     
+      </div>
     </main>
   );
 }

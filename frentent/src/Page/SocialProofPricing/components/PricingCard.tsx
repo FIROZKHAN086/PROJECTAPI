@@ -47,18 +47,22 @@ export default function PricingCard({ plan }: PricingPlanProps) {
           )}
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold text-[#FFFBF4] tracking-tight">{plan.name}</h3>
+            <h3 className="text-xl font-bold text-[#FFFBF4] tracking-tight">
+              {plan.name}
+            </h3>
             <div className="flex items-baseline gap-1.5">
               <span className="text-5xl font-black tracking-tighter text-[#FFFBF4]">
                 {plan.price}
               </span>
               {plan.price !== "Custom" && plan.price !== "$0" && (
-                <span className="text-sm font-medium text-[#D8CFBC]/40">/mo</span>
+                <span className="text-sm font-medium text-[#D8CFBC]/40">
+                  /mo
+                </span>
               )}
             </div>
             <div className="min-h-[40px]">
-              <TextReveal 
-                text={plan.description} 
+              <TextReveal
+                text={plan.description}
                 className="text-sm leading-relaxed text-[#D8CFBC]/70"
               />
             </div>
@@ -68,20 +72,26 @@ export default function PricingCard({ plan }: PricingPlanProps) {
 
           <div className="space-y-4 flex-grow">
             {features.map((feature, idx) => (
-              <motion.div 
-                key={idx} 
+              <motion.div
+                key={idx}
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 + idx * 0.1 }}
                 viewport={{ once: true }}
                 className="flex items-center gap-3"
               >
-                <div className={`flex size-5 items-center justify-center rounded-full ${
-                  plan.featured ? "bg-[#4ADE80]/15 text-[#4ADE80]" : "bg-white/10 text-[#D8CFBC]"
-                }`}>
+                <div
+                  className={`flex size-5 items-center justify-center rounded-full ${
+                    plan.featured
+                      ? "bg-[#4ADE80]/15 text-[#4ADE80]"
+                      : "bg-white/10 text-[#D8CFBC]"
+                  }`}
+                >
                   <Check className="size-3" />
                 </div>
-                <span className="text-sm text-[#D8CFBC]/90 font-medium">{feature}</span>
+                <span className="text-sm text-[#D8CFBC]/90 font-medium">
+                  {feature}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -95,9 +105,7 @@ export default function PricingCard({ plan }: PricingPlanProps) {
           >
             <span className="relative z-10">Get Started Now</span>
             {plan.featured && (
-              <motion.div 
-                className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"
-              />
+              <motion.div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
             )}
           </Button>
         </motion.div>

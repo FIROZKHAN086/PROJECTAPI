@@ -14,14 +14,24 @@ const router = Router();
 
 router.post("/create", rateLimitMiddleware, authMiddleware, createProject);
 
-router.get("/get",rateLimitMiddleware, authMiddleware, getAllProjects);
+router.get("/get", rateLimitMiddleware, authMiddleware, getAllProjects);
 
-router.get("/getproject/:id",rateLimitMiddleware, authMiddleware, getProjectById);
+router.get(
+  "/getproject/:id",
+  rateLimitMiddleware,
+  authMiddleware,
+  getProjectById
+);
 
-router.patch("/update/:id",rateLimitMiddleware, authMiddleware, updateProject);
+router.patch("/update/:id", rateLimitMiddleware, authMiddleware, updateProject);
 
-router.delete("/delete/:id",rateLimitMiddleware, authMiddleware, deleteProject);
+router.delete(
+  "/delete/:id",
+  rateLimitMiddleware,
+  authMiddleware,
+  deleteProject
+);
 
-router.get("/public",rateLimitMiddleware, getPublicProjects);
+router.get("/public", rateLimitMiddleware, getPublicProjects);
 
 export default router;

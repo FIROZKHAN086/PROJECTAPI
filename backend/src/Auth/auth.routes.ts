@@ -17,7 +17,17 @@ router.post("/register", rateLimitMiddleware, registerUser);
 router.post("/login", rateLimitMiddleware, loginUser);
 router.post("/logout", rateLimitMiddleware, logoutUser);
 router.get("/get-me", authMiddleware, getCurrentUser);
-router.post("/verify-otp", rateLimitMiddleware, otpVerificationMiddleware, VerifyOtp);
-router.post("/resend-otp", rateLimitMiddleware, otpVerificationMiddleware, NewOtpsend);
+router.post(
+  "/verify-otp",
+  rateLimitMiddleware,
+  otpVerificationMiddleware,
+  VerifyOtp
+);
+router.post(
+  "/resend-otp",
+  rateLimitMiddleware,
+  otpVerificationMiddleware,
+  NewOtpsend
+);
 
 export default router;

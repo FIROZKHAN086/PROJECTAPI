@@ -8,11 +8,16 @@ export const ACCENT_GRADIENT =
   "bg-gradient-to-r from-[#4ADE80] via-[#34D399] to-[#22D3EE]";
 export const PANEL =
   "rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm";
-export const PANEL_HOVER = "hover:border-white/20 transition-colors duration-300";
+export const PANEL_HOVER =
+  "hover:border-white/20 transition-colors duration-300";
 
 export const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 120, damping: 20 } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 120, damping: 20 },
+  },
 };
 
 export const stagger = (delay = 0.08, delayChildren = 0.05) => ({
@@ -20,7 +25,10 @@ export const stagger = (delay = 0.08, delayChildren = 0.05) => ({
   show: { opacity: 1, transition: { staggerChildren: delay, delayChildren } },
 });
 
-function useInViewOnce(onEnter: (el: HTMLElement) => void, rootMargin = "0px 0px -12% 0px") {
+function useInViewOnce(
+  onEnter: (el: HTMLElement) => void,
+  rootMargin = "0px 0px -12% 0px"
+) {
   const stored = useRef<HTMLElement | null>(null);
   const cb = useRef(onEnter);
 
@@ -64,7 +72,9 @@ export function GradientText({
   className?: string;
 }) {
   return (
-    <span className={`${ACCENT_GRADIENT} bg-clip-text text-transparent ${className}`}>
+    <span
+      className={`${ACCENT_GRADIENT} bg-clip-text text-transparent ${className}`}
+    >
       {children}
     </span>
   );
@@ -72,7 +82,10 @@ export function GradientText({
 
 export function Aurora() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#07070B]">
+    <div
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-[#07070B]"
+    >
       <div className="absolute -top-40 -left-40 size-[520px] rounded-full bg-[#4ADE80]/[0.14] blur-[130px]" />
       <div className="absolute top-1/3 -right-40 size-[480px] rounded-full bg-[#22D3EE]/[0.10] blur-[130px]" />
       <div className="absolute -bottom-40 left-1/3 size-[520px] rounded-full bg-[#8B5CF6]/[0.10] blur-[130px]" />
@@ -82,7 +95,8 @@ export function Aurora() {
           backgroundImage:
             "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
-          maskImage: "radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%)",
+          maskImage:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%)",
         }}
       />
     </div>
@@ -218,7 +232,9 @@ export function GlowCard({
       ref={ref}
       onMouseMove={handleMouseMove}
       className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm ${
-        hoverable ? "transition-all duration-300 hover:border-white/20 hover:-translate-y-0.5" : ""
+        hoverable
+          ? "transition-all duration-300 hover:border-white/20 hover:-translate-y-0.5"
+          : ""
       } ${className}`}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent opacity-60" />
@@ -259,12 +275,18 @@ export function StatCard({
         <GlowCard hoverable={false} className="h-full">
           <div className="p-5 flex items-start justify-between gap-3">
             <div className="min-w-0 space-y-2.5">
-              <p className="text-[13px] font-medium text-[#A3A3A3] truncate">{label}</p>
+              <p className="text-[13px] font-medium text-[#A3A3A3] truncate">
+                {label}
+              </p>
               <p className="text-[26px] font-bold tracking-tight text-[#FAFAFA] font-space-grotesk leading-none">
                 {typeof value === "number" ? (
                   <Counter to={value} prefix={prefix} suffix={suffix} />
                 ) : (
-                  <span>{prefix}{value}{suffix}</span>
+                  <span>
+                    {prefix}
+                    {value}
+                    {suffix}
+                  </span>
                 )}
               </p>
             </div>
@@ -346,7 +368,9 @@ export function DashHeader({
           }}
         />
       </div>
-      {right && <div className="flex items-center gap-2 flex-wrap">{right}</div>}
+      {right && (
+        <div className="flex items-center gap-2 flex-wrap">{right}</div>
+      )}
     </div>
   );
 }

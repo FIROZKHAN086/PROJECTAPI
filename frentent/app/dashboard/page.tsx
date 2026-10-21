@@ -1,4 +1,3 @@
-
 import { Suspense } from "react";
 import Overview from "@/src/Components/dashboard/Overview";
 import Projects from "@/src/Components/dashboard/Projects";
@@ -12,18 +11,31 @@ import ApiLook from "@/src/Components/dashboard/ApiLook";
 import { SupportContent } from "@/src/Components/support/SupportContent";
 import { DashboardContent } from "./DashboardContent";
 
- export const pageVariants = {
+export const pageVariants = {
   initial: { opacity: 0, y: 18, scale: 0.995 },
   animate: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: "spring" as const, stiffness: 90, damping: 20, mass: 0.9 },
+    transition: {
+      type: "spring" as const,
+      stiffness: 90,
+      damping: 20,
+      mass: 0.9,
+    },
   },
-  exit: { opacity: 0, y: -14, filter: "blur(4px)", transition: { duration: 0.25 } },
+  exit: {
+    opacity: 0,
+    y: -14,
+    filter: "blur(4px)",
+    transition: { duration: 0.25 },
+  },
 };
 
- export const SECTIONS: Record<string, { title: string; description: string; component: React.ReactNode }> = {
+export const SECTIONS: Record<
+  string,
+  { title: string; description: string; component: React.ReactNode }
+> = {
   overview: {
     title: "Overview",
     description: "Your project dashboard at a glance",
@@ -75,8 +87,6 @@ import { DashboardContent } from "./DashboardContent";
     component: <SupportContent />,
   },
 };
-
-
 
 export default function DashboardPage() {
   return (

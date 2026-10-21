@@ -73,9 +73,7 @@ const navSections: NavSection[] = [
   },
   {
     title: "SUPPORT",
-    items: [
-      { label: "Support", icon: LifeBuoy, path: "support" },
-    ],
+    items: [{ label: "Support", icon: LifeBuoy, path: "support" }],
   },
 ];
 
@@ -91,7 +89,11 @@ const groupVariants = {
   show: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.1 + i * 0.08, duration: 0.45, ease: "easeOut" as const },
+    transition: {
+      delay: 0.1 + i * 0.08,
+      duration: 0.45,
+      ease: "easeOut" as const,
+    },
   }),
 };
 
@@ -105,9 +107,7 @@ const itemVariants = {
 };
 
 const AppSidebar = ({ currentPath, onNavigate }: SidebarProps) => {
-
   const auth = useAppSelector((state) => state.auth);
-
 
   return (
     <Sidebar
@@ -131,7 +131,10 @@ const AppSidebar = ({ currentPath, onNavigate }: SidebarProps) => {
             <Code2 className="size-4.5 text-[#4ADE80]" />
           </motion.div>
           <span className="text-lg font-bold tracking-tight text-[#FAFAFA] font-space-grotesk group-data-[collapsible=icon]:hidden">
-            Project<span className="bg-gradient-to-r from-[#4ADE80] to-[#22D3EE] bg-clip-text text-transparent">API</span>
+            Project
+            <span className="bg-gradient-to-r from-[#4ADE80] to-[#22D3EE] bg-clip-text text-transparent">
+              API
+            </span>
           </span>
         </motion.div>
       </SidebarHeader>
@@ -166,7 +169,11 @@ const AppSidebar = ({ currentPath, onNavigate }: SidebarProps) => {
                               <motion.span
                                 layoutId={`sidebar-active-${section.title}`}
                                 className="absolute -left-1.5 top-1 bottom-1 w-[3px] rounded-full bg-gradient-to-b from-[#4ADE80] to-[#22D3EE] shadow-[0_0_12px_rgba(74,222,128,0.7)]"
-                                transition={{ type: "spring", stiffness: 260, damping: 28 }}
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 260,
+                                  damping: 28,
+                                }}
                               />
                             )}
                           </div>
@@ -186,9 +193,7 @@ const AppSidebar = ({ currentPath, onNavigate }: SidebarProps) => {
                             >
                               <Icon
                                 className={
-                                  isActive
-                                    ? "text-[#4ADE80]"
-                                    : "text-[#6B6B6B]"
+                                  isActive ? "text-[#4ADE80]" : "text-[#6B6B6B]"
                                 }
                               />
                             </motion.span>
@@ -224,7 +229,7 @@ const AppSidebar = ({ currentPath, onNavigate }: SidebarProps) => {
           <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
             <div className="relative shrink-0">
               <div className="flex size-9 items-center justify-center rounded-full border border-[#4ADE80]/30 bg-gradient-to-br from-[#4ADE80] to-[#22D3EE] font-space-grotesk text-sm font-bold text-[#07110A]">
-               { auth.user?.name?.charAt(0) || "D" }
+                {auth.user?.name?.charAt(0) || "D"}
               </div>
               <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-[#4ADE80] border-2 border-[#0B0B10]" />
             </div>

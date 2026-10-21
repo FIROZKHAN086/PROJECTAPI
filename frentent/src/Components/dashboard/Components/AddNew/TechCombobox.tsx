@@ -16,15 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import {
-  Check,
-  X,
-  Code,
-  Code2,
-  Plus,
-  Search,
-  Sparkles,
-} from "lucide-react";
+import { Check, X, Code, Code2, Plus, Search, Sparkles } from "lucide-react";
 
 import { techOptions, glassInput } from "../data";
 
@@ -44,7 +36,6 @@ export function TechCombobox({
   const [customTech, setCustomTech] = useState("");
   const [query, setQuery] = useState("");
 
-  
   useEffect(() => {
     if (!tech) {
       const t = window.setTimeout(() => setSelectedTech([]), 0);
@@ -55,13 +46,11 @@ export function TechCombobox({
     return () => window.clearTimeout(t);
   }, [tech]);
 
-  
   const filteredTech = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return techOptions;
     return techOptions.filter((o) => o.toLowerCase().includes(q));
   }, [query]);
-
 
   const toggleTech = (value: string) => {
     const next = selectedTech.includes(value)
@@ -95,7 +84,6 @@ export function TechCombobox({
   };
 
   const handleClose = () => {
-   
     setQuery("");
     setCustomTech("");
   };
@@ -108,7 +96,6 @@ export function TechCombobox({
         if (!next) handleClose();
       }}
     >
-  
       <DialogTrigger
         disabled={isPending}
         className="flex h-auto min-h-10 w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-[#FAFAFA] transition-colors hover:border-white/25 disabled:pointer-events-none disabled:opacity-50"
@@ -137,7 +124,6 @@ export function TechCombobox({
         <Plus className="ml-2 size-4 shrink-0 opacity-50" />
       </DialogTrigger>
 
-   
       <DialogContent
         className={cn(
           "max-w-2xl border border-white/10 bg-[#0C0C12] p-0 text-[#FAFAFA]",
@@ -201,7 +187,6 @@ export function TechCombobox({
           </div>
         )}
 
-   
         <div className="space-y-3 border-b border-white/10 px-6 py-4">
           <div className="relative">
             <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-[#6B6B6B]" />
@@ -241,7 +226,6 @@ export function TechCombobox({
             </motion.button>
           </div>
         </div>
-
 
         <div className="max-h-[340px] overflow-y-auto px-6 py-4">
           {filteredTech.length === 0 ? (

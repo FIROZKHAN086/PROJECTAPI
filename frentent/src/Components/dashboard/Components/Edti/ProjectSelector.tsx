@@ -1,11 +1,17 @@
 import { cn } from "@/lib/utils";
-import { Badge, ChevronsUpDown, Code, FolderOpen, Star} from "lucide-react";
+import { Badge, ChevronsUpDown, Code, FolderOpen, Star } from "lucide-react";
 
 import { Label } from "@/components/ui/label";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-
- export const ProjectSelector = ({
+export const ProjectSelector = ({
   projects,
   selectedProjectId,
   setSelectedProjectId,

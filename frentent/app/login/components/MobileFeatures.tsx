@@ -17,7 +17,9 @@ export default function MobileFeatures() {
             className="flex items-center gap-2 p-2 bg-[#141414] border border-white/10 rounded-lg"
           >
             <Icon className="size-3.5 text-[#4ADE80] flex-shrink-0" />
-            <span className="text-[10px] text-[#D8CFBC] truncate">{feature.text}</span>
+            <span className="text-[10px] text-[#D8CFBC] truncate">
+              {feature.text}
+            </span>
           </motion.div>
         );
       })}

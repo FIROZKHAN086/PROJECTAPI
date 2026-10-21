@@ -19,7 +19,9 @@ const isSafePath = (value?: string) =>
 
 export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
   const isSignUp = initialAuth === "signup";
-  const redirectTarget = isSafePath(nextPath) ? (nextPath as string) : "/dashboard";
+  const redirectTarget = isSafePath(nextPath)
+    ? (nextPath as string)
+    : "/dashboard";
   const router = useRouter();
   const { user, isLoading: authLoading } = useAppSelector((s) => s.auth);
   const { otpRequired, pendingEmail } = useAuth();
@@ -31,7 +33,10 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
   }, [user, authLoading, router, redirectTarget]);
 
   return (
-    <div suppressHydrationWarning={true} className="min-h-full md:my-16  my-14 bg-[#0A0A0A] flex items-center justify-center p-4 relative overflow-hidden">
+    <div
+      suppressHydrationWarning={true}
+      className="min-h-full md:my-16  my-14 bg-[#0A0A0A] flex items-center justify-center p-4 relative overflow-hidden"
+    >
       <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#141414] to-[#0A0A0A] -z-10" />
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FFFBF4]/5 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#4ADE80]/5 rounded-full blur-3xl -z-10" />

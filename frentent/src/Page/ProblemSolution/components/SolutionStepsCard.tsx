@@ -5,7 +5,10 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PlusCircle, Zap, RefreshCw, Check } from "lucide-react";
-import { staggerContainer, riseIn } from "@/src/Page/ProblemSolution/lib/variants";
+import {
+  staggerContainer,
+  riseIn,
+} from "@/src/Page/ProblemSolution/lib/variants";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,8 +40,9 @@ export default function SolutionStepsCard() {
     const line = lineRef.current;
     if (!line) return;
 
-    const prefersReduced =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
@@ -55,7 +59,7 @@ export default function SolutionStepsCard() {
             end: "bottom 60%",
             scrub: true,
           },
-        },
+        }
       );
     }, line);
 
@@ -100,7 +104,11 @@ export default function SolutionStepsCard() {
         />
 
         {STEPS.map((step) => (
-          <motion.li key={step.title} variants={riseIn} className="relative flex gap-4">
+          <motion.li
+            key={step.title}
+            variants={riseIn}
+            className="relative flex gap-4"
+          >
             <span className="relative z-10 grid h-[30px] w-[30px] shrink-0 place-items-center rounded-full border border-[#FFFBF4]/25 bg-[#0A0A0A]">
               <step.icon className="h-4 w-4 text-[#FFFBF4]" strokeWidth={2} />
             </span>

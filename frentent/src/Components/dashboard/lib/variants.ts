@@ -1,4 +1,4 @@
- export const container = {
+export const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -25,9 +25,7 @@ export const pulseAnimation = {
   transition: { duration: 2, repeat: Infinity, ease: "easeInOut" as const },
 };
 
-
-
- export const itemVariants = {
+export const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,

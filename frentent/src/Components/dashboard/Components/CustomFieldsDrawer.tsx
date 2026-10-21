@@ -92,7 +92,6 @@ export function CustomFieldsDrawer({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-  
       <DialogTrigger
         disabled={isPending}
         className="flex h-auto min-h-10 w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2 text-[#FAFAFA] backdrop-blur-sm transition-colors hover:border-[#60A5FA]/40 hover:bg-white/[0.06] disabled:pointer-events-none disabled:opacity-50"
@@ -115,7 +114,6 @@ export function CustomFieldsDrawer({
         <Plus className="ml-2 size-4 shrink-0 opacity-50" />
       </DialogTrigger>
 
-    
       <DialogContent
         className={cn(
           "max-w-3xl border border-white/10 bg-[#0C0C12] p-0 text-[#FAFAFA] shadow-[0_24px_80px_-24px_rgba(96,165,250,0.35)]",
@@ -250,7 +248,7 @@ export function CustomFieldsDrawer({
             </div>
           </div>
 
-         {/* // right section  */}
+          {/* // right section  */}
           <div className="p-5">
             <Label className="mb-3 flex items-center gap-2 text-xs font-medium text-[#D8CFBC]">
               <span
@@ -361,7 +359,6 @@ export function CustomFieldsDrawer({
     </Dialog>
   );
 }
-
 
 export function CustomFieldsDisplay({
   fields,

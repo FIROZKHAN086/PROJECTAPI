@@ -15,8 +15,9 @@ export default function FlowArrow() {
     const el = arrowRef.current;
     if (!el) return;
 
-    const prefersReduced =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
@@ -33,7 +34,7 @@ export default function FlowArrow() {
             start: "top 80%",
             once: true,
           },
-        },
+        }
       );
     }, el);
 

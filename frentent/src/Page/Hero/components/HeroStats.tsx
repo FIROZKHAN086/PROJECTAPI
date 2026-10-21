@@ -14,21 +14,16 @@ const STATS = [
   { value: 99.9, suffix: "%", label: "Uptime SLA" },
 ] as const;
 
-function Counter({
-  value,
-  suffix,
-}: {
-  value: number;
-  suffix: string;
-}) {
+function Counter({ value, suffix }: { value: number; suffix: string }) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const prefersReduced =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     if (prefersReduced) {
       el.textContent = `${value}${suffix}`;
@@ -82,7 +77,9 @@ export default function HeroStats() {
           }`}
         >
           <dd className="text-2xl font-bold text-[#FFFBF4] sm:text-3xl">
-            {mounted ? <Counter value={stat.value} suffix={stat.suffix} /> : null}
+            {mounted ? (
+              <Counter value={stat.value} suffix={stat.suffix} />
+            ) : null}
           </dd>
           <dt className="mt-1 text-xs text-[#8A8578] sm:text-sm">
             {stat.label}

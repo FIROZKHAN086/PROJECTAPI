@@ -5,14 +5,7 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Search,
-  HelpCircle,
-  Bug,
-  Lightbulb,
-  Shield,
-  Zap,
-} from "lucide-react";
+import { Search, HelpCircle, Bug, Lightbulb, Shield, Zap } from "lucide-react";
 
 interface FAQItem {
   question: string;
@@ -73,7 +66,8 @@ export function FAQSection() {
   const [search, setSearch] = useState("");
 
   const filtered = faqs.filter((faq) => {
-    const matchCat = activeCategory === "All" || faq.category === activeCategory;
+    const matchCat =
+      activeCategory === "All" || faq.category === activeCategory;
     const matchSearch =
       faq.question.toLowerCase().includes(search.toLowerCase()) ||
       faq.answer.toLowerCase().includes(search.toLowerCase());

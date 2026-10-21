@@ -16,7 +16,11 @@ const floatAnimation = {
   transition: { duration: 3, repeat: Infinity, ease: "easeInOut" as const },
 };
 
-export function SupportHeader({ onCreateClick }: { onCreateClick: () => void }) {
+export function SupportHeader({
+  onCreateClick,
+}: {
+  onCreateClick: () => void;
+}) {
   return (
     <div className="text-center mb-12">
       <motion.div
@@ -44,8 +48,8 @@ export function SupportHeader({ onCreateClick }: { onCreateClick: () => void }) 
         transition={{ delay: 0.2 }}
         className="text-lg text-[#8A8578] max-w-2xl mx-auto mb-8"
       >
-        Found a bug? Have a suggestion? Need help? Create a ticket and we&apos;ll
-        get back to you.
+        Found a bug? Have a suggestion? Need help? Create a ticket and
+        we&apos;ll get back to you.
       </motion.p>
 
       <motion.div
@@ -66,7 +70,9 @@ export function SupportHeader({ onCreateClick }: { onCreateClick: () => void }) 
           variant="outline"
           className="border-white/10 bg-transparent cursor-pointer text-[#D8CFBC]  gap-2 px-6"
           onClick={() =>
-            document.getElementById("faq-section")?.scrollIntoView({ behavior: "smooth" })
+            document
+              .getElementById("faq-section")
+              ?.scrollIntoView({ behavior: "smooth" })
           }
         >
           <LifeBuoy className="h-4 w-4" />
@@ -82,10 +88,17 @@ export function SupportHeader({ onCreateClick }: { onCreateClick: () => void }) 
       >
         {[
           { icon: Clock, label: "Fast Response", sub: "Within 24 hours" },
-          { icon: MessageCircle, label: "Direct Support", sub: "From the dev team" },
+          {
+            icon: MessageCircle,
+            label: "Direct Support",
+            sub: "From the dev team",
+          },
           { icon: Shield, label: "Bug Reports", sub: "Tracked & fixed" },
         ].map((item, i) => (
-          <div key={i} className="flex items-center gap-2 text-sm text-[#8A8578]">
+          <div
+            key={i}
+            className="flex items-center gap-2 text-sm text-[#8A8578]"
+          >
             <item.icon className="w-4 h-4 text-[#4ADE80]" />
             <span className="text-[#D8CFBC] font-medium">{item.label}</span>
             <span className="hidden sm:inline">· {item.sub}</span>

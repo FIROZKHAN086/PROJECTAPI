@@ -1,9 +1,16 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { FolderOpen, ChevronsUpDown, Star, Code, Badge } from "lucide-react";
-import {Label} from "@/components/ui/label";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-export const ProjectSelector = ({ 
+export const ProjectSelector = ({
   projects,
   selectedProjectId,
   setSelectedProjectId,
@@ -41,8 +48,7 @@ export const ProjectSelector = ({
           {selectedProject ? (
             <div className="flex flex-1 items-center gap-3 text-left">
               <div className="flex size-8 items-center justify-center rounded-lg bg-[#4ADE80]/10">
-                <FolderOpen
-                 className="size-4 text-[#4ADE80]" />
+                <FolderOpen className="size-4 text-[#4ADE80]" />
               </div>
               <div className="flex-1 text-left">
                 <p className="text-sm font-medium">{selectedProject.title}</p>

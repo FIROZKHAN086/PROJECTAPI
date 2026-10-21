@@ -31,7 +31,11 @@ export function useProject(id: string) {
 
 export function useCreateProject() {
   const queryClient = useQueryClient();
-  return useMutation<{ success: boolean; data: Project }, ApiError, CreateProjectPayload>({
+  return useMutation<
+    { success: boolean; data: Project },
+    ApiError,
+    CreateProjectPayload
+  >({
     mutationFn: async (payload) => {
       const formData = new FormData();
       formData.append("title", payload.title);
@@ -42,7 +46,8 @@ export function useCreateProject() {
       formData.append("category", payload.category);
       if (payload.image) formData.append("image", payload.image);
       if (payload.featured) formData.append("featured", payload.featured);
-      if (payload.customFields) formData.append("customFields", payload.customFields);
+      if (payload.customFields)
+        formData.append("customFields", payload.customFields);
 
       const res = await fetch(`/api/project/create`, {
         method: "POST",
@@ -60,8 +65,6 @@ export function useCreateProject() {
   });
 }
 
-
-
 export function useUpdateProject() {
   const queryClient = useQueryClient();
   return useMutation<
@@ -72,14 +75,17 @@ export function useUpdateProject() {
     mutationFn: async ({ id, ...payload }) => {
       const formData = new FormData();
       if (payload.title) formData.append("title", payload.title);
-      if (payload.description) formData.append("description", payload.description);
+      if (payload.description)
+        formData.append("description", payload.description);
       if (payload.tech) formData.append("tech", payload.tech);
       if (payload.liveDemo) formData.append("liveDemo", payload.liveDemo);
       if (payload.github) formData.append("github", payload.github);
       if (payload.category) formData.append("category", payload.category);
-      if (payload.featured !== undefined) formData.append("featured", payload.featured);
+      if (payload.featured !== undefined)
+        formData.append("featured", payload.featured);
       if (payload.image) formData.append("image", payload.image);
-      if (payload.customFields) formData.append("customFields", payload.customFields);
+      if (payload.customFields)
+        formData.append("customFields", payload.customFields);
 
       const res = await fetch(`/api/project/update/${id}`, {
         method: "PATCH",
@@ -101,9 +107,12 @@ export function useDeleteProject() {
   const queryClient = useQueryClient();
   return useMutation<{ success: boolean; message: string }, ApiError, string>({
     mutationFn: (id) =>
-      apiFetch<{ success: boolean; message: string }>(`/api/project/delete/${id}`, {
-        method: "DELETE",
-      }),
+      apiFetch<{ success: boolean; message: string }>(
+        `/api/project/delete/${id}`,
+        {
+          method: "DELETE",
+        }
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
     },

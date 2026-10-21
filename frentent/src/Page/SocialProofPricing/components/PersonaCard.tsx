@@ -31,13 +31,13 @@ export default function PersonaCard({ persona }: PersonaProps) {
           >
             <persona.icon className="size-5" />
           </motion.div>
-          
+
           <div className="space-y-2">
             <h3 className="text-lg font-bold text-[#FFFBF4] tracking-tight">
               {persona.title}
             </h3>
-            <TextReveal 
-              text={persona.description} 
+            <TextReveal
+              text={persona.description}
               className="text-sm leading-relaxed text-[#D8CFBC]/60"
             />
           </div>

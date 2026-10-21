@@ -1,4 +1,4 @@
- export  function SectionLabel({
+export function SectionLabel({
   icon,
   title,
   hint,
@@ -7,12 +7,9 @@
   title: string;
   hint?: string;
 }) {
-
-
-
-    const BG = "#11120D";
-const INK = "#FFFBF4";
-const ACCENT = "#4ADE80";
+  const BG = "#11120D";
+  const INK = "#FFFBF4";
+  const ACCENT = "#4ADE80";
 
   return (
     <div className="mb-3 flex items-center gap-2.5">

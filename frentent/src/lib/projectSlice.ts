@@ -29,5 +29,6 @@ const projectSlice = createSlice({
   },
 });
 
-export const { setSelectedProject, setFilter, setSearchQuery } = projectSlice.actions;
+export const { setSelectedProject, setFilter, setSearchQuery } =
+  projectSlice.actions;
 export default projectSlice.reducer;

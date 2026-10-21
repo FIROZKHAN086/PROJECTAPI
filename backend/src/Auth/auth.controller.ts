@@ -148,7 +148,7 @@ export const loginUser = async (req: Request, res: Response) => {
       name: user.name || "",
       email: user.email,
       OneTimeID: user.OneTimeID || "",
-      userVerified: false
+      userVerified: false,
     });
 
     res.cookie("token", token, {
@@ -356,14 +356,13 @@ export const NewOtpsend = async (req: Request, res: Response) => {
   try {
     const otpUser = (req as any).otpUser;
 
-    const {  email, OneTimeID } = otpUser || {};    if (!OneTimeID) {
+    const { email, OneTimeID } = otpUser || {};
+    if (!OneTimeID) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized",
       });
     }
-
-    
 
     const otp = await generateOtp();
 

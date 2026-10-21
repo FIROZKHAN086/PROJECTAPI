@@ -17,37 +17,43 @@ const features = [
     icon: LayoutGrid,
     index: "01",
     title: "Project Manager",
-    description: "Create, update, archive, duplicate, feature, search, filter and sort every project from one place — no hardcoded changes anywhere.",
+    description:
+      "Create, update, archive, duplicate, feature, search, filter and sort every project from one place — no hardcoded changes anywhere.",
   },
   {
     icon: SlidersHorizontal,
     index: "02",
     title: "Rich Project Fields",
-    description: "Title, slug, description, images, stack, achievements and custom fields, served back to you as clean JSON.",
+    description:
+      "Title, slug, description, images, stack, achievements and custom fields, served back to you as clean JSON.",
   },
   {
     icon: Database,
     index: "03",
     title: "Secure Media Storage",
-    description: "Images, videos, GIFs and documents stored and served through ImageKit and Cloudinary, referenced directly from your data.",
+    description:
+      "Images, videos, GIFs and documents stored and served through ImageKit and Cloudinary, referenced directly from your data.",
   },
   {
     icon: Globe,
     index: "04",
     title: "Public REST API",
-    description: "Get your project data as JSON at an auto-generated endpoint — every change flows to your site instantly.",
+    description:
+      "Get your project data as JSON at an auto-generated endpoint — every change flows to your site instantly.",
   },
   {
     icon: TerminalSquare,
     index: "05",
     title: "API Playground",
-    description: "Test requests live and copy ready-made fetch, axios, React hook and Next.js snippets that consume your JSON.",
+    description:
+      "Test requests live and copy ready-made fetch, axios, React hook and Next.js snippets that consume your JSON.",
   },
   {
     icon: LockKeyhole,
     index: "06",
     title: "Auth & Access",
-    description: "Email and Google sign-in with JWT-protected routes to keep your data yours alone.",
+    description:
+      "Email and Google sign-in with JWT-protected routes to keep your data yours alone.",
   },
 ];
 
@@ -78,7 +84,12 @@ export default function FeaturesPage() {
           </ScrollReveal>
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
             {frameworks.map((fw, i) => (
-              <ScrollReveal key={fw} direction="up" delay={0.1 + i * 0.05} distance={15}>
+              <ScrollReveal
+                key={fw}
+                direction="up"
+                delay={0.1 + i * 0.05}
+                distance={15}
+              >
                 <span className="group inline-flex cursor-default items-center gap-2 text-base font-medium text-[#FFFBF4]/70 transition-all duration-300 hover:text-[#FFFBF4]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#FFFBF4]/20 transition-colors duration-300 group-hover:bg-[#FFFBF4]" />
                   {fw}
@@ -145,7 +156,9 @@ export default function FeaturesPage() {
                   <div className="flex flex-col gap-2">
                     <h3
                       className="text-lg font-semibold text-[#FFFBF4]"
-                      style={{ fontFamily: "var(--font-unbounded), sans-serif" }}
+                      style={{
+                        fontFamily: "var(--font-unbounded), sans-serif",
+                      }}
                     >
                       {feature.title}
                     </h3>

@@ -1,7 +1,9 @@
 import type { Variants } from "framer-motion";
 
 export const EASE_OUT: [number, number, number, number] = [0.22, 1, 0.36, 1];
-export const EASE_SOFT: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94];
+export const EASE_SOFT: [number, number, number, number] = [
+  0.25, 0.46, 0.45, 0.94,
+];
 
 export const riseIn: Variants = {
   hidden: { opacity: 0, y: 32 },

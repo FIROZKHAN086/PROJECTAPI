@@ -17,7 +17,13 @@ import type { SupportTicket } from "@/src/types/support";
 
 const statusConfig: Record<
   SupportTicket["status"],
-  { label: string; icon: typeof Clock; color: string; bg: string; border: string }
+  {
+    label: string;
+    icon: typeof Clock;
+    color: string;
+    bg: string;
+    border: string;
+  }
 > = {
   OPEN: {
     label: "Open",
@@ -53,8 +59,6 @@ function TicketCard({ ticket }: { ticket: SupportTicket }) {
   const status = statusConfig[ticket.status] || statusConfig.OPEN;
   const StatusIcon = status.icon;
 
- 
-
   const timeAgo = getTimeAgo(ticket.createdAt);
 
   return (
@@ -80,7 +84,9 @@ function TicketCard({ ticket }: { ticket: SupportTicket }) {
                 {ticket.message}
               </p>
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-[10px] text-[#8A8578]">{ticket.TicketID}</span>
+                <span className="text-[10px] text-[#8A8578]">
+                  {ticket.TicketID}
+                </span>
                 <span className="text-[10px] text-[#8A8578]">·</span>
                 <span className="text-[10px] text-[#8A8578]">{timeAgo}</span>
               </div>
@@ -94,7 +100,6 @@ function TicketCard({ ticket }: { ticket: SupportTicket }) {
               <StatusIcon className="w-3 h-3" />
               {status.label}
             </Badge>
-          
           </div>
         </CardContent>
       </Card>
@@ -148,7 +153,9 @@ export function TicketList() {
         <Card className="bg-[#141414] border-[#F87171]/30">
           <CardContent className="flex flex-col items-center justify-center py-10 gap-3">
             <AlertCircle className="w-8 h-8 text-[#F87171]" />
-            <p className="text-[#F87171] font-medium text-sm">Failed to load tickets</p>
+            <p className="text-[#F87171] font-medium text-sm">
+              Failed to load tickets
+            </p>
             <p className="text-xs text-[#8A8578]">{error.message}</p>
           </CardContent>
         </Card>

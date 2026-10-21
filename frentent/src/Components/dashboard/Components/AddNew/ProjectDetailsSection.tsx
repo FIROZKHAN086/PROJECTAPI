@@ -20,7 +20,6 @@ import {
 import { cn } from "@/lib/utils";
 import { glassInput } from "../data";
 
-
 const ACCENT = {
   title: "#FF8A4C",
   description: "#8B93FF",
@@ -29,7 +28,6 @@ const ACCENT = {
 } as const;
 
 const DESC_MAX = 280;
-
 
 const seeded = (seed: number) => {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -63,7 +61,6 @@ const letterVariants: Variants = {
   }),
 };
 
-
 function FieldLabel({ text }: { text: string }) {
   return (
     <span className="inline-flex">
@@ -81,7 +78,6 @@ function FieldLabel({ text }: { text: string }) {
     </span>
   );
 }
-
 
 function useFocusGlow<T extends HTMLDivElement>(color: string) {
   const ref = useRef<T>(null);
@@ -122,13 +118,7 @@ function useFocusGlow<T extends HTMLDivElement>(color: string) {
   return { onFocus, onBlur, glow };
 }
 
-function SectionHeader({
-  label,
-  count,
-}: {
-  label: string;
-  count?: string;
-}) {
+function SectionHeader({ label, count }: { label: string; count?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
       <span className="h-px flex-1 bg-white/[0.06]" />
@@ -158,7 +148,6 @@ function FieldShell({
 }) {
   return (
     <div className="group/field relative rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]">
-    
       <span
         aria-hidden
         className="absolute top-4 bottom-4 left-0 w-[2px] rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-[3px]"
@@ -193,9 +182,7 @@ function DomainChip({ url }: { url: string }) {
   let host: string;
 
   try {
-    host = new URL(
-      url.startsWith("http") ? url : `https://${url}`
-    ).hostname;
+    host = new URL(url.startsWith("http") ? url : `https://${url}`).hostname;
   } catch {
     return null;
   }
@@ -217,7 +204,6 @@ function SetChip({ show }: { show: boolean }) {
     </Badge>
   );
 }
-
 
 export const ProjectDetailsSection = ({
   title,
@@ -263,7 +249,6 @@ export const ProjectDetailsSection = ({
 
   return (
     <motion.div variants={itemVariants} className="space-y-5">
- 
       <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
         <span className="flex size-8 items-center justify-center rounded-lg border border-[#FF8A4C]/25 bg-[#FF8A4C]/10">
           <FileText className="size-3.5 text-[#FF8A4C]" />
@@ -300,7 +285,6 @@ export const ProjectDetailsSection = ({
         </span>
       </div>
 
-     
       <div>
         <SectionHeader label="Identity" count="required" />
 
@@ -318,7 +302,6 @@ export const ProjectDetailsSection = ({
               right={
                 <div className="flex items-center gap-1.5">
                   <SetChip show={!!title.trim()} />
-                  
                 </div>
               }
             >
@@ -347,8 +330,10 @@ export const ProjectDetailsSection = ({
               icon={<Info className="size-3" />}
               accent={ACCENT.description}
               label="Description"
-              right={                
-                <span className={cn("font-mono text-[10px] tabular-nums", descTone)}>
+              right={
+                <span
+                  className={cn("font-mono text-[10px] tabular-nums", descTone)}
+                >
                   {descLen}/{DESC_MAX}
                   <SetChip show={!!description.trim()} />
                 </span>
@@ -373,7 +358,6 @@ export const ProjectDetailsSection = ({
         </div>
       </div>
 
-   
       <div>
         <SectionHeader label="Links" count="optional" />
 
@@ -448,7 +432,9 @@ export const ProjectDetailsSection = ({
 
               {github.trim() && (
                 <a
-                  href={github.startsWith("http") ? github : `https://${github}`}
+                  href={
+                    github.startsWith("http") ? github : `https://${github}`
+                  }
                   target="_blank"
                   rel="noreferrer"
                   className="mt-2 inline-flex items-center gap-1 text-[11px] text-[#A78BFA]/80 transition-colors hover:text-[#A78BFA]"

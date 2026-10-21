@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 import AuthPage from "./AuthPage";
 
-
 export default async function LoginPage({
   searchParams,
 }: {

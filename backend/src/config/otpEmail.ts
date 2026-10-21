@@ -16,7 +16,7 @@ export const otpEmailTemplate = (
 
   // The code goes in the URL *fragment* (#...), which browsers never send to the server,
   // so it doesn't end up in server logs.
- 
+
   const mono =
     "'SF Mono',SFMono-Regular,Menlo,Consolas,'Courier New',monospace";
 

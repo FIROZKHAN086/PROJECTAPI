@@ -1,18 +1,10 @@
-
 import { itemVariants } from "../AddNewProject";
 
 import { motion } from "framer-motion";
 
+import { Sparkles, Star } from "lucide-react";
 
-import {
-  Sparkles,
-  Star,
- 
-} from "lucide-react";
-
-
-
- export const FeaturedToggle = ({
+export const FeaturedToggle = ({
   featured,
   setFeatured,
   isPending,
@@ -21,12 +13,10 @@ import {
   setFeatured: (value: boolean) => void;
   isPending: boolean;
 }) => {
-
-
-    const pulseAnimation = {
-  scale: [1, 1.03, 1],
-  transition: { duration: 2, repeat: Infinity, ease: "easeInOut" as const },
-};
+  const pulseAnimation = {
+    scale: [1, 1.03, 1],
+    transition: { duration: 2, repeat: Infinity, ease: "easeInOut" as const },
+  };
 
   return (
     <motion.div

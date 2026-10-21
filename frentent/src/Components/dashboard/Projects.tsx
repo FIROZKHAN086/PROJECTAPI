@@ -46,12 +46,14 @@ const Projects = () => {
     const matchesSearch =
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.description.toLowerCase().includes(search.toLowerCase());
-    const matchesFilter = activeFilter === "All" || (activeFilter === "Featured" && p.featured);
+    const matchesFilter =
+      activeFilter === "All" || (activeFilter === "Featured" && p.featured);
     return matchesSearch && matchesFilter;
   });
 
   const handleDelete = (projectID: string, title: string) => {
-    if (!window.confirm(`Delete project "${title}"? This cannot be undone.`)) return;
+    if (!window.confirm(`Delete project "${title}"? This cannot be undone.`))
+      return;
     deleteProject(projectID, {
       onSuccess: () => toast.success(`"${title}" deleted`),
       onError: () => toast.error("Failed to delete project"),
@@ -168,7 +170,11 @@ const Projects = () => {
               <motion.div
                 whileHover={{ y: -3, scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring" as const, stiffness: 300, damping: 20 }}
+                transition={{
+                  type: "spring" as const,
+                  stiffness: 300,
+                  damping: 20,
+                }}
                 className="h-full"
               >
                 <GlowCard className="h-full">
@@ -231,7 +237,9 @@ const Projects = () => {
                           type="button"
                           whileHover={{ y: -2, scale: 1.03 }}
                           whileTap={{ scale: 0.96 }}
-                          onClick={() => window.open(project.liveDemo!, "_blank")}
+                          onClick={() =>
+                            window.open(project.liveDemo!, "_blank")
+                          }
                           className="flex cursor-pointer items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[#D8CFBC] hover:border-[#4ADE80]/30 hover:bg-[#4ADE80]/10 hover:text-[#4ADE80] transition-colors"
                         >
                           <Eye className="size-3" />
@@ -243,7 +251,9 @@ const Projects = () => {
                         whileHover={{ y: -2, scale: 1.03 }}
                         whileTap={{ scale: 0.96 }}
                         onClick={() =>
-                          router.push(`/dashboard?path=edits&project=${project.ProjectID}`)
+                          router.push(
+                            `/dashboard?path=edits&project=${project.ProjectID}`
+                          )
                         }
                         className="flex cursor-pointer items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[#D8CFBC] hover:border-white/25 hover:bg-white/10 hover:text-[#FAFAFA] transition-colors"
                       >
@@ -255,7 +265,9 @@ const Projects = () => {
                         whileHover={{ y: -2, scale: 1.03 }}
                         whileTap={{ scale: 0.96 }}
                         disabled={isPending}
-                        onClick={() => handleDelete(project.ProjectID, project.title)}
+                        onClick={() =>
+                          handleDelete(project.ProjectID, project.title)
+                        }
                         className="flex cursor-pointer items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[11px] font-medium text-[#D8CFBC] hover:border-[#F87171]/30 hover:bg-[#F87171]/10 hover:text-[#F87171] transition-colors disabled:pointer-events-none disabled:opacity-50"
                       >
                         <Trash2 className="size-3" />

@@ -70,7 +70,9 @@ export default function ApiLook() {
   const [error, setError] = useState<string | null>(null);
   const [showKey, setShowKey] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [activeView, setActiveView] = useState<"json" | "table" | "grid">("json");
+  const [activeView, setActiveView] = useState<"json" | "table" | "grid">(
+    "json"
+  );
   const [responseTime, setResponseTime] = useState<number | null>(null);
   const [statusCode, setStatusCode] = useState<number | null>(null);
 
@@ -102,7 +104,7 @@ export default function ApiLook() {
       const res = await fetch(API_URL, {
         method: "GET",
         headers: {
-          "accesskey": apiKey.trim(),
+          accesskey: apiKey.trim(),
           "Content-Type": "application/json",
         },
       });
@@ -116,7 +118,9 @@ export default function ApiLook() {
       if (res.ok) {
         setResponse(data);
       } else {
-        setError(data.message || `Error ${res.status}: Failed to fetch projects`);
+        setError(
+          data.message || `Error ${res.status}: Failed to fetch projects`
+        );
         setResponse(data);
       }
     } catch (err) {
@@ -143,7 +147,8 @@ export default function ApiLook() {
   };
 
   const getStatusColor = (status: number) => {
-    if (status >= 200 && status < 300) return "text-emerald-400 bg-emerald-500/10";
+    if (status >= 200 && status < 300)
+      return "text-emerald-400 bg-emerald-500/10";
     if (status >= 300 && status < 400) return "text-blue-400 bg-blue-500/10";
     if (status >= 400 && status < 500) return "text-amber-400 bg-amber-500/10";
     if (status >= 500) return "text-red-400 bg-red-500/10";
@@ -169,11 +174,21 @@ export default function ApiLook() {
               <table className="w-full text-sm">
                 <thead className="sticky top-0 z-10 border-b border-white/10 bg-[#0C0C12]">
                   <tr>
-                    <th className="p-3 text-left font-medium text-[#D8CFBC]">Title</th>
-                    <th className="p-3 text-left font-medium text-[#D8CFBC]">Category</th>
-                    <th className="p-3 text-left font-medium text-[#D8CFBC]">Tech Stack</th>
-                    <th className="p-3 text-left font-medium text-[#D8CFBC]">Created</th>
-                    <th className="p-3 text-left font-medium text-[#D8CFBC]">Status</th>
+                    <th className="p-3 text-left font-medium text-[#D8CFBC]">
+                      Title
+                    </th>
+                    <th className="p-3 text-left font-medium text-[#D8CFBC]">
+                      Category
+                    </th>
+                    <th className="p-3 text-left font-medium text-[#D8CFBC]">
+                      Tech Stack
+                    </th>
+                    <th className="p-3 text-left font-medium text-[#D8CFBC]">
+                      Created
+                    </th>
+                    <th className="p-3 text-left font-medium text-[#D8CFBC]">
+                      Status
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -231,8 +246,12 @@ export default function ApiLook() {
                   className="rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-all hover:border-white/25 hover:bg-white/[0.06]"
                 >
                   <div className="mb-2 flex items-start justify-between">
-                    <h4 className="text-sm font-medium text-[#FAFAFA]">{project.title}</h4>
-                    {project.featured && <Star className="size-4 text-[#FACC15]" />}
+                    <h4 className="text-sm font-medium text-[#FAFAFA]">
+                      {project.title}
+                    </h4>
+                    {project.featured && (
+                      <Star className="size-4 text-[#FACC15]" />
+                    )}
                   </div>
                   <p className="mb-2 line-clamp-2 text-xs text-[#D8CFBC]">
                     {project.description}
@@ -344,9 +363,15 @@ export default function ApiLook() {
                           whileTap={{ scale: 0.96 }}
                           onClick={() => setShowKey(!showKey)}
                           className="flex size-8 cursor-pointer items-center justify-center rounded-lg text-[#A3A3A3] transition-colors hover:text-[#FAFAFA]"
-                          aria-label={showKey ? "Hide access key" : "Show access key"}
+                          aria-label={
+                            showKey ? "Hide access key" : "Show access key"
+                          }
                         >
-                          {showKey ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                          {showKey ? (
+                            <EyeOff className="size-4" />
+                          ) : (
+                            <Eye className="size-4" />
+                          )}
                         </motion.button>
                         {apiKey && (
                           <motion.button
@@ -369,9 +394,15 @@ export default function ApiLook() {
                       onClick={handleFetchProjects}
                       disabled={isLoading || !apiKey.trim()}
                       whileHover={
-                        !isLoading && apiKey.trim() ? { y: -2, scale: 1.02 } : undefined
+                        !isLoading && apiKey.trim()
+                          ? { y: -2, scale: 1.02 }
+                          : undefined
                       }
-                      whileTap={!isLoading && apiKey.trim() ? { scale: 0.98 } : undefined}
+                      whileTap={
+                        !isLoading && apiKey.trim()
+                          ? { scale: 0.98 }
+                          : undefined
+                      }
                       className="flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-gradient-to-r from-[#4ADE80] to-[#22D3EE] px-5 py-2.5 text-sm font-semibold text-[#07110A] shadow-[0_8px_24px_-8px_rgba(74,222,128,0.7)] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                     >
                       {isLoading ? (
@@ -495,7 +526,11 @@ export default function ApiLook() {
                                   <motion.button
                                     whileHover={{ y: -2, scale: 1.03 }}
                                     whileTap={{ scale: 0.96 }}
-                                    onClick={() => handleCopy(JSON.stringify(response, null, 2))}
+                                    onClick={() =>
+                                      handleCopy(
+                                        JSON.stringify(response, null, 2)
+                                      )
+                                    }
                                     className="flex size-8 cursor-pointer items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-[#A3A3A3] transition-colors hover:text-[#FAFAFA]"
                                   />
                                 }
@@ -518,19 +553,27 @@ export default function ApiLook() {
                     <div className="flex flex-col items-center justify-center py-12">
                       <motion.div
                         animate={{ rotate: 360 }}
-                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 1,
+                          ease: "linear",
+                        }}
                         className="mb-4 flex size-10 items-center justify-center"
                       >
                         <Loader2 className="size-6 text-[#4ADE80]" />
                       </motion.div>
-                      <p className="text-sm text-[#D8CFBC]">Fetching your projects...</p>
+                      <p className="text-sm text-[#D8CFBC]">
+                        Fetching your projects...
+                      </p>
                     </div>
                   ) : error ? (
                     <div className="rounded-xl border border-[#F87171]/30 bg-[#F87171]/[0.06] p-4">
                       <div className="flex items-start gap-3">
                         <XCircle className="mt-0.5 size-5 text-red-400" />
                         <div>
-                          <p className="text-sm font-medium text-red-400">Error</p>
+                          <p className="text-sm font-medium text-red-400">
+                            Error
+                          </p>
                           <p className="mt-1 text-sm text-[#D8CFBC]">{error}</p>
                         </div>
                       </div>
@@ -543,20 +586,26 @@ export default function ApiLook() {
                             <p className="font-space-grotesk text-2xl font-bold text-[#4ADE80]">
                               <Counter to={response.data.length} />
                             </p>
-                            <p className="mt-1 text-xs text-[#A3A3A3]">Projects</p>
+                            <p className="mt-1 text-xs text-[#A3A3A3]">
+                              Projects
+                            </p>
                           </div>
                           <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4 text-center">
                             <p className="font-space-grotesk text-2xl font-bold text-emerald-400">
                               {response.success ? "✓" : "✗"}
                             </p>
-                            <p className="mt-1 text-xs text-[#A3A3A3]">Success</p>
+                            <p className="mt-1 text-xs text-[#A3A3A3]">
+                              Success
+                            </p>
                           </div>
                           {response.source && (
                             <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4 text-center">
                               <p className="font-space-grotesk text-sm font-bold text-[#60A5FA] uppercase">
                                 {response.source}
                               </p>
-                              <p className="mt-1 text-xs text-[#A3A3A3]">Source</p>
+                              <p className="mt-1 text-xs text-[#A3A3A3]">
+                                Source
+                              </p>
                             </div>
                           )}
                           {response.total && (
@@ -564,7 +613,9 @@ export default function ApiLook() {
                               <p className="font-space-grotesk text-2xl font-bold text-[#C084FC]">
                                 <Counter to={response.total} />
                               </p>
-                              <p className="mt-1 text-xs text-[#A3A3A3]">Total</p>
+                              <p className="mt-1 text-xs text-[#A3A3A3]">
+                                Total
+                              </p>
                             </div>
                           )}
                         </div>

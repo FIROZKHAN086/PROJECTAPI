@@ -1,2 +1,1 @@
-export const getOtpKey = (oneTimeId: string) =>
-  `otp:${oneTimeId}`;
+export const getOtpKey = (oneTimeId: string) => `otp:${oneTimeId}`;

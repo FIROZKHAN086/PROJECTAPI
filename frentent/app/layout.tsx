@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Unbounded,  Comic_Relief } from "next/font/google";
+import { Unbounded, Comic_Relief } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/src/Components/SmoothScrollProvider";
 import Providers from "@/src/Components/Providers";

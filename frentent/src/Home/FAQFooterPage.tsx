@@ -219,8 +219,6 @@ export default function FAQFooterPage() {
           </ScrollReveal>
         </section>
       </main>
-
-     
     </div>
   );
 }

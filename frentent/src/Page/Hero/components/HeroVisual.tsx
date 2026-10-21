@@ -33,8 +33,9 @@ export default function HeroVisual() {
     const card = cardRef.current;
     if (!card) return;
 
-    const prefersReduced =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     if (prefersReduced) {
       const frame = requestAnimationFrame(() => {
         setTypedLength(CODE_BLOCK.length);
@@ -46,8 +47,14 @@ export default function HeroVisual() {
     gsap.set(card, { transformPerspective: 1000 });
 
     const ctx = gsap.context(() => {
-      const rotateX = gsap.quickTo(card, "rotationX", { duration: 0.6, ease: "power2.out" });
-      const rotateY = gsap.quickTo(card, "rotationY", { duration: 0.6, ease: "power2.out" });
+      const rotateX = gsap.quickTo(card, "rotationX", {
+        duration: 0.6,
+        ease: "power2.out",
+      });
+      const rotateY = gsap.quickTo(card, "rotationY", {
+        duration: 0.6,
+        ease: "power2.out",
+      });
 
       const handleMove = (e: MouseEvent) => {
         const rect = card.getBoundingClientRect();
@@ -119,9 +126,26 @@ export default function HeroVisual() {
             <div className="relative mb-4 min-h-40 overflow-hidden rounded-lg border border-white/10 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a]">
               <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(74,222,128,0.12),transparent_55%)]" />
               <span className="absolute inset-0 flex items-center justify-center">
-                <svg viewBox="0 0 80 80" fill="none" className="h-16 w-16 opacity-40" aria-hidden="true">
-                  <rect width="80" height="80" rx="18" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)" />
-                  <path d="M24 52V28l32 24V28" stroke="#4ADE80" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  className="h-16 w-16 opacity-40"
+                  aria-hidden="true"
+                >
+                  <rect
+                    width="80"
+                    height="80"
+                    rx="18"
+                    fill="#1a1a1a"
+                    stroke="rgba(255,255,255,0.1)"
+                  />
+                  <path
+                    d="M24 52V28l32 24V28"
+                    stroke="#4ADE80"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </span>
             </div>

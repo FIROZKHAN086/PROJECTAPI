@@ -21,7 +21,7 @@ export default function HeroSection() {
         <HeroCTA />
         <HeroStats />
         <HeroVisual />
-      <HeroScrollHint />
+        <HeroScrollHint />
       </div>
     </section>
   );

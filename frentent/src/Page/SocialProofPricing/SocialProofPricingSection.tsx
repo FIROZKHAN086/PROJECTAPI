@@ -3,12 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { 
-  GraduationCap, 
-  Briefcase, 
-  GitBranch, 
-  Building2 
-} from "lucide-react";
+import { GraduationCap, Briefcase, GitBranch, Building2 } from "lucide-react";
 import { StaggerGrid, ScrollReveal } from "@/src/lib/animations";
 
 import PricingHeader from "./components/PricingHeader";
@@ -21,12 +16,14 @@ const personas = [
   {
     icon: GraduationCap,
     title: "Students",
-    description: "Show your growth without rebuilding your site every semester.",
+    description:
+      "Show your growth without rebuilding your site every semester.",
   },
   {
     icon: Briefcase,
     title: "Freelancers",
-    description: "Update your portfolio once, reuse it across every client pitch.",
+    description:
+      "Update your portfolio once, reuse it across every client pitch.",
   },
   {
     icon: GitBranch,
@@ -36,7 +33,8 @@ const personas = [
   {
     icon: Building2,
     title: "Agencies",
-    description: "Manage multiple developer portfolios from a single dashboard.",
+    description:
+      "Manage multiple developer portfolios from a single dashboard.",
   },
 ];
 
@@ -51,8 +49,8 @@ const pricingPlans = [
       "10 project slots",
       "Basic analytics",
       "Community support",
-      "standard-subdomain.com"
-    ]
+      "standard-subdomain.com",
+    ],
   },
   {
     name: "Pro",
@@ -66,8 +64,8 @@ const pricingPlans = [
       "Custom domain support",
       "Advanced SEO tools",
       "Priority email support",
-      "Remove branding"
-    ]
+      "Remove branding",
+    ],
   },
   {
     name: "Enterprise",
@@ -80,8 +78,8 @@ const pricingPlans = [
       "White-label options",
       "API access",
       "Dedicated account manager",
-      "SSO & Security"
-    ]
+      "SSO & Security",
+    ],
   },
 ];
 
@@ -98,7 +96,7 @@ export default function SocialProofPricingSection() {
         duration: 20,
         repeat: -1,
         yoyo: true,
-        ease: "sine.inOut"
+        ease: "sine.inOut",
       });
 
       // Reveal sections on scroll
@@ -110,7 +108,7 @@ export default function SocialProofPricingSection() {
         scrollTrigger: {
           trigger: ".pricing-grid-container",
           start: "top 80%",
-        }
+        },
       });
     }, sectionRef);
 
@@ -122,15 +120,12 @@ export default function SocialProofPricingSection() {
       ref={sectionRef}
       className="relative overflow-hidden bg-[#0A0A0A] py-24 sm:py-32"
     >
-     
-      
       <main className="relative z-10 mx-auto max-w-[1140px] px-6">
         <div className="flex flex-col gap-24">
-          
           {/* Header & Personas */}
           <div className="flex flex-col gap-12">
             <PricingHeader />
-            
+
             <StaggerGrid className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {personas.map((persona) => (
                 <PersonaCard key={persona.title} persona={persona} />
@@ -151,14 +146,12 @@ export default function SocialProofPricingSection() {
               </ScrollReveal>
               <ScrollReveal direction="up" delay={0.1}>
                 <p className="max-w-2xl text-[#D8CFBC]/70 md:text-lg">
-                  Transparent pricing that grows with your career. No hidden fees, cancel anytime.
+                  Transparent pricing that grows with your career. No hidden
+                  fees, cancel anytime.
                 </p>
               </ScrollReveal>
             </div>
-
-           
           </div>
-
         </div>
       </main>
 

@@ -22,7 +22,7 @@ interface JwtPayload {
 export const authMiddleware = (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): void => {
   try {
     const authHeader = req.headers.authorization;
@@ -36,7 +36,10 @@ export const authMiddleware = (
 
     if (headerToken) {
       try {
-        decoded = jwt.verify(headerToken, process.env.JWT_SECRET as string) as JwtPayload;
+        decoded = jwt.verify(
+          headerToken,
+          process.env.JWT_SECRET as string
+        ) as JwtPayload;
       } catch {
         decoded = null;
       }
@@ -44,7 +47,10 @@ export const authMiddleware = (
 
     if (!decoded && cookieToken) {
       try {
-        decoded = jwt.verify(cookieToken, process.env.JWT_SECRET as string) as JwtPayload;
+        decoded = jwt.verify(
+          cookieToken,
+          process.env.JWT_SECRET as string
+        ) as JwtPayload;
       } catch {
         decoded = null;
       }
@@ -53,15 +59,16 @@ export const authMiddleware = (
     if (!decoded) {
       res.status(401).json({
         success: false,
-        message: headerToken || cookieToken ? "Invalid or expired token." : "user not login.",
+        message:
+          headerToken || cookieToken
+            ? "Invalid or expired token."
+            : "user not login.",
       });
       return;
     }
 
     req.user = decoded;
 
- 
-    
     next();
   } catch (error) {
     res.status(401).json({

@@ -1,13 +1,9 @@
-'use client '
+"use client ";
 
-import LoginSkeleton from "@/src/Page/Skeleton/LoginSkeleton"
-
-
+import LoginSkeleton from "@/src/Page/Skeleton/LoginSkeleton";
 
 const loading = () => {
-  return (
-    <LoginSkeleton/>
-  )
-}
+  return <LoginSkeleton />;
+};
 
-export default loading
+export default loading;

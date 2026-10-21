@@ -10,7 +10,7 @@ const esc = (value: string): string =>
 export const welcomeEmailTemplate = (
   name?: string,
   ctaUrl: string = process.env.APP_LINK || "https://projectapi.firozkhan.site/",
-  ctaLabel: string = "Open your dashboard",
+  ctaLabel: string = "Open your dashboard"
 ): string => {
   const recipient = esc(name?.trim() || "there");
   const year = new Date().getFullYear();
@@ -58,7 +58,7 @@ export const welcomeEmailTemplate = (
                   </tr>
                 </table>
               </td>
-            </tr>`,
+            </tr>`
     )
     .join("");
 

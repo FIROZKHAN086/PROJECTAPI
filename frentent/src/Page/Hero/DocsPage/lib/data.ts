@@ -12,16 +12,15 @@ import {
   Zap,
 } from "lucide-react";
 
-
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!BASE_URL) {
-  throw new Error("NEXT_PUBLIC_BASE_URL is not defined in the environment variables.");
+  throw new Error(
+    "NEXT_PUBLIC_BASE_URL is not defined in the environment variables."
+  );
 }
 
 const API_URL = `${BASE_URL}/api`;
-
 
 export const docTypePhrases: string[] = [
   "Build your endpoint in minutes.",
@@ -29,8 +28,6 @@ export const docTypePhrases: string[] = [
   "Docs that feel like a playground.",
   "Ship the docs you wish existed.",
 ];
-
-
 
 export interface DocNavItem {
   id: string;
@@ -90,8 +87,6 @@ export interface DocOptimizeItem {
   desc: string;
 }
 
-
-
 export const docNav: DocNavItem[] = [
   { id: "overview", title: "Overview", icon: Sparkles },
   { id: "quickstart", title: "Quickstart", icon: Zap },
@@ -101,8 +96,6 @@ export const docNav: DocNavItem[] = [
   { id: "rate-limiting", title: "Rate Limiting", icon: AlertTriangle },
   { id: "errors", title: "Errors", icon: Terminal },
 ];
-
-
 
 const PROJECT_RESPONSE = `{
   "success": true,
@@ -170,7 +163,6 @@ const ERROR_RESPONSE = `{
   "message": "Human-readable error description"
 }`;
 
-
 export const docSections: DocSection[] = [
   {
     id: "overview",
@@ -219,7 +211,7 @@ export const docSections: DocSection[] = [
           },
         ],
       },
-     
+
       { kind: "cta", href: "/login?auth=signup", label: "Get Started" },
     ],
   },
@@ -363,7 +355,6 @@ export const docSections: DocSection[] = [
     ],
   },
 ];
-
 
 export const docOptimize: DocOptimizeItem[] = [
   {

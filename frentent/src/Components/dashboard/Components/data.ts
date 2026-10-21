@@ -1,10 +1,16 @@
-import { Cloud, Code, Database, GitBranch, Lock, Monitor, Palette, Server, Smartphone } from "lucide-react";
+import {
+  Cloud,
+  Code,
+  Database,
+  GitBranch,
+  Lock,
+  Monitor,
+  Palette,
+  Server,
+  Smartphone,
+} from "lucide-react";
 
- 
- 
- 
- 
- export const techOptions = [
+export const techOptions = [
   "React",
   "Next.js",
   "Vue.js",
@@ -50,9 +56,7 @@ import { Cloud, Code, Database, GitBranch, Lock, Monitor, Palette, Server, Smart
   "Cloudflare",
 ];
 
-
-
- export  const categoryOptions = [
+export const categoryOptions = [
   { value: "web-app", label: "Web App", icon: Monitor },
   { value: "mobile-app", label: "Mobile App", icon: Smartphone },
   { value: "api", label: "API", icon: Server },
@@ -65,6 +69,5 @@ import { Cloud, Code, Database, GitBranch, Lock, Monitor, Palette, Server, Smart
   { value: "open-source", label: "Open Source", icon: GitBranch },
 ];
 
-
- export const glassInput =
+export const glassInput =
   "rounded-xl border border-white/10 bg-white/[0.04] text-[#FAFAFA] placeholder:text-[#6B6B6B] focus-visible:border-[#4ADE80]/50 focus-visible:ring-[#4ADE80]/20";

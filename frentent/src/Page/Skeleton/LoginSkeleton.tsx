@@ -5,9 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function LoginSkeleton() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center p-4 relative overflow-hidden">
-     
       <div className="w-full max-w-[1120px] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-     
         <div className="hidden lg:block space-y-8">
           <div className="space-y-4">
             {/* Badge pill */}

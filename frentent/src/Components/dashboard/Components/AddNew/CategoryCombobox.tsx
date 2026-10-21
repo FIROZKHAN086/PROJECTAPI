@@ -1,5 +1,5 @@
- import {  useState } from "react";
- 
+import { useState } from "react";
+
 import {
   Popover,
   PopoverContent,
@@ -14,15 +14,10 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import {
-  Tag,
-  ChevronsUpDown,
-  Check,
-} from "lucide-react";
+import { Tag, ChevronsUpDown, Check } from "lucide-react";
 import { categoryOptions } from "../data";
 
- 
- export  const CategoryCombobox = ({
+export const CategoryCombobox = ({
   category,
   setCategory,
   isPending,

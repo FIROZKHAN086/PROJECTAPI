@@ -7,16 +7,14 @@ import { cn } from "@/lib/utils";
 import {
   Check,
   Upload,
-    ImagePlus,
-    Trash2,
-    RefreshCw,
-    Image as ImageIcon,
-} from "lucide-react";  
+  ImagePlus,
+  Trash2,
+  RefreshCw,
+  Image as ImageIcon,
+} from "lucide-react";
 import { floatAnimation } from "../../AddNewProject";
 
-
-
- export const ImageUploadSection = ({
+export const ImageUploadSection = ({
   currentImage,
   imageFile,
   setImageFile,

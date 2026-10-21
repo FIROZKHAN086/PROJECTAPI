@@ -10,11 +10,13 @@ import project from "./Project/project.route.js";
 import support from "./Support/support.route.js";
 dotenv.config();
 
-
 export const app = express();
 
 const isProd = process.env.NODE_ENV === "production";
-morgan.token('host', (req) => req.headers.origin || req.headers.referer || 'Direct/Unknown');
+morgan.token(
+  "host",
+  (req) => req.headers.origin || req.headers.referer || "Direct/Unknown"
+);
 const allowedOrigins = (process.env.FRONTEND_URL || "")
   .split(",")
   .map((origin) => origin.trim())
@@ -35,15 +37,16 @@ app.use(
 if (process.env.NODE_ENV === "production") {
   app.use(morgan("combined"));
 } else {
- app.use(morgan(':method :url :status :res[content-length] - :response-time ms [From: :host]'));
+  app.use(
+    morgan(
+      ":method :url :status :res[content-length] - :response-time ms [From: :host]"
+    )
+  );
 }
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use(fileUpload());
-
-
-
 
 app.get("/", (_, res) => {
   res.json({
@@ -52,9 +55,6 @@ app.get("/", (_, res) => {
   });
 });
 
-
 app.use("/api/auth", authRoutes);
 app.use("/api/project", project);
 app.use("/api/support", support);
-
-

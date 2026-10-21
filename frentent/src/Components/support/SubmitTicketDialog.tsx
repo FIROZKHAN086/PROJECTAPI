@@ -28,8 +28,18 @@ import { toast } from "@/src/lib/toastSlice";
 
 const ticketTypes = [
   { value: "bug", label: "Bug Report", icon: Bug, color: "text-[#F87171]" },
-  { value: "feature", label: "Suggestion", icon: Lightbulb, color: "text-[#FACC15]" },
-  { value: "help", label: "Need Help", icon: HelpCircle, color: "text-[#60A5FA]" },
+  {
+    value: "feature",
+    label: "Suggestion",
+    icon: Lightbulb,
+    color: "text-[#FACC15]",
+  },
+  {
+    value: "help",
+    label: "Need Help",
+    icon: HelpCircle,
+    color: "text-[#60A5FA]",
+  },
 ];
 
 interface SubmitTicketDialogProps {
@@ -37,7 +47,10 @@ interface SubmitTicketDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function SubmitTicketDialog({ open, onOpenChange }: SubmitTicketDialogProps) {
+export function SubmitTicketDialog({
+  open,
+  onOpenChange,
+}: SubmitTicketDialogProps) {
   const { mutate: createTicket, isPending } = useCreateTicket();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -55,8 +68,8 @@ export function SubmitTicketDialog({ open, onOpenChange }: SubmitTicketDialogPro
       ticketType === "bug"
         ? "[Bug] "
         : ticketType === "feature"
-        ? "[Suggestion] "
-        : "[Help] ";
+          ? "[Suggestion] "
+          : "[Help] ";
 
     createTicket(
       { subject: prefix + subject.trim(), message: message.trim() },

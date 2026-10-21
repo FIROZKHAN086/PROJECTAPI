@@ -98,7 +98,11 @@ console.log(data);`;
               </div>
               <motion.div
                 animate={{ y: [0, -5, 0], opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 3.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#4ADE80]/25 bg-[#4ADE80]/10"
               >
                 <Zap className="size-4 text-[#4ADE80]" />
@@ -118,7 +122,11 @@ console.log(data);`;
                   className={iconBtn}
                   aria-label={revealed ? "Hide API key" : "Reveal API key"}
                 >
-                  {revealed ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                  {revealed ? (
+                    <EyeOff className="size-3.5" />
+                  ) : (
+                    <Eye className="size-3.5" />
+                  )}
                 </motion.button>
                 <motion.button
                   whileHover={{ y: -2, scale: 1.03 }}
@@ -169,7 +177,9 @@ console.log(data);`;
                   key={l.label}
                   className="space-y-2 rounded-xl border border-white/10 bg-white/[0.04] p-4 transition-colors duration-300 hover:border-white/20"
                 >
-                  <p className="text-sm font-medium text-[#D8CFBC]">{l.label}</p>
+                  <p className="text-sm font-medium text-[#D8CFBC]">
+                    {l.label}
+                  </p>
                   <p className="font-space-grotesk text-2xl font-bold tracking-tight text-[#FAFAFA]">
                     <Counter to={l.max} />
                   </p>

@@ -2,8 +2,28 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, Brackets, Check, Copy, Code2, Rocket, Sparkles, Terminal, Zap, Cpu, GitBranch, Layers, ShieldCheck } from "lucide-react";
-import { ScrollReveal, StaggerGrid, StaggerItem, CharReveal, AnimatedCounter } from "@/src/lib/animations";
+import {
+  ArrowUpRight,
+  Brackets,
+  Check,
+  Copy,
+  Code2,
+  Rocket,
+  Sparkles,
+  Terminal,
+  Zap,
+  Cpu,
+  GitBranch,
+  Layers,
+  ShieldCheck,
+} from "lucide-react";
+import {
+  ScrollReveal,
+  StaggerGrid,
+  StaggerItem,
+  CharReveal,
+  AnimatedCounter,
+} from "@/src/lib/animations";
 
 const typePhrases = [
   "Try the playground. Build it live.",
@@ -19,7 +39,10 @@ const glowVariants = {
 const codeLines = [
   { text: "const api = await ProjectAPI.create()", color: "text-[#FFFBF4]" },
   { text: 'api.playground("portfolio-cms")', color: "text-[#4ADE80]" },
-  { text: "// live endpoint is ready → try it now", color: "text-[#D8CFBC]/60" },
+  {
+    text: "// live endpoint is ready → try it now",
+    color: "text-[#D8CFBC]/60",
+  },
 ];
 
 const templateCards = [
@@ -62,9 +85,21 @@ const templateCards = [
 ];
 
 const features = [
-  { icon: Zap, title: "Zero-setup", desc: "No config. Start typing, it just works." },
-  { icon: Code2, title: "Typed API", desc: "Full TypeScript types generated for you." },
-  { icon: Rocket, title: "Ship-ready", desc: "Go from idea to deployed in one session." },
+  {
+    icon: Zap,
+    title: "Zero-setup",
+    desc: "No config. Start typing, it just works.",
+  },
+  {
+    icon: Code2,
+    title: "Typed API",
+    desc: "Full TypeScript types generated for you.",
+  },
+  {
+    icon: Rocket,
+    title: "Ship-ready",
+    desc: "Go from idea to deployed in one session.",
+  },
 ];
 
 export default function PlaygroundPage() {
@@ -141,7 +176,7 @@ export default function PlaygroundPage() {
               </motion.div>
 
               <div className="flex min-h-[3rem] items-center gap-2 text-3xl font-semibold tracking-tight text-[#FFFBF4] md:text-5xl">
-                  <span>
+                <span>
                   {display}
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
@@ -169,13 +204,23 @@ export default function PlaygroundPage() {
               className="absolute -inset-px rounded-2xl bg-[#4ADE80]/10 blur-xl"
             />
             <motion.div
-              whileHover={{ y: -4, boxShadow: "0 24px 80px rgba(0,0,0,0.55), 0 0 40px rgba(74,222,128,0.08)" }}
+              whileHover={{
+                y: -4,
+                boxShadow:
+                  "0 24px 80px rgba(0,0,0,0.55), 0 0 40px rgba(74,222,128,0.08)",
+              }}
               className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0F0F0F]"
             >
               {/* window chrome */}
               <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-5 py-3.5">
                 <div className="flex items-center gap-2">
-                  <motion.span animate={{ backgroundColor: ["#FF5F57", "#FF5F57", "#FF5F57"] }} className="size-3 rounded-full bg-[#FF5F57]" data-lettter />
+                  <motion.span
+                    animate={{
+                      backgroundColor: ["#FF5F57", "#FF5F57", "#FF5F57"],
+                    }}
+                    className="size-3 rounded-full bg-[#FF5F57]"
+                    data-lettter
+                  />
                   <span className="size-3 rounded-full bg-[#FEBC2E]" />
                   <span className="size-3 rounded-full bg-[#28C840]" />
                 </div>
@@ -188,7 +233,11 @@ export default function PlaygroundPage() {
                   whileTap={{ scale: 0.92 }}
                   className="flex items-center gap-1.5 rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] cursor-pointer"
                 >
-                  {copied ? <Check className="size-3.5 text-[#4ADE80]" /> : <Copy className="size-3.5" />}
+                  {copied ? (
+                    <Check className="size-3.5 text-[#4ADE80]" />
+                  ) : (
+                    <Copy className="size-3.5" />
+                  )}
                   {copied ? "Copied" : "Copy"}
                 </motion.button>
               </div>
@@ -218,7 +267,9 @@ export default function PlaygroundPage() {
                   );
                 })}
                 <div className="flex items-center gap-3">
-                  <span className="text-[#FFFBF4]/25">{codeLines.length + 1}</span>
+                  <span className="text-[#FFFBF4]/25">
+                    {codeLines.length + 1}
+                  </span>
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
@@ -242,7 +293,9 @@ export default function PlaygroundPage() {
           <div className="mt-16">
             <ScrollReveal className="mb-8 flex items-end justify-between">
               <div>
-                <p className="mb-2 text-xs uppercase tracking-[0.3em] text-[#4ADE80]">Start with a vibe</p>
+                <p className="mb-2 text-xs uppercase tracking-[0.3em] text-[#4ADE80]">
+                  Start with a vibe
+                </p>
                 <h3 className="text-2xl font-bold text-[#FFFBF4] md:text-3xl">
                   Cool templates, ready to run.
                 </h3>
@@ -255,7 +308,10 @@ export default function PlaygroundPage() {
                 return (
                   <StaggerItem key={card.title}>
                     <motion.div
-                      whileHover={{ y: -6, borderColor: "rgba(74,222,128,0.4)" }}
+                      whileHover={{
+                        y: -6,
+                        borderColor: "rgba(74,222,128,0.4)",
+                      }}
                       className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors"
                     >
                       {/* hover glow */}
@@ -264,7 +320,10 @@ export default function PlaygroundPage() {
                         initial="idle"
                         whileHover="hover"
                         className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-                        style={{ background: "radial-gradient(240px 160px at 30% 0%, rgba(74,222,128,0.12), transparent 65%)" }}
+                        style={{
+                          background:
+                            "radial-gradient(240px 160px at 30% 0%, rgba(74,222,128,0.12), transparent 65%)",
+                        }}
                       />
                       <div className="relative flex items-start justify-between">
                         <motion.span
@@ -282,7 +341,9 @@ export default function PlaygroundPage() {
                           {card.title}
                           <ArrowUpRight className="size-4 text-[#4ADE80] opacity-0 transition-opacity group-hover:opacity-100" />
                         </h4>
-                        <p className="mt-1.5 text-sm leading-relaxed text-[#D8CFBC]">{card.desc}</p>
+                        <p className="mt-1.5 text-sm leading-relaxed text-[#D8CFBC]">
+                          {card.desc}
+                        </p>
                       </div>
                     </motion.div>
                   </StaggerItem>
@@ -302,8 +363,12 @@ export default function PlaygroundPage() {
                       <Icon className="size-5" />
                     </div>
                     <div>
-                      <h5 className="text-base font-semibold text-[#FFFBF4]">{feature.title}</h5>
-                      <p className="mt-1 text-sm text-[#D8CFBC]">{feature.desc}</p>
+                      <h5 className="text-base font-semibold text-[#FFFBF4]">
+                        {feature.title}
+                      </h5>
+                      <p className="mt-1 text-sm text-[#D8CFBC]">
+                        {feature.desc}
+                      </p>
                     </div>
                   </div>
                 </ScrollReveal>
@@ -318,7 +383,10 @@ export default function PlaygroundPage() {
                 className="pointer-events-none absolute -top-20 left-1/2 h-40 w-[560px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
                 animate={{ opacity: [0.4, 0.7, 0.4] }}
                 transition={{ repeat: Infinity, duration: 4 }}
-                style={{ background: "radial-gradient(closest-side, rgba(74,222,128,0.25), transparent)" }}
+                style={{
+                  background:
+                    "radial-gradient(closest-side, rgba(74,222,128,0.25), transparent)",
+                }}
               />
               <div className="relative">
                 <motion.span
@@ -331,15 +399,23 @@ export default function PlaygroundPage() {
                   <Rocket className="size-6" />
                 </motion.span>
                 <h3 className="mt-6 text-2xl font-bold text-[#FFFBF4] md:text-4xl">
-                  Stop planning. <CharReveal text="Start building." className="text-[#4ADE80]" staggerDelay={0.03} />
+                  Stop planning.{" "}
+                  <CharReveal
+                    text="Start building."
+                    className="text-[#4ADE80]"
+                    staggerDelay={0.03}
+                  />
                 </h3>
                 <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#D8CFBC]">
-                  Jump into the playground, try a template, and see your
-                  product come to life — the exact way your users will.
+                  Jump into the playground, try a template, and see your product
+                  come to life — the exact way your users will.
                 </p>
                 <motion.a
                   href="/login"
-                  whileHover={{ scale: 1.04, boxShadow: "0 0 40px rgba(74,222,128,0.4)" }}
+                  whileHover={{
+                    scale: 1.04,
+                    boxShadow: "0 0 40px rgba(74,222,128,0.4)",
+                  }}
                   whileTap={{ scale: 0.96 }}
                   className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#4ADE80] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A]"
                 >

@@ -26,11 +26,7 @@ import { useProjects, useDeleteProject } from "@/src/hooks/useProjects";
 import { ApiError } from "@/src/lib/api";
 import { toast } from "@/src/lib/toastSlice";
 import { useRouter } from "next/navigation";
-import {
-  DashHeader,
-  Reveal,
-  GlowCard,
-} from "@/src/Components/dashboard/ui";
+import { DashHeader, Reveal, GlowCard } from "@/src/Components/dashboard/ui";
 
 export default function DeleteProject() {
   const router = useRouter();
@@ -44,7 +40,8 @@ export default function DeleteProject() {
   const [confirmName, setConfirmName] = useState("");
 
   const project = projects.find((p) => p.ProjectID === selectedProjectId);
-  const isConfirmed = confirmChecked && project && confirmName === project.title;
+  const isConfirmed =
+    confirmChecked && project && confirmName === project.title;
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -286,7 +283,11 @@ export default function DeleteProject() {
                           initial={{ scale: 0, rotate: -60 }}
                           animate={{ scale: 1, rotate: 0 }}
                           exit={{ scale: 0 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 22,
+                          }}
                           className="size-3 text-white"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -308,9 +309,14 @@ export default function DeleteProject() {
                 </motion.button>
 
                 <div className="flex flex-col gap-2">
-                  <Label htmlFor="confirm-name" className="text-sm text-[#D8CFBC]">
+                  <Label
+                    htmlFor="confirm-name"
+                    className="text-sm text-[#D8CFBC]"
+                  >
                     Type project title to confirm:{" "}
-                    <span className="font-mono text-[#F87171]">{project.title}</span>
+                    <span className="font-mono text-[#F87171]">
+                      {project.title}
+                    </span>
                   </Label>
                   <Input
                     id="confirm-name"
@@ -333,7 +339,9 @@ export default function DeleteProject() {
                         ? { y: -2, scale: 1.01 }
                         : undefined
                     }
-                    whileTap={isConfirmed && !isPending ? { scale: 0.98 } : undefined}
+                    whileTap={
+                      isConfirmed && !isPending ? { scale: 0.98 } : undefined
+                    }
                     className={`flex w-full cursor-pointer items-center justify-center rounded-xl py-3 text-sm font-semibold transition-all ${
                       isConfirmed && !isPending
                         ? "bg-gradient-to-r from-[#F87171] to-[#EF4444] text-white shadow-[0_8px_24px_-8px_rgba(248,113,113,0.7)]"
