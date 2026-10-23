@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
   useScroll,
-  useSpring,
   useMotionValue,
   useTransform,
 } from "framer-motion";
@@ -27,7 +26,6 @@ import {
   ChevronDown,
   CircleQuestionMark,
   Info,
-  View,
   Home,
   LifeBuoy,
 } from "lucide-react";
@@ -85,7 +83,7 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const { scrollYProgress } = useScroll();
+  useScroll();
 
   // Motion values for floating elements
   const mouseX = useMotionValue(0);

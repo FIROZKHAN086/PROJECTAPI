@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Brackets,
@@ -22,7 +22,6 @@ import {
   StaggerGrid,
   StaggerItem,
   CharReveal,
-  AnimatedCounter,
 } from "@/src/lib/animations";
 
 const typePhrases = [

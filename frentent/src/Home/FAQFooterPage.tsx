@@ -34,21 +34,6 @@ const faqs = [
   },
 ];
 
-const footerColumns = [
-  {
-    title: "Product",
-    links: ["Overview", "Pricing", "API Docs", "Changelog"],
-  },
-  {
-    title: "Developers",
-    links: ["Quickstart", "SDKs", "Examples", "Status"],
-  },
-  {
-    title: "Company",
-    links: ["About", "Blog", "Careers", "Contact"],
-  },
-];
-
 const typePhrases = [
   "one API",
   "every framework",

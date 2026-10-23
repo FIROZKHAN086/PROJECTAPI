@@ -15,7 +15,6 @@ import {
   Info,
   ArrowUpRight,
   Check,
-  Link2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { glassInput } from "../data";
@@ -174,24 +173,6 @@ function FieldShell({
 
       {children}
     </div>
-  );
-}
-
-function DomainChip({ url }: { url: string }) {
-  if (!url.trim()) return null;
-  let host: string;
-
-  try {
-    host = new URL(url.startsWith("http") ? url : `https://${url}`).hostname;
-  } catch {
-    return null;
-  }
-
-  return (
-    <Badge className="gap-1 border border-[#7FBF97]/25 bg-[#7FBF97]/10 text-[9px] font-normal text-[#7FBF97]">
-      <Link2 className="size-2.5" />
-      {host}
-    </Badge>
   );
 }
 

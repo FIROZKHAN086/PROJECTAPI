@@ -7,7 +7,6 @@ export function SectionLabel({
   title: string;
   hint?: string;
 }) {
-  const BG = "#11120D";
   const INK = "#FFFBF4";
   const ACCENT = "#4ADE80";
 

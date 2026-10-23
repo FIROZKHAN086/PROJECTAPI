@@ -44,6 +44,7 @@ export const CategoryCombobox = ({
             type="button"
             role="combobox"
             aria-expanded={open}
+            aria-controls="category-combobox-listbox"
             disabled={isPending}
             className={cn(
               "flex h-10 w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 text-[#FAFAFA] transition-colors hover:border-white/25 disabled:pointer-events-none disabled:opacity-50"
