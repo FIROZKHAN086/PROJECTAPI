@@ -3,14 +3,13 @@
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/src/lib/hooks";
-import { removeToast, selectToasts, initToastDispatcher, type ToastType } from "@/src/lib/toastSlice";
 import {
-  CheckCircle2,
-  XCircle,
-  Info,
-  AlertTriangle,
-  X,
-} from "lucide-react";
+  removeToast,
+  selectToasts,
+  initToastDispatcher,
+  type ToastType,
+} from "@/src/lib/toastSlice";
+import { CheckCircle2, XCircle, Info, AlertTriangle, X } from "lucide-react";
 
 const iconMap: Record<ToastType, React.ReactNode> = {
   success: <CheckCircle2 className="size-4 text-[#4ADE80]" />,
@@ -26,7 +25,11 @@ const borderColorMap: Record<ToastType, string> = {
   warning: "border-[#FBBF24]/30",
 };
 
-function ToastItem({ toast }: { toast: { id: string; message: string; type: ToastType; duration?: number } }) {
+function ToastItem({
+  toast,
+}: {
+  toast: { id: string; message: string; type: ToastType; duration?: number };
+}) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {

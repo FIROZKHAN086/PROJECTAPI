@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
   MessageCircle,
   Send,
@@ -28,8 +27,18 @@ import { toast } from "@/src/lib/toastSlice";
 
 const ticketTypes = [
   { value: "bug", label: "Bug Report", icon: Bug, color: "text-[#F87171]" },
-  { value: "feature", label: "Suggestion", icon: Lightbulb, color: "text-[#FACC15]" },
-  { value: "help", label: "Need Help", icon: HelpCircle, color: "text-[#60A5FA]" },
+  {
+    value: "feature",
+    label: "Suggestion",
+    icon: Lightbulb,
+    color: "text-[#FACC15]",
+  },
+  {
+    value: "help",
+    label: "Need Help",
+    icon: HelpCircle,
+    color: "text-[#60A5FA]",
+  },
 ];
 
 interface SubmitTicketDialogProps {
@@ -37,7 +46,10 @@ interface SubmitTicketDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function SubmitTicketDialog({ open, onOpenChange }: SubmitTicketDialogProps) {
+export function SubmitTicketDialog({
+  open,
+  onOpenChange,
+}: SubmitTicketDialogProps) {
   const { mutate: createTicket, isPending } = useCreateTicket();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -55,8 +67,8 @@ export function SubmitTicketDialog({ open, onOpenChange }: SubmitTicketDialogPro
       ticketType === "bug"
         ? "[Bug] "
         : ticketType === "feature"
-        ? "[Suggestion] "
-        : "[Help] ";
+          ? "[Suggestion] "
+          : "[Help] ";
 
     createTicket(
       { subject: prefix + subject.trim(), message: message.trim() },
@@ -90,7 +102,7 @@ export function SubmitTicketDialog({ open, onOpenChange }: SubmitTicketDialogPro
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto bg-[#141414] border-white/10 text-[#FFFBF4]">
+      <DialogContent className="sm:max-w-130 max-h-[90vh] overflow-y-auto bg-[#141414] border-white/10 text-[#FFFBF4]">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2 text-[#FFFBF4]">
             <MessageCircle className="w-5 h-5 text-[#4ADE80]" />

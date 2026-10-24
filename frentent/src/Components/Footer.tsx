@@ -7,10 +7,7 @@ import { Github01Icon, NewTwitterIcon } from "@hugeicons/core-free-icons";
 import { Brackets, ArrowUpRight, Heart } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  ScrollReveal,
-  CharReveal,
-} from "@/src/lib/animations";
+import { ScrollReveal, CharReveal } from "@/src/lib/animations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -212,8 +209,8 @@ export default function Footer() {
               />
             </motion.div>
             <p className="max-w-[240px] text-sm leading-relaxed text-[#D8CFBC]">
-              The platform that turns your ideas into products people
-              remember — with an API for everything.
+              The platform that turns your ideas into products people remember —
+              with an API for everything.
             </p>
 
             <div className="flex items-center gap-3">
@@ -276,7 +273,11 @@ export default function Footer() {
           <p className="flex items-center gap-1.5">
             <motion.span
               animate={{ scale: [1, 1.18, 1] }}
-              transition={{ repeat: Infinity, duration: 1.4, ease: "easeInOut" }}
+              transition={{
+                repeat: Infinity,
+                duration: 1.4,
+                ease: "easeInOut",
+              }}
               className="inline-flex"
             >
               <Heart className="size-3.5 fill-[#4ADE80] text-[#4ADE80]" />

@@ -1,4 +1,6 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendEmail = async (
   to: string,
@@ -6,25 +8,15 @@ export const sendEmail = async (
   text: string,
   html: string
 ) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  const mailOptions = {
-    from: `"PROJECTAPI" <${process.env.SMTP_USER}>`,
-    to,
-    subject,
-    text,
-    html,
-  };
-
   try {
-    const info = await transporter.sendMail(mailOptions);
-    return info;
+    const data = await resend.emails.send({
+      from: "PROJECTAPI <support@firozkhan.site>",
+      to,
+      subject,
+      text,
+      html,
+    });
+    return data;
   } catch (error) {
     console.error("Error sending email:", error);
     throw error;

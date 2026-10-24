@@ -4,8 +4,6 @@ import HomeSkeleton from "@/src/Page/Skeleton/HomeSkeleton";
 import LoginSkeleton from "@/src/Page/Skeleton/LoginSkeleton";
 import { usePathname } from "next/navigation";
 
-
-
 export default function Loading() {
   const pathname = usePathname();
 
@@ -17,6 +15,5 @@ export default function Loading() {
     return <LoginSkeleton />;
   }
 
-  return <HomeSkeleton/>;
-
+  return <HomeSkeleton />;
 }

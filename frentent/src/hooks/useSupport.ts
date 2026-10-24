@@ -18,17 +18,18 @@ export function useTickets() {
 
 export function useCreateTicket() {
   const queryClient = useQueryClient();
-  return useMutation<{ success: boolean; data: SupportTicket }, ApiError, CreateTicketPayload>({
+  return useMutation<
+    { success: boolean; data: SupportTicket },
+    ApiError,
+    CreateTicketPayload
+  >({
     mutationFn: async (payload) => {
-      const res = await fetch(
-        `/api/support/create`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`/api/support/create`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json();
       if (!res.ok) throw new ApiError(res.status, data);
       return data;

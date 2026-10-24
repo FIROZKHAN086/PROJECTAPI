@@ -44,7 +44,11 @@ export function ScrollReveal({
     <motion.div
       ref={ref}
       initial={{ opacity: 0, ...dirMap[direction] }}
-      animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...dirMap[direction] }}
+      animate={
+        isInView
+          ? { opacity: 1, x: 0, y: 0 }
+          : { opacity: 0, ...dirMap[direction] }
+      }
       transition={{
         duration,
         delay,
@@ -165,7 +169,11 @@ export function ParallaxSection({
   });
 
   const factor = dir === "up" ? speed : -speed;
-  const y = useTransform(scrollYProgress, [0, 1], [factor * 100, factor * -100]);
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [factor * 100, factor * -100]
+  );
 
   return (
     <motion.div ref={ref} style={{ y }} className={className}>
@@ -235,7 +243,9 @@ export function CharReveal({
           <motion.span
             className="inline-block"
             initial={{ y: "100%", opacity: 0 }}
-            animate={isInView ? { y: "0%", opacity: 1 } : { y: "100%", opacity: 0 }}
+            animate={
+              isInView ? { y: "0%", opacity: 1 } : { y: "100%", opacity: 0 }
+            }
             transition={{
               duration: 0.4,
               delay: delay + i * staggerDelay,
@@ -410,15 +420,15 @@ export function SlideReveal({
   const isInView = useInView(ref, { once: true, margin: "-60px" });
 
   const clipFrom =
-    direction === "left"
-      ? "inset(0 100% 0 0)"
-      : "inset(0 0 0 100%)";
+    direction === "left" ? "inset(0 100% 0 0)" : "inset(0 0 0 100%)";
 
   return (
     <motion.div
       ref={ref}
       initial={{ clipPath: clipFrom }}
-      animate={isInView ? { clipPath: "inset(0 0% 0 0%)" } : { clipPath: clipFrom }}
+      animate={
+        isInView ? { clipPath: "inset(0 0% 0 0%)" } : { clipPath: clipFrom }
+      }
       transition={{ duration: 0.8, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={className}
     >

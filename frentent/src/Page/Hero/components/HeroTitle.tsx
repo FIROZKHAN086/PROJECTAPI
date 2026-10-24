@@ -16,7 +16,10 @@ export default function HeroTitle() {
     >
       <span className="block">
         {LINE_ONE.map((word, i) => (
-          <span key={i} className="inline-block overflow-hidden py-0.5 align-top">
+          <span
+            key={i}
+            className="inline-block overflow-hidden py-0.5 align-top"
+          >
             <motion.span
               custom={i}
               variants={wordReveal}
@@ -30,7 +33,10 @@ export default function HeroTitle() {
       </span>
       <span className="block">
         {LINE_TWO.map((word, i) => (
-          <span key={i} className="inline-block overflow-hidden py-0.5 align-top">
+          <span
+            key={i}
+            className="inline-block overflow-hidden py-0.5 align-top"
+          >
             <motion.span
               custom={LINE_ONE.length + i}
               variants={wordReveal}

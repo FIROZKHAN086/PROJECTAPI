@@ -12,7 +12,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hasToken = Boolean(
     request.cookies.get("token")?.value ||
-      request.cookies.get("authToken")?.value
+    request.cookies.get("authToken")?.value
   );
 
   if (pathname === "/login" && hasToken) {

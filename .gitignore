@@ -5,16 +5,9 @@ node_modules
 /generated/prisma
 
 /generated/prisma
-
-/dist 
 .claude
 
-
-<<<<<<< HEAD
-
+TodayTaks.md
 devboot.log
-=======
-
-TodayTaks.md 
-devboot.log 
->>>>>>> f1e7accc85ef776ffc53c28f51d7b9aba71cac66
+dist
+/dist

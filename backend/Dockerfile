@@ -1,35 +1,67 @@
-# ---- Build Stage ----
-FROM node:20-alpine AS builder
+
+# ==========================================
+# Multi-stage Dockerfile for Backend API
+# Runs as ROOT user
+# ==========================================
+
+# 1. Base Stage
+FROM node:20-alpine AS base
 
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
+RUN apk add --no-cache libc6-compat openssl
+
+
+# 2. Dependencies Stage
+FROM base AS deps
+
+COPY package*.json ./
+COPY prisma ./prisma/
+COPY prisma.config.ts ./
+
 RUN npm ci
 
-COPY prisma ./prisma/
+# Generate Prisma Client (build-time dummy DATABASE_URL for Prisma 7 config evaluation)
+ENV DATABASE_URL="postgresql://placeholder:5432/db"
 RUN npx prisma generate
 
-COPY tsconfig.json ./
-COPY src ./src/
+
+# 3. Builder Stage
+FROM base AS builder
+
+COPY --from=deps /app/node_modules ./node_modules
+
+COPY package*.json tsconfig.json ./
+COPY prisma ./prisma/
+COPY prisma.config.ts ./
+COPY src ./src
+
 RUN npm run build
 
-# ---- Production Stage ----
-FROM node:20-alpine AS runner
+
+# 4. Production Runner Stage
+FROM base AS runner
+
+ENV NODE_ENV=production
+ENV PORT=5000
 
 WORKDIR /app
 
-RUN apk add --no-cache openssl
+# Copy dependencies, build output and Prisma files
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+COPY package*.json ./
 
-ENV NODE_ENV=production
-
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev
-
-COPY prisma ./prisma/
-RUN npx prisma generate
-
-COPY --from=builder /app/dist ./dist/
+# Explicitly run as root
+USER root
 
 EXPOSE 5000
 
-CMD ["node", "dist/server.js"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:5000/ || exit 1
+
+# Start the backend
+CMD ["npm", "run", "start"]

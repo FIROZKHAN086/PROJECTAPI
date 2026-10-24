@@ -61,9 +61,6 @@ export const floatAnimation = {
   },
 };
 
-
-
-
 export default function AddNewProject() {
   const router = useRouter();
   const { mutate: createProject, isPending } = useCreateProject();

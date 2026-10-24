@@ -176,9 +176,7 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
         </AnimatePresence>
 
         <div>
-          <label className="text-xs text-[#D8CFBC] block mb-1.5">
-            Email
-          </label>
+          <label className="text-xs text-[#D8CFBC] block mb-1.5">Email</label>
           <input
             type="email"
             name="email"

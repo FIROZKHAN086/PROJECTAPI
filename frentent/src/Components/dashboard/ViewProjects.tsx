@@ -163,9 +163,7 @@ const ViewProjects = () => {
         <div className="flex items-center gap-4 text-xs text-[#6B6B6B]">
           <span className="flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
-            <GradientText className="font-bold">
-              {filtered.length}
-            </GradientText>
+            <GradientText className="font-bold">{filtered.length}</GradientText>
             project{filtered.length !== 1 ? "s" : ""}
           </span>
           {featuredCount > 0 && (
@@ -179,11 +177,18 @@ const ViewProjects = () => {
 
       {isLoading ? (
         <div
-          className={viewMode === "grid" ? "grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" : "space-y-3"}
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
+              : "space-y-3"
+          }
         >
           {Array.from({ length: 6 }).map((_, i) =>
             viewMode === "grid" ? (
-              <div key={i} className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
+              <div
+                key={i}
+                className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]"
+              >
                 <Skeleton className="h-44 w-full rounded-none bg-white/[0.06]" />
                 <div className="space-y-3 p-5">
                   <Skeleton className="h-5 w-40 rounded bg-white/[0.06]" />
@@ -196,7 +201,10 @@ const ViewProjects = () => {
                 </div>
               </div>
             ) : (
-              <div key={i} className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/[0.04] p-4">
+              <div
+                key={i}
+                className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/[0.04] p-4"
+              >
                 <Skeleton className="size-16 shrink-0 rounded-lg bg-white/[0.06]" />
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-4 w-32 rounded bg-white/[0.06]" />
@@ -214,7 +222,9 @@ const ViewProjects = () => {
             </div>
             <p className="text-sm text-[#A3A3A3]">No projects found</p>
             {search && (
-              <p className="text-xs text-[#6B6B6B]">Try a different search term</p>
+              <p className="text-xs text-[#6B6B6B]">
+                Try a different search term
+              </p>
             )}
           </div>
         </Reveal>
@@ -248,7 +258,10 @@ const ViewProjects = () => {
 
 const ProjectHeroCard = ({ project }: { project: Project }) => {
   return (
-    <motion.div whileHover={{ y: -4 }} transition={{ type: "spring", stiffness: 250, damping: 22 }}>
+    <motion.div
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 250, damping: 22 }}
+    >
       <GlowCard className="relative overflow-hidden">
         <div className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-[#4ADE80]/15 blur-[100px]" />
         <div className="pointer-events-none absolute -bottom-28 -left-16 size-64 rounded-full bg-[#22D3EE]/10 blur-[100px]" />
@@ -322,7 +335,9 @@ const ProjectHeroCard = ({ project }: { project: Project }) => {
                 </motion.a>
               )}
               {!project.liveDemo && !project.github && (
-                <span className="text-xs italic text-[#6B6B6B]">No links available</span>
+                <span className="text-xs italic text-[#6B6B6B]">
+                  No links available
+                </span>
               )}
             </div>
           </div>
@@ -418,7 +433,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
               </a>
             )}
             {!project.liveDemo && !project.github && (
-              <span className="text-[11px] italic text-[#6B6B6B]/60">No links available</span>
+              <span className="text-[11px] italic text-[#6B6B6B]/60">
+                No links available
+              </span>
             )}
           </div>
         </div>
@@ -429,8 +446,14 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 const ProjectRow = ({ project }: { project: Project }) => {
   return (
-    <motion.div whileHover={{ x: 4 }} transition={{ type: "spring", stiffness: 300, damping: 25 }}>
-      <GlowCard hoverable={false} className="flex cursor-default items-center gap-4 p-4 transition-colors hover:border-[#4ADE80]/30">
+    <motion.div
+      whileHover={{ x: 4 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+    >
+      <GlowCard
+        hoverable={false}
+        className="flex cursor-default items-center gap-4 p-4 transition-colors hover:border-[#4ADE80]/30"
+      >
         <ProjectImage
           image={project.image}
           title={project.title}
@@ -441,14 +464,18 @@ const ProjectRow = ({ project }: { project: Project }) => {
             <h3 className="truncate text-sm font-medium text-[#FAFAFA] transition-colors group-hover:text-[#4ADE80]">
               {project.title}
             </h3>
-            {project.featured && <Star className="size-3 shrink-0 text-[#FACC15]" />}
+            {project.featured && (
+              <Star className="size-3 shrink-0 text-[#FACC15]" />
+            )}
             {project.category && (
               <Badge className="shrink-0 border border-white/10 bg-white/[0.04] text-[9px] text-[#6B6B6B]">
                 {project.category}
               </Badge>
             )}
           </div>
-          <p className="truncate text-xs text-[#6B6B6B]">{project.description}</p>
+          <p className="truncate text-xs text-[#6B6B6B]">
+            {project.description}
+          </p>
         </div>
         <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
           {project.tech.slice(0, 3).map((t) => (
@@ -465,18 +492,21 @@ const ProjectRow = ({ project }: { project: Project }) => {
             </Badge>
           )}
         </div>
-        {project.customFields && Object.keys(project.customFields).length > 0 && (
-          <div className="hidden shrink-0 items-center gap-1.5 xl:flex">
-            {Object.entries(project.customFields).slice(0, 2).map(([key, value]) => (
-              <Badge
-                key={key}
-                className="border border-[#60A5FA]/25 bg-[#60A5FA]/10 px-1.5 py-0 text-[9px] text-[#60A5FA]"
-              >
-                {key}: {String(value)}
-              </Badge>
-            ))}
-          </div>
-        )}
+        {project.customFields &&
+          Object.keys(project.customFields).length > 0 && (
+            <div className="hidden shrink-0 items-center gap-1.5 xl:flex">
+              {Object.entries(project.customFields)
+                .slice(0, 2)
+                .map(([key, value]) => (
+                  <Badge
+                    key={key}
+                    className="border border-[#60A5FA]/25 bg-[#60A5FA]/10 px-1.5 py-0 text-[9px] text-[#60A5FA]"
+                  >
+                    {key}: {String(value)}
+                  </Badge>
+                ))}
+            </div>
+          )}
         <div className="flex shrink-0 items-center gap-1.5">
           {project.liveDemo && (
             <a

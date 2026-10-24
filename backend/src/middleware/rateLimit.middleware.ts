@@ -7,7 +7,6 @@ export const rateLimitMiddleware = rateLimit({
   legacyHeaders: false,
   message: {
     success: false,
-    message:
-      "Too many requests, please try again later.",
+    message: "Too many requests, please try again later.",
   },
 });

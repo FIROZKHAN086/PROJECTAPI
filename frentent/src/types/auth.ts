@@ -3,7 +3,7 @@ export interface User {
   name: string | null;
   email: string;
   OneTimeID: string | null;
- userVerified: boolean;
+  userVerified: boolean;
   role?: string;
   Role?: string;
   createdAt?: string;

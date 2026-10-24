@@ -189,30 +189,70 @@ const Overview = () => {
 
   const totalProjects = projects.length;
   const featuredCount = projects.filter((p) => p.featured).length;
-  const uniqueCategories = new Set(projects.map((p) => p.category).filter(Boolean)).size;
-  const uniqueTech = new Set(projects.flatMap((p) => p.tech).filter(Boolean)).size;
+  const uniqueCategories = new Set(
+    projects.map((p) => p.category).filter(Boolean)
+  ).size;
+  const uniqueTech = new Set(projects.flatMap((p) => p.tech).filter(Boolean))
+    .size;
   const activeProjects =
     projects.filter((p) => p.status === "active").length || totalProjects;
-  const totalTechUsed = projects.reduce((acc: number, p) => acc + (p.tech?.length || 0), 0);
+  const totalTechUsed = projects.reduce(
+    (acc: number, p) => acc + (p.tech?.length || 0),
+    0
+  );
   const completionRate =
     totalProjects > 0 ? Math.round((activeProjects / totalProjects) * 100) : 0;
 
   const stats: Stat[] = [
-    { label: "Total Projects", value: totalProjects, icon: FolderOpen, color: "#4ADE80" },
+    {
+      label: "Total Projects",
+      value: totalProjects,
+      icon: FolderOpen,
+      color: "#4ADE80",
+    },
     { label: "Featured", value: featuredCount, icon: Star, color: "#FACC15" },
-    { label: "Categories", value: uniqueCategories, icon: LayoutGrid, color: "#60A5FA" },
+    {
+      label: "Categories",
+      value: uniqueCategories,
+      icon: LayoutGrid,
+      color: "#60A5FA",
+    },
     { label: "Tech Stack", value: uniqueTech, icon: Layers, color: "#C084FC" },
   ];
 
   const miniStats = [
-    { label: "Total Tech Usage", value: totalTechUsed, icon: Code, color: "#F472B6" },
-    { label: "Active Projects", value: activeProjects, icon: Activity, color: "#34D399" },
-    { label: "Categories Used", value: uniqueCategories, icon: Database, color: "#FBBF24" },
-    { label: "Completion Rate", value: completionRate, icon: Target, color: "#818CF8", suffix: "%" },
+    {
+      label: "Total Tech Usage",
+      value: totalTechUsed,
+      icon: Code,
+      color: "#F472B6",
+    },
+    {
+      label: "Active Projects",
+      value: activeProjects,
+      icon: Activity,
+      color: "#34D399",
+    },
+    {
+      label: "Categories Used",
+      value: uniqueCategories,
+      icon: Database,
+      color: "#FBBF24",
+    },
+    {
+      label: "Completion Rate",
+      value: completionRate,
+      icon: Target,
+      color: "#818CF8",
+      suffix: "%",
+    },
   ];
 
   const recentProjects = [...projects]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
     .slice(0, 5);
 
   const usages = [
@@ -237,9 +277,19 @@ const Overview = () => {
   ];
 
   const quickActions = [
-    { label: "Add Project", icon: Plus, path: "add-new-project", accent: "#4ADE80" },
+    {
+      label: "Add Project",
+      icon: Plus,
+      path: "add-new-project",
+      accent: "#4ADE80",
+    },
     { label: "View Projects", icon: Eye, path: "project", accent: "#60A5FA" },
-    { label: "All Data", icon: Database, path: "get-all-data", accent: "#C084FC" },
+    {
+      label: "All Data",
+      icon: Database,
+      path: "get-all-data",
+      accent: "#C084FC",
+    },
   ];
 
   if (error) {
@@ -324,11 +374,19 @@ const Overview = () => {
                       transition={{ delay: 0.3 + i * 0.12 }}
                       whileHover={{ y: -2, scale: 1.03 }}
                       whileTap={{ scale: 0.96 }}
-                      onClick={() => router.push(`/dashboard?path=${action.path}`)}
+                      onClick={() =>
+                        router.push(`/dashboard?path=${action.path}`)
+                      }
                       className="flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-medium text-[#D8CFBC] transition-colors"
-                      style={{ borderColor: `${action.accent}33`, backgroundColor: `${action.accent}12` }}
+                      style={{
+                        borderColor: `${action.accent}33`,
+                        backgroundColor: `${action.accent}12`,
+                      }}
                     >
-                      <action.icon className="size-4" style={{ color: action.accent }} />
+                      <action.icon
+                        className="size-4"
+                        style={{ color: action.accent }}
+                      />
                       {action.label}
                     </motion.button>
                   ))}
@@ -354,7 +412,8 @@ const Overview = () => {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-[#FAFAFA] leading-none">
-                      {VIEWERS} <span className="text-[#6B6B6B] font-normal">live</span>
+                      {VIEWERS}{" "}
+                      <span className="text-[#6B6B6B] font-normal">live</span>
                     </p>
                     <p className="mt-0.5 flex items-center gap-1 text-[10px] text-[#6B6B6B]">
                       <Users className="size-2.5" />
@@ -370,7 +429,9 @@ const Overview = () => {
                     <p className="text-sm font-semibold text-[#FAFAFA] leading-none">
                       <GradientText>99.9%</GradientText>
                     </p>
-                    <p className="mt-0.5 text-[10px] text-[#6B6B6B]">uptime guarantee</p>
+                    <p className="mt-0.5 text-[10px] text-[#6B6B6B]">
+                      uptime guarantee
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -383,7 +444,10 @@ const Overview = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         {isLoading
           ? Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 space-y-4">
+              <div
+                key={i}
+                className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 space-y-4"
+              >
                 <div className="flex items-start justify-between">
                   <Skeleton className="h-4 w-20 bg-white/[0.06]" />
                   <Skeleton className="size-11 rounded-xl bg-white/[0.06]" />
@@ -399,7 +463,13 @@ const Overview = () => {
                   label={stat.label}
                   value={stat.value}
                   accent={stat.color}
-                  badge={index === 0 ? "All time" : index === 1 ? "Top rated" : undefined}
+                  badge={
+                    index === 0
+                      ? "All time"
+                      : index === 1
+                        ? "Top rated"
+                        : undefined
+                  }
                 />
               </Reveal>
             ))}
@@ -417,7 +487,9 @@ const Overview = () => {
                   </span>
                   Analytics & Usage
                 </h3>
-                <p className="mt-1 text-sm text-[#A3A3A3]">Project health at a glance</p>
+                <p className="mt-1 text-sm text-[#A3A3A3]">
+                  Project health at a glance
+                </p>
               </div>
               <span className="hidden sm:flex items-center gap-1.5 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3 py-1 text-[10px] font-medium text-[#4ADE80]">
                 <TrendingUp className="size-3" />
@@ -440,17 +512,25 @@ const Overview = () => {
                               borderColor: `${stat.color}26`,
                             }}
                           >
-                            <stat.icon className="size-4" style={{ color: stat.color }} />
+                            <stat.icon
+                              className="size-4"
+                              style={{ color: stat.color }}
+                            />
                           </div>
                           <div>
                             <p className="text-lg font-bold text-[#FAFAFA] font-space-grotesk leading-none">
                               {typeof stat.value === "number" ? (
-                                <Counter to={stat.value} suffix={stat.suffix ?? ""} />
+                                <Counter
+                                  to={stat.value}
+                                  suffix={stat.suffix ?? ""}
+                                />
                               ) : (
                                 stat.value
                               )}
                             </p>
-                            <p className="mt-0.5 text-[11px] text-[#6B6B6B]">{stat.label}</p>
+                            <p className="mt-0.5 text-[11px] text-[#6B6B6B]">
+                              {stat.label}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -482,12 +562,25 @@ const Overview = () => {
                         strokeLinecap="round"
                         strokeDasharray={2 * Math.PI * 54}
                         initial={{ strokeDashoffset: 2 * Math.PI * 54 }}
-                        whileInView={{ strokeDashoffset: 2 * Math.PI * 54 * (1 - completionRate / 100) }}
+                        whileInView={{
+                          strokeDashoffset:
+                            2 * Math.PI * 54 * (1 - completionRate / 100),
+                        }}
                         viewport={{ once: true, amount: 0.5 }}
-                        transition={{ duration: 1.4, ease: "easeOut", delay: 0.3 }}
+                        transition={{
+                          duration: 1.4,
+                          ease: "easeOut",
+                          delay: 0.3,
+                        }}
                       />
                       <defs>
-                        <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <linearGradient
+                          id="donutGrad"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
                           <stop offset="0%" stopColor="#4ADE80" />
                           <stop offset="100%" stopColor="#22D3EE" />
                         </linearGradient>
@@ -497,7 +590,9 @@ const Overview = () => {
                       <p className="text-2xl font-bold text-[#FAFAFA] font-space-grotesk leading-none">
                         <Counter to={completionRate} suffix="%" />
                       </p>
-                      <p className="mt-1 text-[10px] text-[#6B6B6B]">completion</p>
+                      <p className="mt-1 text-[10px] text-[#6B6B6B]">
+                        completion
+                      </p>
                     </div>
                   </div>
                   <div className="space-y-2 flex-1 min-w-0">
@@ -533,13 +628,22 @@ const Overview = () => {
                             <span className="text-[#D8CFBC] flex items-center gap-2">
                               <span
                                 className="size-1.5 rounded-full"
-                                style={{ backgroundColor: usage.color, boxShadow: `0 0 8px ${usage.color}` }}
+                                style={{
+                                  backgroundColor: usage.color,
+                                  boxShadow: `0 0 8px ${usage.color}`,
+                                }}
                               />
                               {usage.label}
                             </span>
-                            <span className="font-medium text-[#FAFAFA]">{usage.count}</span>
+                            <span className="font-medium text-[#FAFAFA]">
+                              {usage.count}
+                            </span>
                           </div>
-                          <GrowBar to={usage.value} color={usage.color} height="h-2" />
+                          <GrowBar
+                            to={usage.value}
+                            color={usage.color}
+                            height="h-2"
+                          />
                         </div>
                       ))}
                 </div>
@@ -561,7 +665,9 @@ const Overview = () => {
                   </span>
                   Recent Activity
                 </h3>
-                <p className="mt-1 text-sm text-[#A3A3A3]">Latest projects and updates</p>
+                <p className="mt-1 text-sm text-[#A3A3A3]">
+                  Latest projects and updates
+                </p>
               </div>
               <motion.button
                 whileHover={{ scale: 1.03 }}
@@ -586,7 +692,11 @@ const Overview = () => {
                   </div>
                 ))
               : recentProjects.map((project, index) => (
-                  <ActivityItem key={project.id} project={project} index={index} />
+                  <ActivityItem
+                    key={project.id}
+                    project={project}
+                    index={index}
+                  />
                 ))}
 
             {!isLoading && recentProjects.length === 0 && (

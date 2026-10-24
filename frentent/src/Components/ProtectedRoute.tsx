@@ -6,7 +6,11 @@ import { useAppSelector } from "@/src/lib/hooks";
 
 const PUBLIC_ROUTES = ["/", "/login", "/about", "/contact", "/docs"];
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export default function ProtectedRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, isLoading } = useAppSelector((s) => s.auth);

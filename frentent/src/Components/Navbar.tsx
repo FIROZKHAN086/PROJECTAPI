@@ -1,16 +1,21 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useSpring, useMotionValue, useTransform } from "framer-motion";
-import { 
-  Menu, 
-  X, 
-  ArrowRight, 
-  Code2, 
-  Sparkles, 
-  BookOpen, 
-  CreditCard, 
-  Terminal, 
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
+import {
+  Menu,
+  X,
+  ArrowRight,
+  Code2,
+  Sparkles,
+  BookOpen,
+  CreditCard,
+  Terminal,
   LogIn,
   ChevronRight,
   LogOut,
@@ -20,26 +25,23 @@ import {
   ChevronDown,
   CircleQuestionMark,
   Info,
-  View,
   Home,
-  LifeBuoy
+  LifeBuoy,
 } from "lucide-react";
-import { 
-  Sheet, 
-  SheetTrigger, 
-  SheetContent, 
-  SheetHeader, 
-  SheetTitle, 
-  SheetDescription 
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Github01Icon, TwitterSquareIcon } from "@hugeicons/core-free-icons";
-import { useRouter  } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/src/lib/hooks";
 import { useLogout } from "@/src/hooks/useAuth";
 import Link from "next/link";
-
-
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -55,7 +57,6 @@ const Navbar = () => {
   const logoutMutation = useLogout();
 
   const router = useRouter();
-
 
   // Mouse tracking for parallax
   useEffect(() => {
@@ -81,8 +82,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const { scrollYProgress } = useScroll();
- 
 
   // Motion values for floating elements
   const mouseX = useMotionValue(0);
@@ -97,7 +96,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target as Node)) {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(e.target as Node)
+      ) {
         setProfileOpen(false);
       }
     };
@@ -105,20 +107,46 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-const navLinks = [
-  { name: "Home", href: "/", icon: Home, description: "Return to the homepage" },
-  { name: "Features", href: "#features", icon: Sparkles, description: "Discover powerful tools" },
-  { name: "Docs", href: "/docs", icon: BookOpen, description: "Read the documentation" },
-    ...(user ? [
-    { name: "Dashboard", href: "/dashboard", icon: Terminal, description: "Test your API" }
-  ] : [])
-];
+  const navLinks = [
+    {
+      name: "Home",
+      href: "/",
+      icon: Home,
+      description: "Return to the homepage",
+    },
+    {
+      name: "Features",
+      href: "#features",
+      icon: Sparkles,
+      description: "Discover powerful tools",
+    },
+    {
+      name: "Docs",
+      href: "/docs",
+      icon: BookOpen,
+      description: "Read the documentation",
+    },
+    ...(user
+      ? [
+          {
+            name: "Dashboard",
+            href: "/dashboard",
+            icon: Terminal,
+            description: "Test your API",
+          },
+        ]
+      : []),
+  ];
 
   const dropdownItems = [
     { name: "Pricing", href: "#pricing", icon: CreditCard },
-    { name: "About", href: "#playground", icon:Info },
+    { name: "About", href: "#playground", icon: Info },
     { name: "Contact us", href: "#playground", icon: CircleQuestionMark },
-    { name: "API Playground", href: "/dashboard?path=Api-Data", icon: Terminal },
+    {
+      name: "API Playground",
+      href: "/dashboard?path=Api-Data",
+      icon: Terminal,
+    },
   ];
 
   const navbarVariants = {
@@ -138,15 +166,15 @@ const navLinks = [
 
   const childVariants = {
     hidden: { opacity: 0, y: -10, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
-      transition: { 
-        type: "spring" as const, 
+      transition: {
+        type: "spring" as const,
         stiffness: 120,
-        damping: 15
-      } 
+        damping: 15,
+      },
     },
   };
 
@@ -186,33 +214,33 @@ const navLinks = [
 
   const mobileItemVariants = {
     hidden: { opacity: 0, x: 30, rotateY: -10 },
-    show: { 
-      opacity: 1, 
-      x: 0, 
+    show: {
+      opacity: 1,
+      x: 0,
       rotateY: 0,
-      transition: { 
-        type: "spring" as const, 
-        stiffness: 150, 
-        damping: 18 
-      } 
+      transition: {
+        type: "spring" as const,
+        stiffness: 150,
+        damping: 18,
+      },
     },
   };
 
   const buttonGlowVariants = {
     idle: { boxShadow: "0px 0px 20px rgba(74, 222, 128, 0)" },
-    hover: { 
+    hover: {
       boxShadow: "0px 0px 30px rgba(74, 222, 128, 0.3)",
       transition: {
         duration: 0.3,
         ease: "easeOut" as const,
-      }
+      },
     },
   };
 
   return (
     <>
       <motion.header
-      suppressHydrationWarning={true}
+        suppressHydrationWarning={true}
         ref={navbarRef}
         variants={navbarVariants}
         initial="hidden"
@@ -227,9 +255,9 @@ const navLinks = [
             : "py-5 bg-transparent border-white/5"
         }`}
       >
-        <div className="max-w-[1140px] mx-auto px-6 flex items-center justify-between relative">
+        <div className="max-w-285 mx-auto px-6 flex items-center justify-between relative">
           {/* Logo Section with Enhanced Animation */}
-          <motion.div 
+          <motion.div
             variants={childVariants}
             className="flex items-center gap-2 cursor-pointer group relative"
             whileHover={{ scale: 1.03 }}
@@ -244,7 +272,7 @@ const navLinks = [
               animate={isHoveringLogo ? "hover" : "initial"}
               className="absolute inset-0 rounded-full bg-[#4ADE80]/20 blur-xl"
             />
-            
+
             <motion.span
               variants={logoVariants}
               initial="initial"
@@ -253,17 +281,21 @@ const navLinks = [
             >
               <Code2 className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
             </motion.span>
-            
-            <motion.span 
-            onClick={()=>router.push('/')}
+
+            <motion.span
+              onClick={() => router.push("/")}
               className="text-lg font-bold text-[#FFFBF4] tracking-tight font-sans relative z-10"
-              animate={isHoveringLogo ? { 
-                textShadow: "0 0 20px rgba(74,222,128,0.2)",
-                color: "#4ADE80"
-              } : { 
-                textShadow: "0 0 0px rgba(74,222,128,0)",
-                color: "#FFFBF4"
-              }}
+              animate={
+                isHoveringLogo
+                  ? {
+                      textShadow: "0 0 20px rgba(74,222,128,0.2)",
+                      color: "#4ADE80",
+                    }
+                  : {
+                      textShadow: "0 0 0px rgba(74,222,128,0)",
+                      color: "#FFFBF4",
+                    }
+              }
               transition={{ duration: 0.3 }}
             >
               Project<span className="text-[#4ADE80]">API</span>
@@ -276,13 +308,13 @@ const navLinks = [
                   {[...Array(6)].map((_, i) => (
                     <motion.div
                       key={i}
-                      initial={{ 
+                      initial={{
                         opacity: 0,
                         scale: 0,
                         x: 0,
-                        y: 0 
+                        y: 0,
                       }}
-                      animate={{ 
+                      animate={{
                         opacity: [0, 1, 0],
                         scale: [0, 1, 0],
                         x: [0, (i - 2.5) * 20],
@@ -308,8 +340,8 @@ const navLinks = [
           </motion.div>
 
           {/* Desktop Navigation with Enhanced Interactions */}
-          <motion.nav 
-            variants={childVariants} 
+          <motion.nav
+            variants={childVariants}
             className="hidden md:flex items-center gap-1 bg-[#141414]/40 border border-white/5 p-1 rounded-full relative"
           >
             {navLinks.map((link, index) => {
@@ -317,16 +349,16 @@ const navLinks = [
               return (
                 <motion.button
                   key={link.name}
-                    onClick={() => {
-                      if (link.href.startsWith("#")) {
-                        const target = document.querySelector(link.href);
-                        if (target) {
-                          target.scrollIntoView({ behavior: "smooth" });
-                        }
-                      } else {
-                        router.push(link.href);
+                  onClick={() => {
+                    if (link.href.startsWith("#")) {
+                      const target = document.querySelector(link.href);
+                      if (target) {
+                        target.scrollIntoView({ behavior: "smooth" });
                       }
-                    }}
+                    } else {
+                      router.push(link.href);
+                    }
+                  }}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="relative px-4 py-1.5 text-xs font-medium text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors duration-200 z-10 flex items-center gap-1.5"
@@ -337,16 +369,24 @@ const navLinks = [
                     <motion.span
                       layoutId="nav-hover-pill"
                       className="absolute inset-0 bg-white/5 border border-white/10 rounded-full z-[-1]"
-                      transition={{ type: "spring" as const, stiffness: 350, damping: 25 }}
+                      transition={{
+                        type: "spring" as const,
+                        stiffness: 350,
+                        damping: 25,
+                      }}
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                     />
                   )}
                   <motion.span
-                    animate={hoveredIndex === index ? { 
-                      rotate: [0, 10, -10, 0],
-                      transition: { duration: 0.5 }
-                    } : {}}
+                    animate={
+                      hoveredIndex === index
+                        ? {
+                            rotate: [0, 10, -10, 0],
+                            transition: { duration: 0.5 },
+                          }
+                        : {}
+                    }
                   >
                     <Icon className="w-3.5 h-3.5" />
                   </motion.span>
@@ -399,7 +439,10 @@ const navLinks = [
                         <motion.button
                           key={item.name}
                           onClick={() => router.push(item.href)}
-                          whileHover={{ x: 5, backgroundColor: "rgba(255,255,255,0.05)" }}
+                          whileHover={{
+                            x: 5,
+                            backgroundColor: "rgba(255,255,255,0.05)",
+                          }}
                           className="flex items-center gap-3 px-4 py-3 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] transition-all duration-200"
                         >
                           <Icon className="w-4 h-4 text-[#4ADE80]" />
@@ -414,7 +457,10 @@ const navLinks = [
           </motion.nav>
 
           {/* Right Actions with Enhanced Animation */}
-          <motion.div variants={childVariants} className="hidden md:flex items-center gap-4">
+          <motion.div
+            variants={childVariants}
+            className="hidden md:flex items-center gap-4"
+          >
             {user ? (
               <div className="relative" ref={profileDropdownRef}>
                 <motion.button
@@ -425,10 +471,12 @@ const navLinks = [
                 >
                   <div className="size-6 rounded-full bg-[#4ADE80]/15 border border-[#4ADE80]/30 flex items-center justify-center">
                     <span className="text-[10px] font-bold text-[#4ADE80]">
-                      {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                      {user.name
+                        ? user.name.charAt(0).toUpperCase()
+                        : user.email.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-[#FFFBF4] max-w-[100px] truncate">
+                  <span className="text-xs font-medium text-[#FFFBF4] max-w-25 truncate">
                     {user.name || user.email.split("@")[0]}
                   </span>
                   <motion.span
@@ -445,45 +493,84 @@ const navLinks = [
                       initial={{ opacity: 0, y: 10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 20,
+                      }}
                       className="absolute top-full mt-2 right-0 w-52 bg-[#141414] border border-white/10 rounded-xl overflow-hidden shadow-2xl z-50"
                     >
                       <div className="px-4 py-3 border-b border-white/10">
-                        <p className="text-sm font-medium text-[#FFFBF4] truncate">{user.name || "User"}</p>
-                        <p className="text-[10px] text-[#8A8578] truncate">{user.email}</p>
+                        <p className="text-sm font-medium text-[#FFFBF4] truncate">
+                          {user.name || "User"}
+                        </p>
+                        <p className="text-[10px] text-[#8A8578] truncate">
+                          {user.email}
+                        </p>
                       </div>
                       <div className="py-1">
-                        <Link href="#profile" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                        <Link
+                          href="#profile"
+                          onClick={() => setProfileOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200"
+                        >
                           <User className="w-4 h-4" />
                           <span>Profile</span>
                         </Link>
-                      
-                          <Link href={'/dashboard?path=api-key'} onClick={() => {setProfileOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
-                            <Key className="w-4 h-4" />
-                            <span>API Keys</span>
-                          </Link>
-                            <Link href="/dashboard" onClick={() => {setProfileOpen(false);}} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
-                            <Terminal className="w-4 h-4" />
-                            <span>Dashboard</span>
-                          </Link>
-                       
-                        <Link href={'/dashboard?path=support'} onClick={() => {setProfileOpen(false); }} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer">
+
+                        <Link
+                          href={"/dashboard?path=api-key"}
+                          onClick={() => {
+                            setProfileOpen(false);
+                          }}
+                          className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200"
+                        >
+                          <Key className="w-4 h-4" />
+                          <span>API Keys</span>
+                        </Link>
+                        <Link
+                          href="/dashboard"
+                          onClick={() => {
+                            setProfileOpen(false);
+                          }}
+                          className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200"
+                        >
+                          <Terminal className="w-4 h-4" />
+                          <span>Dashboard</span>
+                        </Link>
+
+                        <Link
+                          href={"/dashboard?path=support"}
+                          onClick={() => {
+                            setProfileOpen(false);
+                          }}
+                          className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200 cursor-pointer"
+                        >
                           <LifeBuoy className="w-4 h-4" />
                           <span>Support</span>
                         </Link>
-                        <Link href="#settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200">
+                        <Link
+                          href="#settings"
+                          onClick={() => setProfileOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] hover:bg-white/5 transition-all duration-200"
+                        >
                           <Settings className="w-4 h-4" />
                           <span>Settings</span>
                         </Link>
                       </div>
                       <div className="border-t border-white/10 py-1">
                         <button
-                          onClick={() => { logoutMutation.mutate(); setProfileOpen(false); }}
+                          onClick={() => {
+                            logoutMutation.mutate();
+                            setProfileOpen(false);
+                          }}
                           disabled={logoutMutation.isPending}
                           className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-[#F87171] hover:bg-[#F87171]/10 transition-all duration-200 cursor-pointer"
                         >
                           <LogOut className="w-4 h-4" />
-                          <span>{logoutMutation.isPending ? "..." : "Logout"}</span>
+                          <span>
+                            {logoutMutation.isPending ? "..." : "Logout"}
+                          </span>
                         </button>
                       </div>
                     </motion.div>
@@ -492,64 +579,60 @@ const navLinks = [
               </div>
             ) : (
               <>
-                
-                  <motion.a
-                  onClick={()=>router.push("/login?auth=login")}
-                    whileHover={{ 
-                      scale: 1.05, 
-                      y: -2,
-                      textShadow: "0 0 20px rgba(74,222,128,0.3)"
+                <motion.a
+                  onClick={() => router.push("/login?auth=login")}
+                  whileHover={{
+                    scale: 1.05,
+                    y: -2,
+                    textShadow: "0 0 20px rgba(74,222,128,0.3)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative text-sm font-medium text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors flex items-center gap-1.5 px-3 py-1.5 group"
+                >
+                  <motion.span
+                    animate={{
+                      rotate: [0, 10, -10, 0],
                     }}
-                    whileTap={{ scale: 0.95 }}
-                    className="relative text-sm font-medium text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors flex items-center gap-1.5 px-3 py-1.5 group"
+                    transition={{
+                      repeat: Infinity,
+                      duration: 3,
+                      ease: "easeInOut" as const,
+                      delay: 0.5,
+                    }}
                   >
+                    <LogIn className="w-4 h-4 text-[#D8CFBC] group-hover:text-[#4ADE80] transition-colors" />
+                  </motion.span>
+                  <span>Log in</span>
+                </motion.a>
+
+                <motion.button
+                  onClick={() => router.push("/login?auth=signup")}
+                  variants={buttonGlowVariants}
+                  initial="idle"
+                  whileHover="hover"
+                  whileTap={{ scale: 0.95 }}
+                  className="relative overflow-hidden px-5 py-2 bg-linear-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] rounded-lg text-sm font-medium transition-all duration-300 group flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span className="relative z-10 flex items-center gap-1.5">
+                    Get Started
                     <motion.span
-                      animate={{ 
-                        rotate: [0, 10, -10, 0],
-                      }}
-                      transition={{ 
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{
                         repeat: Infinity,
-                        duration: 3,
+                        duration: 1.5,
                         ease: "easeInOut" as const,
-                        delay: 0.5
                       }}
                     >
-                      <LogIn className="w-4 h-4 text-[#D8CFBC] group-hover:text-[#4ADE80] transition-colors" />
+                      <ArrowRight className="w-4 h-4" />
                     </motion.span>
-                    <span>Log in</span>
-                  </motion.a>
-                
-
-                
-                  <motion.button
-                  onClick={()=>router.push('/login?auth=signup')}
-                    variants={buttonGlowVariants}
-                    initial="idle"
-                    whileHover="hover"
-                    whileTap={{ scale: 0.95 }}
-                    className="relative overflow-hidden px-5 py-2 bg-gradient-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] rounded-lg text-sm font-medium transition-all duration-300 group flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <span className="relative z-10 flex items-center gap-1.5">
-                      Get Started
-                      <motion.span
-                        animate={{ x: [0, 3, 0] }}
-                        transition={{ 
-                          repeat: Infinity,
-                          duration: 1.5,
-                          ease: "easeInOut" as const
-                        }}
-                      >
-                        <ArrowRight className="w-4 h-4" />
-                      </motion.span>
-                    </span>
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent z-0"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: "100%" }}
-                      transition={{ duration: 0.8, ease: "easeInOut" as const }}
-                    />
-                  </motion.button>
-                
+                  </span>
+                  <motion.div
+                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent z-0"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "100%" }}
+                    transition={{ duration: 0.8, ease: "easeInOut" as const }}
+                  />
+                </motion.button>
               </>
             )}
           </motion.div>
@@ -562,40 +645,54 @@ const navLinks = [
                   animate={isOpen ? { rotate: 90 } : { rotate: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                  {isOpen ? (
+                    <X className="w-5 h-5" />
+                  ) : (
+                    <Menu className="w-5 h-5" />
+                  )}
                 </motion.div>
               </SheetTrigger>
-              <SheetContent 
-                side="right" 
-                className="bg-[#0A0A0A]  border-l border-white/10 p-0 flex flex-col justify-between w-[340px] text-[#FFFBF4] overflow-hidden"
+              <SheetContent
+                side="right"
+                className="bg-[#0A0A0A]  border-l border-white/10 p-0 flex flex-col justify-between w-85 text-[#FFFBF4] overflow-hidden"
               >
                 <SheetHeader className="sr-only">
                   <SheetTitle>Mobile Navigation</SheetTitle>
-                  <SheetDescription>Access sections, log in, or get started</SheetDescription>
+                  <SheetDescription>
+                    Access sections, log in, or get started
+                  </SheetDescription>
                 </SheetHeader>
 
-                <motion.div 
+                <motion.div
                   className="flex flex-col h-full justify-between p-6"
                   initial={{ opacity: 0, x: 50 }}
-                  animate={isOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+                  animate={
+                    isOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }
+                  }
                   transition={{ duration: 0.3, ease: "easeOut" as const }}
                 >
                   <div className="space-y-8 pt-4">
                     {/* Mobile Header */}
-                    <motion.div 
+                    <motion.div
                       className="flex items-center justify-between border-b border-white/10 pb-4"
                       initial={{ opacity: 0, y: -20 }}
-                      animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+                      animate={
+                        isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }
+                      }
                       transition={{ delay: 0.1 }}
                     >
-                      <motion.div 
+                      <motion.div
                         className="flex items-center gap-2"
                         whileHover={{ scale: 1.02 }}
                       >
-                        <motion.span 
+                        <motion.span
                           className="text-[#4ADE80] font-bold font-mono p-1.5 rounded-lg bg-[#141414] border border-white/10"
                           animate={{ rotate: [0, 5, -5, 0] }}
-                          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" as const }}
+                          transition={{
+                            repeat: Infinity,
+                            duration: 4,
+                            ease: "easeInOut" as const,
+                          }}
                         >
                           <Code2 className="w-5 h-5" />
                         </motion.span>
@@ -603,12 +700,10 @@ const navLinks = [
                           Project<span className="text-[#4ADE80]">API</span>
                         </span>
                       </motion.div>
-                      
-                   
                     </motion.div>
 
                     {/* Mobile Navigation Links with Stagger */}
-                    <motion.nav 
+                    <motion.nav
                       variants={mobileListVariants}
                       initial="hidden"
                       animate={isOpen ? "show" : "hidden"}
@@ -622,10 +717,10 @@ const navLinks = [
                             href={link.href}
                             onClick={() => setIsOpen(false)}
                             variants={mobileItemVariants}
-                            whileHover={{ 
-                              x: 8, 
+                            whileHover={{
+                              x: 8,
                               backgroundColor: "rgba(74,222,128,0.1)",
-                              borderColor: "rgba(74,222,128,0.3)"
+                              borderColor: "rgba(74,222,128,0.3)",
                             }}
                             className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#141414]/50 border border-white/5 hover:border-[#4ADE80]/20 hover:bg-[#141414]/80 text-[#D8CFBC] hover:text-[#FFFBF4] text-sm font-medium transition-all duration-200 group"
                           >
@@ -637,11 +732,17 @@ const navLinks = [
                             </motion.div>
                             <div className="flex-1">
                               <span>{link.name}</span>
-                              <span className="block text-[10px] text-[#D8CFBC]/50">{link.description}</span>
+                              <span className="block text-[10px] text-[#D8CFBC]/50">
+                                {link.description}
+                              </span>
                             </div>
                             <motion.div
                               animate={{ x: [0, 5, 0] }}
-                              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" as const }}
+                              transition={{
+                                repeat: Infinity,
+                                duration: 2,
+                                ease: "easeInOut" as const,
+                              }}
                             >
                               <ChevronRight className="w-4 h-4 text-[#D8CFBC]/30 group-hover:text-[#4ADE80] transition-colors" />
                             </motion.div>
@@ -658,7 +759,10 @@ const navLinks = [
                             href={item.href}
                             onClick={() => setIsOpen(false)}
                             variants={mobileItemVariants}
-                            whileHover={{ x: 8, backgroundColor: "rgba(255,255,255,0.05)" }}
+                            whileHover={{
+                              x: 8,
+                              backgroundColor: "rgba(255,255,255,0.05)",
+                            }}
                             className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#141414]/30 border border-white/5 hover:border-white/10 text-[#D8CFBC] hover:text-[#FFFBF4] text-sm font-medium transition-all duration-200"
                           >
                             <Icon className="w-4 h-4 text-[#D8CFBC]" />
@@ -670,10 +774,12 @@ const navLinks = [
                   </div>
 
                   {/* Mobile Bottom Actions */}
-                  <motion.div 
+                  <motion.div
                     className="flex flex-col gap-3 border-t border-white/10 pt-6"
                     initial={{ opacity: 0, y: 20 }}
-                    animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    animate={
+                      isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                    }
                     transition={{ delay: 0.3 }}
                   >
                     {user ? (
@@ -681,62 +787,86 @@ const navLinks = [
                         <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#141414]/50 border border-white/5">
                           <div className="size-8 rounded-full bg-[#4ADE80]/15 border border-[#4ADE80]/30 flex items-center justify-center">
                             <span className="text-xs font-bold text-[#4ADE80]">
-                              {user.name ? user.name.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase()}
+                              {user.name
+                                ? user.name.charAt(0).toUpperCase()
+                                : user.email.charAt(0).toUpperCase()}
                             </span>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-[#FFFBF4] truncate">{user.name || "User"}</p>
-                            <p className="text-[10px] text-[#8A8578] truncate">{user.email}</p>
+                            <p className="text-sm font-medium text-[#FFFBF4] truncate">
+                              {user.name || "User"}
+                            </p>
+                            <p className="text-[10px] text-[#8A8578] truncate">
+                              {user.email}
+                            </p>
                           </div>
                         </div>
                         <motion.button
-                          onClick={() => { logoutMutation.mutate(); setIsOpen(false); }}
+                          onClick={() => {
+                            logoutMutation.mutate();
+                            setIsOpen(false);
+                          }}
                           disabled={logoutMutation.isPending}
-                          whileHover={{ scale: 1.02, backgroundColor: "rgba(248,113,113,0.1)" }}
+                          whileHover={{
+                            scale: 1.02,
+                            backgroundColor: "rgba(248,113,113,0.1)",
+                          }}
                           whileTap={{ scale: 0.98 }}
                           className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-[#F87171]/20 text-sm font-medium text-[#F87171] hover:bg-[#F87171]/10 transition-all duration-200 cursor-pointer"
                         >
                           <LogOut className="w-4 h-4" />
-                          <span>{logoutMutation.isPending ? "Logging out..." : "Logout"}</span>
+                          <span>
+                            {logoutMutation.isPending
+                              ? "Logging out..."
+                              : "Logout"}
+                          </span>
                         </motion.button>
                       </>
                     ) : (
                       <>
-                       
-                          <motion.a
+                        <motion.a
+                          onClick={() => {
+                            setIsOpen(false);
+                            router.push("/login");
+                          }}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-transparent border border-white/10 text-sm font-medium text-[#FFFBF4] hover:bg-white/5 transition-all duration-200"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          <span>Log in</span>
+                        </motion.a>
 
-                          onClick={() => {setIsOpen(false); router.push('/login')}}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-transparent border border-white/10 text-sm font-medium text-[#FFFBF4] hover:bg-white/5 transition-all duration-200"
-                          >
-                            <LogIn className="w-4 h-4" />
-                            <span>Log in</span>
-                          </motion.a>
-                     
-                       
-                          <motion.button
-                           onClick={() => {setIsOpen(false); router.push('/login?auth=signup')}}
-                            whileHover={{ scale: 1.02, boxShadow: "0px 0px 30px rgba(74,222,128,0.2)" }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] text-sm font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer shadow-[0_4px_15px_rgba(255,255,255,0.05)] relative overflow-hidden group"
-                          >
-                            <span className="relative z-10 flex items-center gap-2">
-                              Get Started
-                              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </span>
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent z-0"
-                              initial={{ x: "-100%" }}
-                              whileHover={{ x: "100%" }}
-                              transition={{ duration: 0.6, ease: "easeInOut" as const }}
-                            />
-                          </motion.button>
-                      
+                        <motion.button
+                          onClick={() => {
+                            setIsOpen(false);
+                            router.push("/login?auth=signup");
+                          }}
+                          whileHover={{
+                            scale: 1.02,
+                            boxShadow: "0px 0px 30px rgba(74,222,128,0.2)",
+                          }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-linear-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] text-sm font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer shadow-[0_4px_15px_rgba(255,255,255,0.05)] relative overflow-hidden group"
+                        >
+                          <span className="relative z-10 flex items-center gap-2">
+                            Get Started
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                          <motion.div
+                            className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent z-0"
+                            initial={{ x: "-100%" }}
+                            whileHover={{ x: "100%" }}
+                            transition={{
+                              duration: 0.6,
+                              ease: "easeInOut" as const,
+                            }}
+                          />
+                        </motion.button>
                       </>
                     )}
 
-                    <motion.div 
+                    <motion.div
                       className="flex items-center justify-center gap-4 pt-2"
                       initial={{ opacity: 0 }}
                       animate={isOpen ? { opacity: 1 } : { opacity: 0 }}
@@ -747,14 +877,14 @@ const navLinks = [
                         whileHover={{ scale: 1.1, y: -2 }}
                         className="text-[#D8CFBC] hover:text-[#4ADE80] transition-colors"
                       >
-                <HugeiconsIcon icon={Github01Icon} />
+                        <HugeiconsIcon icon={Github01Icon} />
                       </motion.a>
                       <motion.a
                         href="#"
                         whileHover={{ scale: 1.1, y: -2 }}
                         className="text-[#D8CFBC] hover:text-[#4ADE80] transition-colors"
                       >
-                      <HugeiconsIcon icon={TwitterSquareIcon} />
+                        <HugeiconsIcon icon={TwitterSquareIcon} />
                       </motion.a>
                     </motion.div>
                   </motion.div>
@@ -763,8 +893,6 @@ const navLinks = [
             </Sheet>
           </div>
         </div>
-
-       
       </motion.header>
     </>
   );

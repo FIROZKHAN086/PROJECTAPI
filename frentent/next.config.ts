@@ -6,13 +6,6 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   async rewrites() {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
-<<<<<<< HEAD
-
-    console.log(backendUrl);
-    
-
-=======
->>>>>>> c2ec9c74b2b457ff98afd9895dbcfc443aa78b0f
     return [
       {
         source: "/api/:path*",

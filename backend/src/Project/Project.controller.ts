@@ -20,7 +20,7 @@ export const createProject = async (req: Request, res: Response) => {
     const { title, description, tech, liveDemo, github, category, featured } =
       req.body;
 
-    let  parsedCustomFields = null;
+    let parsedCustomFields = null;
 
     if (req.body.customFields) {
       parsedCustomFields = JSON.parse(req.body.customFields);
@@ -143,7 +143,7 @@ export const getAllProjects = async (req: Request, res: Response) => {
   }
 };
 
-// get a single project by ProjectID 
+// get a single project by ProjectID
 export const getProjectById = async (req: Request, res: Response) => {
   try {
     const oneTimeId = (req as any).user?.OneTimeID;
@@ -156,7 +156,6 @@ export const getProjectById = async (req: Request, res: Response) => {
     }
 
     const { id } = req.params as { id: string };
-   
 
     const cacheKey = `projects:${oneTimeId}`;
 
@@ -175,7 +174,7 @@ export const getProjectById = async (req: Request, res: Response) => {
     });
 
     if (!project) {
-      // development to use this logs 
+      // development to use this logs
       console.warn(
         `[${new Date().toISOString()}] [WARN] Project not found: ${id}`
       );
@@ -187,7 +186,6 @@ export const getProjectById = async (req: Request, res: Response) => {
 
     await redis.set(`project:${id}`, JSON.stringify(project));
 
-    
     return res.status(200).json({
       success: true,
       data: project,
@@ -227,7 +225,6 @@ export const updateProject = async (req: Request, res: Response) => {
       featured,
       customFields,
     } = req.body;
-    
 
     const updateData: any = {};
     if (title) updateData.title = title;
@@ -291,7 +288,7 @@ export const updateProject = async (req: Request, res: Response) => {
       data: updatedProject,
     });
   } catch (error) {
-    // development to use this logs 
+    // development to use this logs
     console.error(
       `[${new Date().toISOString()}] [ERROR] Failed to update project: ${req.params.id}`,
       error
@@ -335,7 +332,7 @@ export const deleteProject = async (req: Request, res: Response) => {
     const cacheKey = `projects:${oneTimeId}`;
     await redis.del(cacheKey);
 
-    // development to use this logs 
+    // development to use this logs
     console.log(
       `[${new Date().toISOString()}] [SUCCESS] Project deleted successfully: ${id}`
     );

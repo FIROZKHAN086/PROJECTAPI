@@ -15,11 +15,9 @@ import {
   Info,
   ArrowUpRight,
   Check,
-  Link2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { glassInput } from "../data";
-
 
 const ACCENT = {
   title: "#FF8A4C",
@@ -29,7 +27,6 @@ const ACCENT = {
 } as const;
 
 const DESC_MAX = 280;
-
 
 const seeded = (seed: number) => {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -63,7 +60,6 @@ const letterVariants: Variants = {
   }),
 };
 
-
 function FieldLabel({ text }: { text: string }) {
   return (
     <span className="inline-flex">
@@ -81,7 +77,6 @@ function FieldLabel({ text }: { text: string }) {
     </span>
   );
 }
-
 
 function useFocusGlow<T extends HTMLDivElement>(color: string) {
   const ref = useRef<T>(null);
@@ -122,23 +117,17 @@ function useFocusGlow<T extends HTMLDivElement>(color: string) {
   return { onFocus, onBlur, glow };
 }
 
-function SectionHeader({
-  label,
-  count,
-}: {
-  label: string;
-  count?: string;
-}) {
+function SectionHeader({ label, count }: { label: string; count?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
-      <span className="h-px flex-1 bg-white/[0.06]" />
+      <span className="h-px flex-1 bg-white/6" />
       <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9A96A6]">
         {label}
       </span>
       {count && (
         <span className="font-mono text-[10px] text-[#6B6B6B]">{count}</span>
       )}
-      <span className="h-px w-3 bg-white/[0.06]" />
+      <span className="h-px w-3 bg-white/6" />
     </div>
   );
 }
@@ -157,11 +146,10 @@ function FieldShell({
   children: ReactNode;
 }) {
   return (
-    <div className="group/field relative rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]">
-    
+    <div className="group/field relative rounded-xl border border-white/6 bg-white/2 p-4 transition-colors hover:border-white/12">
       <span
         aria-hidden
-        className="absolute top-4 bottom-4 left-0 w-[2px] rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-[3px]"
+        className="absolute top-4 bottom-4 left-0 w-0.5 rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-0.75"
         style={{
           background: `linear-gradient(180deg, ${accent}, transparent)`,
           opacity: 0.75,
@@ -188,25 +176,7 @@ function FieldShell({
   );
 }
 
-function DomainChip({ url }: { url: string }) {
-  if (!url.trim()) return null;
-  let host: string;
 
-  try {
-    host = new URL(
-      url.startsWith("http") ? url : `https://${url}`
-    ).hostname;
-  } catch {
-    return null;
-  }
-
-  return (
-    <Badge className="gap-1 border border-[#7FBF97]/25 bg-[#7FBF97]/10 text-[9px] font-normal text-[#7FBF97]">
-      <Link2 className="size-2.5" />
-      {host}
-    </Badge>
-  );
-}
 
 function SetChip({ show }: { show: boolean }) {
   if (!show) return null;
@@ -217,7 +187,6 @@ function SetChip({ show }: { show: boolean }) {
     </Badge>
   );
 }
-
 
 export const ProjectDetailsSection = ({
   title,
@@ -263,8 +232,7 @@ export const ProjectDetailsSection = ({
 
   return (
     <motion.div variants={itemVariants} className="space-y-5">
- 
-      <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+      <div className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/2 px-4 py-3">
         <span className="flex size-8 items-center justify-center rounded-lg border border-[#FF8A4C]/25 bg-[#FF8A4C]/10">
           <FileText className="size-3.5 text-[#FF8A4C]" />
         </span>
@@ -300,7 +268,6 @@ export const ProjectDetailsSection = ({
         </span>
       </div>
 
-     
       <div>
         <SectionHeader label="Identity" count="required" />
 
@@ -318,7 +285,6 @@ export const ProjectDetailsSection = ({
               right={
                 <div className="flex items-center gap-1.5">
                   <SetChip show={!!title.trim()} />
-                  
                 </div>
               }
             >
@@ -347,8 +313,10 @@ export const ProjectDetailsSection = ({
               icon={<Info className="size-3" />}
               accent={ACCENT.description}
               label="Description"
-              right={                
-                <span className={cn("font-mono text-[10px] tabular-nums", descTone)}>
+              right={
+                <span
+                  className={cn("font-mono text-[10px] tabular-nums", descTone)}
+                >
                   {descLen}/{DESC_MAX}
                   <SetChip show={!!description.trim()} />
                 </span>
@@ -373,7 +341,6 @@ export const ProjectDetailsSection = ({
         </div>
       </div>
 
-   
       <div>
         <SectionHeader label="Links" count="optional" />
 
@@ -448,7 +415,9 @@ export const ProjectDetailsSection = ({
 
               {github.trim() && (
                 <a
-                  href={github.startsWith("http") ? github : `https://${github}`}
+                  href={
+                    github.startsWith("http") ? github : `https://${github}`
+                  }
                   target="_blank"
                   rel="noreferrer"
                   className="mt-2 inline-flex items-center gap-1 text-[11px] text-[#A78BFA]/80 transition-colors hover:text-[#A78BFA]"

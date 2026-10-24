@@ -81,14 +81,14 @@ body {
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: #0A0A0A;
-  --sidebar-foreground: #FFFBF4;
-  --sidebar-primary: #4ADE80;
-  --sidebar-primary-foreground: #0A0A0A;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #fffbf4;
+  --sidebar-primary: #4ade80;
+  --sidebar-primary-foreground: #0a0a0a;
   --sidebar-accent: rgba(255, 255, 255, 0.05);
-  --sidebar-accent-foreground: #FFFBF4;
+  --sidebar-accent-foreground: #fffbf4;
   --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #4ADE80;
+  --sidebar-ring: #4ade80;
 }
 
 .dark {

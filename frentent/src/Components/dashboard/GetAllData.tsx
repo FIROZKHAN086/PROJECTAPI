@@ -46,7 +46,10 @@ export default function GetAllData() {
 
   const stats = useMemo(() => {
     const uniqueCategories = new Set(projects.map((p) => p.category));
-    const totalTechItems = projects.reduce((acc, p) => acc + (p.tech?.length || 0), 0);
+    const totalTechItems = projects.reduce(
+      (acc, p) => acc + (p.tech?.length || 0),
+      0
+    );
     const featuredCount = projects.filter((p) => p.featured).length;
 
     return {

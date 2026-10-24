@@ -5,7 +5,12 @@ import { motion } from "framer-motion";
 import { ArrowLeft, LoaderCircle, MailCheck, RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/src/lib/hooks";
-import { useVerifyOtp, useResendOtp, useAuth, clearOtpPending } from "@/src/hooks/useAuth";
+import {
+  useVerifyOtp,
+  useResendOtp,
+  useAuth,
+  clearOtpPending,
+} from "@/src/hooks/useAuth";
 import { cancelOtpVerification } from "@/src/lib/authSlice";
 import { toast } from "@/src/lib/toastSlice";
 
@@ -69,9 +74,7 @@ export default function OtpForm({ redirectTarget, onBack }: OtpFormProps) {
             err.code === "INVALID_OTP_VERIFICATION_TOKEN" ||
             err.status === 401
           ) {
-            toast.error(
-              "Verification session expired. Please sign up again."
-            );
+            toast.error("Verification session expired. Please sign up again.");
             dispatch(cancelOtpVerification());
             onBack();
             return;
@@ -175,9 +178,7 @@ export default function OtpForm({ redirectTarget, onBack }: OtpFormProps) {
       </motion.div>
 
       <div className="text-center">
-        <p className="text-sm text-[#D8CFBC]">
-          We sent a 6-digit code to
-        </p>
+        <p className="text-sm text-[#D8CFBC]">We sent a 6-digit code to</p>
         <p className="text-sm font-medium text-[#FFFBF4] mt-0.5 break-all">
           {pendingEmail ?? "your email"}
         </p>

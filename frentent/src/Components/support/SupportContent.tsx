@@ -2,19 +2,27 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Brackets, Sparkles, ScrollText, CircleDot, ArrowUpRight, MessageCircle, LifeBuoy, Headset } from "lucide-react";
+import {
+  Brackets,
+  Sparkles,
+  ScrollText,
+  CircleDot,
+  ArrowUpRight,
+  MessageCircle,
+  LifeBuoy,
+  Headset,
+} from "lucide-react";
 import { SubmitTicketDialog } from "./SubmitTicketDialog";
-import { SupportHeader } from "./SupportHeader"; 
- import { Reveal } from "@/src/Components/dashboard/ui";
+import { SupportHeader } from "./SupportHeader";
+import { Reveal } from "@/src/Components/dashboard/ui";
 import { TicketList } from "./TicketList";
 import { SectionLabel } from "./SectionLabel";
 import { FAQSection } from "./FAQSection";
 import { useRouter } from "next/navigation";
 
-
- export function SupportContent() {
+export function SupportContent() {
   const [dialogOpen, setDialogOpen] = useState(false);
-    const router = useRouter();
+  const router = useRouter();
 
   const quickActions = [
     {
@@ -39,15 +47,16 @@ import { useRouter } from "next/navigation";
       sub: "Direct help from the dev team",
       icon: Headset,
       onClick: () => {
-        router.push("https://api.whatsapp.com/send/?phone=916377047189&text&type=phone_number&app_absent=0");
+        router.push(
+          "https://api.whatsapp.com/send/?phone=916377047189&text&type=phone_number&app_absent=0"
+        );
       },
       hint: "→",
     },
   ];
 
-
-const INK = "#FFFBF4";
-const ACCENT = "#4ADE80";
+  const INK = "#FFFBF4";
+  const ACCENT = "#4ADE80";
 
   const trigger = (fn: (open: (v: boolean) => void) => void) =>
     fn(setDialogOpen);
@@ -130,7 +139,6 @@ const ACCENT = "#4ADE80";
           </div>
         </Reveal>
 
-      
         <Reveal delay={0.08}>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {quickActions.map((action, i) => {
@@ -148,7 +156,6 @@ const ACCENT = "#4ADE80";
                       background: "rgba(255,251,244,0.02)",
                     }}
                   >
-              
                     <span
                       aria-hidden
                       className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -204,7 +211,6 @@ const ACCENT = "#4ADE80";
           </div>
         </Reveal>
 
-      
         <Reveal delay={0.14}>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
             {/* tickets */}
@@ -245,7 +251,6 @@ const ACCENT = "#4ADE80";
           </div>
         </Reveal>
 
-      
         <Reveal delay={0.2}>
           <div
             className="flex flex-col items-center justify-between gap-3 rounded-2xl border px-5 py-4 text-xs sm:flex-row"
@@ -258,10 +263,7 @@ const ACCENT = "#4ADE80";
             <span className="flex items-center gap-2">
               <Sparkles className="size-3.5" style={{ color: ACCENT }} />
               Average first reply&nbsp;
-              <span
-                className="font-mono font-semibold"
-                style={{ color: INK }}
-              >
+              <span className="font-mono font-semibold" style={{ color: INK }}>
                 under 6h
               </span>
             </span>

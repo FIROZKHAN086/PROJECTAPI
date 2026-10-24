@@ -3,18 +3,34 @@ import { ImageUploadSection } from "./ImageEdiSection";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Loader2, Save, Trash2, FileText, Info, Tag, Star, Globe, GitBranch, Settings2 } from "lucide-react";
+import {
+  Loader2,
+  Save,
+  Trash2,
+  FileText,
+  Info,
+  Tag,
+  Star,
+  Globe,
+  GitBranch,
+  Settings2,
+} from "lucide-react";
 import { pulseAnimation, item } from "../../lib/variants";
 import { CustomFieldsDrawer } from "../CustomFieldsDrawer";
 import { glassInput } from "../data";
 import { TechCombobox } from "../AddNew/TechCombobox";
 import { Separator } from "@/components/ui/separator";
 
-
- export const EditForm = ({
+export const EditForm = ({
   selectedProject,
   title,
   setTitle,
@@ -125,11 +141,7 @@ import { Separator } from "@/components/ui/separator";
         </motion.div>
 
         <motion.div variants={item}>
-          <TechCombobox
-            tech={tech}
-            setTech={setTech}
-            isPending={isUpdating}
-          />
+          <TechCombobox tech={tech} setTech={setTech} isPending={isUpdating} />
         </motion.div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -256,7 +268,10 @@ import { Separator } from "@/components/ui/separator";
 
         <Separator className="bg-white/10" />
 
-        <motion.div variants={item} className="flex flex-wrap items-center gap-3">
+        <motion.div
+          variants={item}
+          className="flex flex-wrap items-center gap-3"
+        >
           <motion.button
             type="button"
             onClick={handleSave}

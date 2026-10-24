@@ -14,14 +14,14 @@ export default function HeroSection() {
       className="relative min-h-screen overflow-hidden bg-[#0A0A0A] text-[#FFFBF4]"
     >
       <HeroBackground />
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1140px] flex-col items-center justify-center px-6 py-24 text-center sm:py-28">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-285 flex-col items-center justify-center px-6 py-24 text-center sm:py-28">
         <HeroBadge />
         <HeroTitle />
         <HeroSubtitle />
         <HeroCTA />
         <HeroStats />
         <HeroVisual />
-      <HeroScrollHint />
+        <HeroScrollHint />
       </div>
     </section>
   );

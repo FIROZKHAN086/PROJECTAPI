@@ -31,8 +31,7 @@ export default function ProblemHeader() {
       >
         Your portfolio shouldn&apos;t
         <br />
-        be this much{" "}
-        <span className="text-[#FFFBF4]/50">work.</span>
+        be this much <span className="text-[#FFFBF4]/50">work.</span>
       </motion.h2>
 
       <motion.p

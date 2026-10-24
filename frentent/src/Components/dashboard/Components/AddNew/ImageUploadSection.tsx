@@ -7,15 +7,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { ImageIcon } from "lucide-react";
 
-import {
-  Check,
-  Upload,
-  ImagePlus,
-  Trash2,
-  RefreshCw,
-} from "lucide-react";
-
-
+import { Check, Upload, ImagePlus, Trash2, RefreshCw } from "lucide-react";
 
 const letterVariants = {
   hidden: { opacity: 0, y: 6 },
@@ -25,7 +17,6 @@ const letterVariants = {
     transition: { delay: 0.02 * i, duration: 0.3, ease: "easeOut" as const },
   }),
 };
-
 
 function AnimatedLabel({ text }: { text: string }) {
   return (
@@ -48,7 +39,6 @@ function AnimatedLabel({ text }: { text: string }) {
     </span>
   );
 }
-
 
 function TypewriterText({ text }: { text: string }) {
   const [displayed, setDisplayed] = useState("");
@@ -150,7 +140,7 @@ export const ImageUploadSection = ({
     <motion.div variants={itemVariants} className="space-y-3 sm:space-y-4">
       <div className="flex flex-wrap items-center gap-2">
         <ImageIcon className="size-4 shrink-0 text-[#FF8A4C]" />
-        <Label >
+        <Label>
           <AnimatedLabel text="Project image" />
         </Label>
         <AnimatePresence>
@@ -198,7 +188,6 @@ export const ImageUploadSection = ({
               />
               <div className="absolute inset-0 bg-linear-to-t from-[#0B0B10] via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-         
               <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-linear-to-t from-[#0B0B10]/90 to-transparent px-3 py-2 sm:translate-y-full sm:opacity-0 sm:transition-all sm:duration-300 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
                 <TypewriterText
                   text={`${imageFile.name} · ${formatBytes(imageFile.size)}`}
@@ -229,7 +218,6 @@ export const ImageUploadSection = ({
               </div>
             </div>
 
-            
             <div className="mt-2 truncate sm:hidden">
               <TypewriterText
                 text={`${imageFile.name} · ${formatBytes(imageFile.size)}`}

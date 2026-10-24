@@ -58,7 +58,10 @@ const solutionSteps = [
 
 export default function ProblemSolutionPage() {
   const stepLineRef = useRef(null);
-  const stepLineInView = useInView(stepLineRef, { once: true, margin: "-60px" });
+  const stepLineInView = useInView(stepLineRef, {
+    once: true,
+    margin: "-60px",
+  });
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] font-sans antialiased text-[#FFFBF4]">
@@ -77,7 +80,10 @@ export default function ProblemSolutionPage() {
               >
                 Your portfolio shouldn&apos;t be this much work.
               </h2>
-              <LineDraw className="mt-2 h-px bg-linear-to-r from-[#7a3b3b]/60 to-transparent w-32" delay={0.4} />
+              <LineDraw
+                className="mt-2 h-px bg-linear-to-r from-[#7a3b3b]/60 to-transparent w-32"
+                delay={0.4}
+              />
             </div>
           </ScrollReveal>
 
@@ -122,24 +128,40 @@ export default function ProblemSolutionPage() {
                 className="max-w-[860px] text-4xl font-bold leading-[1.1] tracking-tight text-[#FFFBF4] md:text-5xl"
                 style={{ fontFamily: "'Space Grotesk', sans-serif" }}
               >
-                One dashboard. One database. One API. Unlimited portfolios Projects.
+                One dashboard. One database. One API. Unlimited portfolios
+                Projects.
               </h2>
             </ScrollReveal>
-            <LineDraw className="mt-3 h-px bg-gradient-to-r from-[#4ADE80]/40 via-[#4ADE80]/20 to-transparent w-48" delay={0.3} />
+            <LineDraw
+              className="mt-3 h-px bg-gradient-to-r from-[#4ADE80]/40 via-[#4ADE80]/20 to-transparent w-48"
+              delay={0.3}
+            />
           </div>
 
           {/* Steps */}
-          <div ref={stepLineRef} className="relative grid grid-cols-1 gap-6 pt-4 md:grid-cols-3">
+          <div
+            ref={stepLineRef}
+            className="relative grid grid-cols-1 gap-6 pt-4 md:grid-cols-3"
+          >
             {/* Animated dashed line connector */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={stepLineInView ? { scaleX: 1 } : { scaleX: 0 }}
-              transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              transition={{
+                duration: 1.2,
+                delay: 0.3,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
               className="absolute left-[16.5%] right-[16.5%] top-[30px] hidden border-t border-white/10 border-dashed md:block origin-left"
             />
 
             {solutionSteps.map((step, index) => (
-              <ScrollReveal key={step.title} direction="up" delay={0.2 + index * 0.15} distance={30}>
+              <ScrollReveal
+                key={step.title}
+                direction="up"
+                delay={0.2 + index * 0.15}
+                distance={30}
+              >
                 <motion.div
                   whileHover={{ y: -3 }}
                   transition={{ duration: 0.2 }}
