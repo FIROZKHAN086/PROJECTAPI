@@ -8,7 +8,6 @@ import { StaggerGrid, ScrollReveal } from "@/src/lib/animations";
 
 import PricingHeader from "./components/PricingHeader";
 import PersonaCard from "./components/PersonaCard";
-import PricingCard from "./components/PricingCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,50 +37,7 @@ const personas = [
   },
 ];
 
-const pricingPlans = [
-  {
-    name: "Starter",
-    price: "$0",
-    description: "Perfect for students and early explorers.",
-    featured: false,
-    features: [
-      "1 public portfolio",
-      "10 project slots",
-      "Basic analytics",
-      "Community support",
-      "standard-subdomain.com",
-    ],
-  },
-  {
-    name: "Pro",
-    price: "$19",
-    description: "Everything you need for a professional presence.",
-    featured: true,
-    badge: "Recommended",
-    features: [
-      "Unlimited portfolios",
-      "Unlimited projects",
-      "Custom domain support",
-      "Advanced SEO tools",
-      "Priority email support",
-      "Remove branding",
-    ],
-  },
-  {
-    name: "Enterprise",
-    price: "Custom",
-    description: "Scaling tools for agencies and large teams.",
-    featured: false,
-    features: [
-      "Everything in Pro",
-      "Team collaboration",
-      "White-label options",
-      "API access",
-      "Dedicated account manager",
-      "SSO & Security",
-    ],
-  },
-];
+
 
 export default function SocialProofPricingSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -120,7 +76,7 @@ export default function SocialProofPricingSection() {
       ref={sectionRef}
       className="relative overflow-hidden bg-[#0A0A0A] py-24 sm:py-32"
     >
-      <main className="relative z-10 mx-auto max-w-[1140px] px-6">
+      <main className="relative z-10 mx-auto max-w-285 px-6">
         <div className="flex flex-col gap-24">
           {/* Header & Personas */}
           <div className="flex flex-col gap-12">
@@ -156,7 +112,7 @@ export default function SocialProofPricingSection() {
       </main>
 
       {/* Bottom decorative line */}
-      <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      <div className="absolute bottom-0 left-0 h-px w-full bg-linear-to-r from-transparent via-white/5 to-transparent" />
     </section>
   );
 }

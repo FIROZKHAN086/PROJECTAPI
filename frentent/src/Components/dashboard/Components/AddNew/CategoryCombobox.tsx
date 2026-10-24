@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import {
   Popover,
@@ -27,6 +27,7 @@ export const CategoryCombobox = ({
   isPending: boolean;
 }) => {
   const [open, setOpen] = useState(false);
+  const listId = useId();
 
   const current = categoryOptions.find((c) => c.value === category);
   const CurrentIcon = current?.icon;
@@ -43,10 +44,11 @@ export const CategoryCombobox = ({
           <button
             type="button"
             role="combobox"
+            aria-controls={listId}
             aria-expanded={open}
             disabled={isPending}
             className={cn(
-              "flex h-10 w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 text-[#FAFAFA] transition-colors hover:border-white/25 disabled:pointer-events-none disabled:opacity-50"
+              "flex h-10 w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/4 px-4 text-[#FAFAFA] transition-colors hover:border-white/25 disabled:pointer-events-none disabled:opacity-50"
             )}
           />
         }
@@ -80,7 +82,7 @@ export const CategoryCombobox = ({
             className="text-[#FAFAFA] placeholder:text-[#6B6B6B]"
           />
 
-          <CommandList className="max-h-[280px] overflow-y-auto">
+          <CommandList id={listId} className="max-h-70 overflow-y-auto">
             <CommandEmpty className="py-6 text-center text-xs text-[#6B6B6B]">
               No category found.
             </CommandEmpty>
@@ -93,7 +95,7 @@ export const CategoryCombobox = ({
                     key={option.value}
                     value={option.label}
                     onSelect={() => handleSelect(option.value)}
-                    className="cursor-pointer text-[#D8CFBC] data-[selected=true]:bg-white/[0.06] data-[selected=true]:text-[#FAFAFA]"
+                    className="cursor-pointer text-[#D8CFBC] data-[selected=true]:bg-white/6 data-[selected=true]:text-[#FAFAFA]"
                   >
                     <Check
                       className={cn(

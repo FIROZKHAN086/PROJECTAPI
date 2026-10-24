@@ -1,9 +1,25 @@
+# Node.js and dependencies
 node_modules
-dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
 .env
-.git
-.gitignore
-*.md
-.prettierrc
-.prettierignore
-.vscode
+.env.local
+.env.*.local
+
+# Build output
+dist
+build
+
+# Prisma generated artifacts
+/src/generated/prisma
+/generated/prisma
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

@@ -8,6 +8,10 @@
     "dev": "nodemon --exec tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "docker:build": "docker build -t projectapi-backend .",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "keywords": [],

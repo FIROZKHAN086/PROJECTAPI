@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   LifeBuoy,
   ArrowRight,
@@ -10,11 +9,6 @@ import {
   MessageCircle,
   Shield,
 } from "lucide-react";
-
-const floatAnimation = {
-  y: [0, -6, 0],
-  transition: { duration: 3, repeat: Infinity, ease: "easeInOut" as const },
-};
 
 export function SupportHeader({
   onCreateClick,

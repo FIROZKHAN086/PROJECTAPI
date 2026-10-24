@@ -1,42 +1,38 @@
-services:
+version: "3.9"
 
+services:
+  # ========================================================
+  # Backend API Service
+  # ========================================================
   backend:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend-ProjectApi
-    image: projectapibackend
-    restart: unless-stopped 
-    
-    env_file:
-      - .env
-    ports:
-      - "5000:5000"
-    environment:
-      - REDIS_URL=redis://redis:6379
-      - NODE_ENV=production
-    depends_on:
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:5000/"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-
-  redis:
-    image: redis:7-alpine
+    container_name: projectapi_backend
     restart: unless-stopped
     ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
+      - "${PORT:-5000}:5000"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=5000
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - IMAGEKIT_PUBLIC_KEY=${IMAGEKIT_PUBLIC_KEY}
+      - IMAGEKIT_PRIVATE_KEY=${IMAGEKIT_PRIVATE_KEY}
+      - IMAGEKIT_URL_ENDPOINT=${IMAGEKIT_URL_ENDPOINT}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - APP_LINK=${APP_LINK}
+    env_file:
+      - .env
+    networks:
+      - app_network
 
-volumes:
-  redis_data:
+# ========================================================
+# Networks Definition
+# ========================================================
+networks:
+  app_network:
+    driver: bridge

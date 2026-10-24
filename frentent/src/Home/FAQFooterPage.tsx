@@ -34,20 +34,7 @@ const faqs = [
   },
 ];
 
-const footerColumns = [
-  {
-    title: "Product",
-    links: ["Overview", "Pricing", "API Docs", "Changelog"],
-  },
-  {
-    title: "Developers",
-    links: ["Quickstart", "SDKs", "Examples", "Status"],
-  },
-  {
-    title: "Company",
-    links: ["About", "Blog", "Careers", "Contact"],
-  },
-];
+
 
 const typePhrases = [
   "one API",
@@ -96,9 +83,9 @@ export default function FAQFooterPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] font-sans text-[#FFFBF4]">
-      <main className="mx-auto flex w-full max-w-[1200px] flex-col px-6 py-16">
+      <main className="mx-auto flex w-full max-w-300 flex-col px-6 py-16">
         {/* ============ FAQ ============ */}
-        <section className="mx-auto flex w-full max-w-[720px] flex-col items-center">
+        <section className="mx-auto flex w-full max-w-180 flex-col items-center">
           <ScrollReveal direction="up">
             <h2
               className="text-center text-4xl font-bold tracking-tight text-[#FFFBF4] md:text-5xl"
@@ -147,7 +134,7 @@ export default function FAQFooterPage() {
                             initial={{ y: -8, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.3, delay: 0.1 }}
-                            className="max-w-[620px] text-[15px] leading-relaxed text-[#D8CFBC]"
+                            className="max-w-155 text-[15px] leading-relaxed text-[#D8CFBC]"
                           >
                             {faq.answer}
                           </motion.p>

@@ -5,7 +5,7 @@ node_modules
 /generated/prisma
 
 /generated/prisma
-
+.claude 
 
 TodayTaks.md 
 devboot.log 

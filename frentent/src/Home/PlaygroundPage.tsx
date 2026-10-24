@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Brackets,
@@ -22,7 +22,6 @@ import {
   StaggerGrid,
   StaggerItem,
   CharReveal,
-  AnimatedCounter,
 } from "@/src/lib/animations";
 
 const typePhrases = [
@@ -163,7 +162,7 @@ export default function PlaygroundPage() {
           }}
         />
 
-        <div className="relative mx-auto w-full max-w-[1200px] px-6">
+        <div className="relative mx-auto w-full max-w-300 px-6">
           {/* ---- Typewriter hero ---- */}
           <ScrollReveal className="mb-16 max-w-3xl">
             <div className="flex flex-col gap-5">
@@ -175,13 +174,13 @@ export default function PlaygroundPage() {
                 Playground
               </motion.div>
 
-              <div className="flex min-h-[3rem] items-center gap-2 text-3xl font-semibold tracking-tight text-[#FFFBF4] md:text-5xl">
+              <div className="flex min-h-12 items-center gap-2 text-3xl font-semibold tracking-tight text-[#FFFBF4] md:text-5xl">
                 <span>
                   {display}
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ repeat: Infinity, duration: 0.8 }}
-                    className="ml-0.5 inline-block h-6 w-[3px] translate-y-0.5 bg-[#4ADE80] md:h-8"
+                    className="ml-0.5 inline-block h-6 w-0.75 translate-y-0.5 bg-[#4ADE80] md:h-8"
                   />
                 </span>
               </div>
@@ -212,7 +211,7 @@ export default function PlaygroundPage() {
               className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0F0F0F]"
             >
               {/* window chrome */}
-              <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-5 py-3.5">
+              <div className="flex items-center justify-between border-b border-white/10 bg-white/3 px-5 py-3.5">
                 <div className="flex items-center gap-2">
                   <motion.span
                     animate={{
@@ -273,13 +272,13 @@ export default function PlaygroundPage() {
                   <motion.span
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
-                    className="inline-block h-4 w-[2px] bg-[#4ADE80]"
+                    className="inline-block h-4 w-0.5 bg-[#4ADE80]"
                   />
                 </div>
               </div>
 
               {/* status footer */}
-              <div className="flex items-center justify-between border-t border-white/10 bg-white/[0.02] px-5 py-3 text-xs text-[#D8CFBC]">
+              <div className="flex items-center justify-between border-t border-white/10 bg-white/2 px-5 py-3 text-xs text-[#D8CFBC]">
                 <span className="flex items-center gap-2">
                   <span className="size-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
                   Live playground active
@@ -312,7 +311,7 @@ export default function PlaygroundPage() {
                         y: -6,
                         borderColor: "rgba(74,222,128,0.4)",
                       }}
-                      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors"
+                      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/3 p-6 transition-colors"
                     >
                       {/* hover glow */}
                       <motion.div
@@ -359,7 +358,7 @@ export default function PlaygroundPage() {
               return (
                 <ScrollReveal key={feature.title} delay={0.08 * i}>
                   <div className="flex items-start gap-4">
-                    <div className="flex size-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-[#4ADE80]">
+                    <div className="flex size-12 items-center justify-center rounded-xl border border-white/10 bg-white/4 text-[#4ADE80]">
                       <Icon className="size-5" />
                     </div>
                     <div>
@@ -378,9 +377,9 @@ export default function PlaygroundPage() {
 
           {/* ---- CTA ---- */}
           <ScrollReveal delay={0.1}>
-            <div className="mt-24 relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#121212] to-[#0A0A0A] p-10 text-center md:p-14">
+            <div className="mt-24 relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-[#121212] to-[#0A0A0A] p-10 text-center md:p-14">
               <motion.div
-                className="pointer-events-none absolute -top-20 left-1/2 h-40 w-[560px] -translate-x-1/2 rounded-full opacity-60 blur-3xl"
+                className="pointer-events-none absolute -top-20 left-1/2 h-40 w-140 -translate-x-1/2 rounded-full opacity-60 blur-3xl"
                 animate={{ opacity: [0.4, 0.7, 0.4] }}
                 transition={{ repeat: Infinity, duration: 4 }}
                 style={{

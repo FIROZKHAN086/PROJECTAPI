@@ -153,7 +153,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     res.cookie("token", token, {
       ...getCookieOptions(),
-      maxAge: 30 * 60 * 1000, // 30 minutes
+      maxAge:  7 * 24 * 60 * 1000, // 7 days
     });
 
     return res.status(200).json({
@@ -320,7 +320,7 @@ export const VerifyOtp = async (req: Request, res: Response) => {
 
     res.cookie("token", token, {
       ...getCookieOptions(),
-      maxAge: 30 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 1000, // * 7 days
     });
 
     res.clearCookie("otp_verification", getCookieOptions());

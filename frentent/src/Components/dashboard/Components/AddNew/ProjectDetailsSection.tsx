@@ -15,7 +15,6 @@ import {
   Info,
   ArrowUpRight,
   Check,
-  Link2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { glassInput } from "../data";
@@ -121,14 +120,14 @@ function useFocusGlow<T extends HTMLDivElement>(color: string) {
 function SectionHeader({ label, count }: { label: string; count?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
-      <span className="h-px flex-1 bg-white/[0.06]" />
+      <span className="h-px flex-1 bg-white/6" />
       <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9A96A6]">
         {label}
       </span>
       {count && (
         <span className="font-mono text-[10px] text-[#6B6B6B]">{count}</span>
       )}
-      <span className="h-px w-3 bg-white/[0.06]" />
+      <span className="h-px w-3 bg-white/6" />
     </div>
   );
 }
@@ -147,10 +146,10 @@ function FieldShell({
   children: ReactNode;
 }) {
   return (
-    <div className="group/field relative rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]">
+    <div className="group/field relative rounded-xl border border-white/6 bg-white/2 p-4 transition-colors hover:border-white/12">
       <span
         aria-hidden
-        className="absolute top-4 bottom-4 left-0 w-[2px] rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-[3px]"
+        className="absolute top-4 bottom-4 left-0 w-0.5 rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-0.75"
         style={{
           background: `linear-gradient(180deg, ${accent}, transparent)`,
           opacity: 0.75,
@@ -177,23 +176,7 @@ function FieldShell({
   );
 }
 
-function DomainChip({ url }: { url: string }) {
-  if (!url.trim()) return null;
-  let host: string;
 
-  try {
-    host = new URL(url.startsWith("http") ? url : `https://${url}`).hostname;
-  } catch {
-    return null;
-  }
-
-  return (
-    <Badge className="gap-1 border border-[#7FBF97]/25 bg-[#7FBF97]/10 text-[9px] font-normal text-[#7FBF97]">
-      <Link2 className="size-2.5" />
-      {host}
-    </Badge>
-  );
-}
 
 function SetChip({ show }: { show: boolean }) {
   if (!show) return null;
@@ -249,7 +232,7 @@ export const ProjectDetailsSection = ({
 
   return (
     <motion.div variants={itemVariants} className="space-y-5">
-      <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+      <div className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/2 px-4 py-3">
         <span className="flex size-8 items-center justify-center rounded-lg border border-[#FF8A4C]/25 bg-[#FF8A4C]/10">
           <FileText className="size-3.5 text-[#FF8A4C]" />
         </span>

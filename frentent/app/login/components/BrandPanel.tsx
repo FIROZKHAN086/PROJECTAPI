@@ -66,7 +66,7 @@ export default function BrandPanel({ isSignUp }: { isSignUp: boolean }) {
               transition={{ delay: 0.6 + index * 0.1 }}
               className="flex items-center gap-2 p-3 bg-[#141414] border border-white/10 rounded-lg hover:border-white/20 transition-colors"
             >
-              <Icon className="size-4 text-[#4ADE80] flex-shrink-0" />
+              <Icon className="size-4 text-[#4ADE80] shrink-0" />
               <span className="text-sm text-[#D8CFBC]">{feature.text}</span>
             </motion.div>
           );
@@ -83,7 +83,7 @@ export default function BrandPanel({ isSignUp }: { isSignUp: boolean }) {
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="size-8 rounded-full bg-gradient-to-br from-[#D8CFBC] to-[#8A8578] border-2 border-[#0A0A0A] flex items-center justify-center"
+              className="size-8 rounded-full bg-linear-to-br from-[#D8CFBC] to-[#8A8578] border-2 border-[#0A0A0A] flex items-center justify-center"
             >
               <span className="text-[10px] font-medium text-[#0A0A0A]">
                 {String.fromCharCode(65 + i)}
