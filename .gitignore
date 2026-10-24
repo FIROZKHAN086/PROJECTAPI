@@ -6,7 +6,12 @@ node_modules
 
 /generated/prisma
 
+/dist 
+.claude
+
+
 <<<<<<< HEAD
+
 devboot.log
 =======
 
