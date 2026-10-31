@@ -6,6 +6,7 @@ node_modules
 
 /generated/prisma
 .claude
+.agents
 
 TodayTaks.md
 devboot.log
