@@ -1,4 +1,4 @@
-import { Badge, Check, Pencil, Sparkles } from "lucide-react";
+import { Badge, Check, Pencil, Sparkles } from "@/src/Components/DynamicIcons";
 import { ImageUploadSection } from "./ImageEdiSection";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

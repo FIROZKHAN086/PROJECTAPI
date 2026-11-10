@@ -2,7 +2,6 @@ import { withSentryConfig } from "@sentry/nextjs/config";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   reactCompiler: true,
   async rewrites() {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://projectapi-backend.duckdns.org";
