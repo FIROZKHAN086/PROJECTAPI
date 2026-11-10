@@ -1,27 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppSelector } from "@/src/lib/hooks";
 import { useAuth } from "@/src/hooks/useAuth";
 import BrandPanel from "./components/BrandPanel";
 import AuthForm from "./components/AuthForm";
 import MobileFeatures from "./components/MobileFeatures";
 
-interface AuthPageProps {
-  initialAuth?: string;
-  nextPath?: string;
-}
-
 const isSafePath = (value?: string) =>
   !!value && value.startsWith("/") && !value.startsWith("//");
 
-export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
+function AuthPageContent() {
+  const searchParams = useSearchParams();
+  const initialAuth = searchParams.get("auth") ?? undefined;
+  const nextPath = searchParams.get("next") ?? undefined;
   const isSignUp = initialAuth === "signup";
-  const redirectTarget = isSafePath(nextPath)
-    ? (nextPath as string)
-    : "/dashboard";
+  const redirectTarget = isSafePath(nextPath) ? nextPath! : "/dashboard";
   const router = useRouter();
   const { user, isLoading: authLoading } = useAppSelector((s) => s.auth);
   const { otpRequired, pendingEmail } = useAuth();
@@ -196,5 +192,13 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={null}>
+      <AuthPageContent />
+    </Suspense>
   );
 }
