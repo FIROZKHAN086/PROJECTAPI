@@ -12,7 +12,7 @@ import {
   KeyRound,
   ShieldCheck,
   Activity,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { useAppSelector } from "@/src/lib/hooks";
 import { toast } from "@/src/lib/toastSlice";
 import {

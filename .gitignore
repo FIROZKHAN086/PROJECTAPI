@@ -5,7 +5,10 @@ node_modules
 /generated/prisma
 
 /generated/prisma
+.claude
+.agents
 
-
-TodayTaks.md 
-devboot.log 
+TodayTaks.md
+devboot.log
+dist
+/dist

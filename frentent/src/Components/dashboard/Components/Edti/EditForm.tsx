@@ -1,4 +1,4 @@
-import { Badge, Check, Pencil, Sparkles } from "lucide-react";
+import { Badge, Check, Pencil, Sparkles } from "@/src/Components/DynamicIcons";
 import { ImageUploadSection } from "./ImageEdiSection";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +23,7 @@ import {
   Globe,
   GitBranch,
   Settings2,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { pulseAnimation, item } from "../../lib/variants";
 import { CustomFieldsDrawer } from "../CustomFieldsDrawer";
 import { glassInput } from "../data";

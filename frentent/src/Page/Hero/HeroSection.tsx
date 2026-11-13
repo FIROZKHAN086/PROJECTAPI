@@ -18,7 +18,7 @@ export default function HeroSection() {
         <HeroBackground />
         <HeroParticles />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1140px] flex-col items-center justify-center px-6 py-24 text-center sm:py-28">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-285 flex-col items-center justify-center px-6 py-24 text-center sm:py-28">
           <HeroBadge />
           <HeroTitle />
           <HeroSubtitle />

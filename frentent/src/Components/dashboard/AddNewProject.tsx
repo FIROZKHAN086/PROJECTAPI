@@ -16,8 +16,8 @@ import {
   Tag,
   ArrowRight,
   Send,
-} from "lucide-react";
-import { Image as ImageIcon } from "lucide-react";
+} from "@/src/Components/DynamicIcons";
+import { ImageIcon } from "@/src/Components/DynamicIcons";
 import { useCreateProject } from "@/src/hooks/useProjects";
 import { ApiError } from "@/src/lib/api";
 import { toast } from "@/src/lib/toastSlice";

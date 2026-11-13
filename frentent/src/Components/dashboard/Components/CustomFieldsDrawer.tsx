@@ -25,7 +25,7 @@ import {
   Check,
   X,
   Sparkles,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 
 interface CustomFieldsDrawerProps {
   fields: Record<string, string>;

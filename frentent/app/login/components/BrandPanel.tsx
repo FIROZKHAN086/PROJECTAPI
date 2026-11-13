@@ -121,29 +121,11 @@ export default function BrandPanel({ isSignUp }: { isSignUp: boolean }) {
               key={index}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.8 + index * 0.1 }}
-              whileHover={{ y: -4, scale: 1.02 }}
-              className="group relative"
+              transition={{ delay: 0.6 + index * 0.1 }}
+              className="flex items-center gap-2 p-3 bg-[#141414] border border-white/10 rounded-lg hover:border-white/20 transition-colors"
             >
-              {/* Glow effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#4ADE80]/10 to-[#3B82F6]/10 rounded-2xl blur opacity-0 group-hover:opacity-50 transition-opacity" />
-
-              <div className="relative p-5 bg-gradient-to-br from-[#1A1A1A]/80 to-[#0F0F0F]/80 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-white/20 transition-all">
-                <div className="flex items-start gap-4">
-                  <div className="relative">
-                    <Icon className="size-5 text-[#4ADE80]" />
-                    <div className="absolute -inset-2 bg-[#4ADE80]/10 blur rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-[#FFFBF4] mb-1">
-                      {feature.text.split(' ')[0]}
-                    </h3>
-                    <p className="text-xs text-[#D8CFBC]/70 leading-relaxed">
-                      {feature.text.split(' ').slice(1).join(' ')}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <Icon className="size-4 text-[#4ADE80] shrink-0" />
+              <span className="text-sm text-[#D8CFBC]">{feature.text}</span>
             </motion.div>
           );
         })}
@@ -158,25 +140,18 @@ export default function BrandPanel({ isSignUp }: { isSignUp: boolean }) {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* Animated Avatars */}
-            <div className="flex -space-x-3">
-              {[...Array(5)].map((_, i) => (
-                <motion.div
+            <div className="flex -space-x-2">
+              {[...Array(4)].map((_, i) => (
+                <div
                   key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1 + i * 0.1 }}
-                  whileHover={{ y: -3 }}
-                  className="relative size-10 rounded-full bg-gradient-to-br from-[#D8CFBC] to-[#8A8578] border-2 border-[#0A0A0A] flex items-center justify-center shadow-lg"
+                  className="size-8 rounded-full bg-linear-to-br from-[#D8CFBC] to-[#8A8578] border-2 border-[#0A0A0A] flex items-center justify-center"
                 >
-                  <span className="text-xs font-bold text-[#0A0A0A]">
+                  <span className="text-[10px] font-medium text-[#0A0A0A]">
                     {String.fromCharCode(65 + i)}
                   </span>
-                  <div className="absolute -inset-1 bg-gradient-to-br from-[#4ADE80]/20 to-[#3B82F6]/20 rounded-full blur opacity-0 hover:opacity-100 transition-opacity" />
-                </motion.div>
+                </div>
               ))}
             </div>
-
             <div>
               <p className="text-sm font-medium text-[#FFFBF4]">
                 Join our growing community

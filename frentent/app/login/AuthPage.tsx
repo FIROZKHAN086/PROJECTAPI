@@ -1,28 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppSelector } from "@/src/lib/hooks";
 import { useAuth } from "@/src/hooks/useAuth";
 import BrandPanel from "./components/BrandPanel";
 import AuthForm from "./components/AuthForm";
 import MobileFeatures from "./components/MobileFeatures";
-import HeroParticles from "./components/HeroParticles";
-
-interface AuthPageProps {
-  initialAuth?: string;
-  nextPath?: string;
-}
 
 const isSafePath = (value?: string) =>
   !!value && value.startsWith("/") && !value.startsWith("//");
 
-export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
+function AuthPageContent() {
+  const searchParams = useSearchParams();
+  const initialAuth = searchParams.get("auth") ?? undefined;
+  const nextPath = searchParams.get("next") ?? undefined;
   const isSignUp = initialAuth === "signup";
-  const redirectTarget = isSafePath(nextPath)
-    ? (nextPath as string)
-    : "/dashboard";
+  const redirectTarget = isSafePath(nextPath) ? nextPath! : "/dashboard";
   const router = useRouter();
   const { user, isLoading: authLoading } = useAppSelector((s) => s.auth);
   const { otpRequired, pendingEmail } = useAuth();
@@ -46,20 +41,17 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
     <div
       ref={containerRef}
       suppressHydrationWarning={true}
-      className="min-h-screen bg-gradient-to-br from-[#0A0A0A] via-[#111111] to-[#151515] flex items-center justify-center p-4 relative overflow-hidden"
+      className="min-h-screen bg-linear-to-br from-[#0A0A0A] via-[#111111] to-[#151515] flex items-center justify-center p-4 relative overflow-hidden"
     >
-      {/* Animated Background Particles */}
-      <HeroParticles />
-
       {/* Animated Gradient Background */}
       <motion.div
         className="absolute inset-0 -z-10"
         style={{ y: backgroundY, opacity }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#4ADE80]/10 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[#3B82F6]/10 via-transparent to-transparent" />
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-r from-[#4ADE80]/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-gradient-to-l from-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-[#4ADE80]/10 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,var(--tw-gradient-stops))] from-[#3B82F6]/10 via-transparent to-transparent" />
+        <div className="absolute top-1/4 left-1/4 w-150 h-150 bg-linear-to-r from-[#4ADE80]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-125 h-125 bg-linear-to-l from-[#3B82F6]/5 to-transparent rounded-full blur-3xl" />
       </motion.div>
 
       {/* Animated Grid Pattern */}
@@ -75,7 +67,7 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
         />
       </div>
 
-      <div className="w-full max-w-[1200px] grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center relative z-10">
+      <div className="w-full max-w-300 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center relative z-10">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -88,12 +80,12 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-[460px] mx-auto lg:mx-0 relative"
+          className="w-full max-w-115 mx-auto lg:mx-0 relative"
         >
           {/* Glowing Border Effect */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-[#4ADE80]/30 via-[#3B82F6]/30 to-[#4ADE80]/30 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
+          <div className="absolute -inset-0.5 bg-linear-to-r from-[#4ADE80]/30 via-[#3B82F6]/30 to-[#4ADE80]/30 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
 
-          <div className="relative bg-gradient-to-br from-[#1A1A1A]/95 to-[#0F0F0F]/95 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 lg:p-12 overflow-hidden">
+          <div className="relative bg-linear-to-br from-[#1A1A1A]/95 to-[#0F0F0F]/95 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-10 lg:p-12 overflow-hidden">
             {/* Animated Corner Accents */}
             <div className="absolute top-0 left-0 w-16 h-16 border-t border-l border-[#4ADE80]/30 rounded-tl-3xl" />
             <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-[#3B82F6]/30 rounded-tr-3xl" />
@@ -111,13 +103,13 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
                   repeatType: "reverse",
                   repeatDelay: 2
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#4ADE80]/20 to-[#3B82F6]/20 border border-white/10 rounded-full"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-[#4ADE80]/20 to-[#3B82F6]/20 border border-white/10 rounded-full"
               >
                 <span className="relative flex size-2">
                   <span className="animate-ping absolute inline-flex size-full rounded-full bg-[#4ADE80] opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-[#4ADE80]" />
                 </span>
-                <span className="text-sm font-semibold bg-gradient-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
+                <span className="text-sm font-semibold bg-linear-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
                   ProjectAPI
                 </span>
               </motion.div>
@@ -133,7 +125,7 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
               <h2 className="text-2xl sm:text-3xl font-bold text-[#FFFBF4] font-space-grotesk leading-tight">
                 {otpRequired ? (
                   <>
-                    <span className="bg-gradient-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
                       Verify your email
                     </span>
                     <motion.span
@@ -147,14 +139,14 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
                 ) : isSignUp ? (
                   <>
                     Start your{" "}
-                    <span className="bg-gradient-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
                       journey
                     </span>
                   </>
                 ) : (
                   <>
                     Welcome{" "}
-                    <span className="bg-gradient-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
                       back
                     </span>
                   </>
@@ -195,10 +187,18 @@ export default function AuthPage({ initialAuth, nextPath }: AuthPageProps) {
             transition={{ duration: 2, repeat: Infinity }}
             className="w-4 h-8 border-2 border-white/20 rounded-full flex items-start justify-center p-1"
           >
-            <div className="w-1 h-2 bg-gradient-to-b from-[#4ADE80] to-[#3B82F6] rounded-full" />
+            <div className="w-1 h-2 bg-linear-to-b from-[#4ADE80] to-[#3B82F6] rounded-full" />
           </motion.div>
         </div>
       </motion.div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={null}>
+      <AuthPageContent />
+    </Suspense>
   );
 }

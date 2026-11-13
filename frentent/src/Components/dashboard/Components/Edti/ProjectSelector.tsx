@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Badge, ChevronsUpDown, Code, FolderOpen, Star } from "lucide-react";
+import { Badge, ChevronsUpDown, Code, FolderOpen, Star } from "@/src/Components/DynamicIcons";
 
 import { Label } from "@/components/ui/label";
 import {

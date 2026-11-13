@@ -1,14 +1,4 @@
-import {
-  Cloud,
-  Code,
-  Database,
-  GitBranch,
-  Lock,
-  Monitor,
-  Palette,
-  Server,
-  Smartphone,
-} from "lucide-react";
+import { Cloud, Code, Database, GitBranch, Lock, Monitor, Palette, Server, Smartphone } from "@/src/Components/DynamicIcons";
 
 export const techOptions = [
   "React",

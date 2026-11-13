@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Zap } from "lucide-react";
+import { Pencil, Zap } from "@/src/Components/DynamicIcons";
 import {
   useProjects,
   useUpdateProject,

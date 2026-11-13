@@ -4,7 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
+
   useScroll,
+
+
   useMotionValue,
   useTransform,
 } from "framer-motion";
@@ -83,7 +86,9 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
   useScroll();
+
 
   // Motion values for floating elements
   const mouseX = useMotionValue(0);
@@ -257,7 +262,7 @@ const Navbar = () => {
             : "py-5 bg-transparent border-white/5"
         }`}
       >
-        <div className="max-w-[1140px] mx-auto px-6 flex items-center justify-between relative">
+        <div className="max-w-285 mx-auto px-6 flex items-center justify-between relative">
           {/* Logo Section with Enhanced Animation */}
           <motion.div
             variants={childVariants}
@@ -478,7 +483,7 @@ const Navbar = () => {
                         : user.email.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-[#FFFBF4] max-w-[100px] truncate">
+                  <span className="text-xs font-medium text-[#FFFBF4] max-w-25 truncate">
                     {user.name || user.email.split("@")[0]}
                   </span>
                   <motion.span
@@ -613,7 +618,7 @@ const Navbar = () => {
                   initial="idle"
                   whileHover="hover"
                   whileTap={{ scale: 0.95 }}
-                  className="relative overflow-hidden px-5 py-2 bg-gradient-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] rounded-lg text-sm font-medium transition-all duration-300 group flex items-center gap-1.5 cursor-pointer"
+                  className="relative overflow-hidden px-5 py-2 bg-linear-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] rounded-lg text-sm font-medium transition-all duration-300 group flex items-center gap-1.5 cursor-pointer"
                 >
                   <span className="relative z-10 flex items-center gap-1.5">
                     Get Started
@@ -629,7 +634,7 @@ const Navbar = () => {
                     </motion.span>
                   </span>
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent z-0"
+                    className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent z-0"
                     initial={{ x: "-100%" }}
                     whileHover={{ x: "100%" }}
                     transition={{ duration: 0.8, ease: "easeInOut" as const }}
@@ -656,7 +661,7 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="bg-[#0A0A0A]  border-l border-white/10 p-0 flex flex-col justify-between w-[340px] text-[#FFFBF4] overflow-hidden"
+                className="bg-[#0A0A0A]  border-l border-white/10 p-0 flex flex-col justify-between w-85 text-[#FFFBF4] overflow-hidden"
               >
                 <SheetHeader className="sr-only">
                   <SheetTitle>Mobile Navigation</SheetTitle>
@@ -849,14 +854,14 @@ const Navbar = () => {
                             boxShadow: "0px 0px 30px rgba(74,222,128,0.2)",
                           }}
                           whileTap={{ scale: 0.98 }}
-                          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] text-sm font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer shadow-[0_4px_15px_rgba(255,255,255,0.05)] relative overflow-hidden group"
+                          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-linear-to-r from-[#FBF7F4] to-[#EBE7E4] text-[#0A0A0A] text-sm font-semibold hover:opacity-90 transition-all duration-200 cursor-pointer shadow-[0_4px_15px_rgba(255,255,255,0.05)] relative overflow-hidden group"
                         >
                           <span className="relative z-10 flex items-center gap-2">
                             Get Started
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                           </span>
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent z-0"
+                            className="absolute inset-0 bg-linear-to-r from-transparent via-white/50 to-transparent z-0"
                             initial={{ x: "-100%" }}
                             whileHover={{ x: "100%" }}
                             transition={{

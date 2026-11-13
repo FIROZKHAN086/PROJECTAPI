@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GraduationCap, Briefcase, GitBranch, Building2 } from "lucide-react";
+import {GraduationCap,Briefcase,GitBranch,Building2} from "../../Components/DynamicIcons"
 import { StaggerGrid, ScrollReveal } from "@/src/lib/animations";
 
 import PricingHeader from "./components/PricingHeader";
@@ -36,6 +36,8 @@ const personas = [
       "Manage multiple developer portfolios from a single dashboard.",
   },
 ];
+
+
 
 export default function SocialProofPricingSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -74,7 +76,7 @@ export default function SocialProofPricingSection() {
       ref={sectionRef}
       className="relative overflow-hidden bg-[#0A0A0A] py-24 sm:py-32"
     >
-      <main className="relative z-10 mx-auto max-w-[1140px] px-6">
+      <main className="relative z-10 mx-auto max-w-285 px-6">
         <div className="flex flex-col gap-24">
           {/* Header & Personas */}
           <div className="flex flex-col gap-12">
@@ -110,7 +112,7 @@ export default function SocialProofPricingSection() {
       </main>
 
       {/* Bottom decorative line */}
-      <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      <div className="absolute bottom-0 left-0 h-px w-full bg-linear-to-r from-transparent via-white/5 to-transparent" />
     </section>
   );
 }

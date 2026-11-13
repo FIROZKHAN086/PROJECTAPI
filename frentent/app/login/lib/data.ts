@@ -1,4 +1,4 @@
-import { Shield, Zap, Users, Code } from "lucide-react";
+import { Shield, Zap, Users, Code } from "@/src/Components/DynamicIcons";
 import type { LucideIcon } from "lucide-react";
 
 export interface AuthFeature {

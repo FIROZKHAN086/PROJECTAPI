@@ -1,16 +1,6 @@
 // lib/data.ts
 import type { LucideIcon } from "lucide-react";
-import {
-  AlertTriangle,
-  Code2,
-  FolderOpen,
-  Globe,
-  Pill,
-  Rocket,
-  Sparkles,
-  Terminal,
-  Zap,
-} from "lucide-react";
+import { AlertTriangle, Code2, FolderOpen, Globe, Pill, Rocket, Sparkles, Terminal, Zap } from "@/src/Components/DynamicIcons";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 

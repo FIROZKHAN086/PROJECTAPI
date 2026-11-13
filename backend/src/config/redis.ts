@@ -1,6 +1,7 @@
 import { Redis } from "ioredis";
 
-const redis = new Redis(process.env.REDIS_URL!);
+const cleanRedisUrl = (process.env.REDIS_URL || "").replace(/^["']|["']$/g, "");
+const redis = new Redis(cleanRedisUrl);
 
 redis.on("connect", () => {
   console.log("Redis Connected");

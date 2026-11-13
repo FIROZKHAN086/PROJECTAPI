@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { ImageIcon } from "lucide-react";
 
-import { Check, Upload, ImagePlus, Trash2, RefreshCw } from "lucide-react";
+import { Check, Upload, ImagePlus, Trash2, RefreshCw } from "@/src/Components/DynamicIcons";
 
 const letterVariants = {
   hidden: { opacity: 0, y: 6 },

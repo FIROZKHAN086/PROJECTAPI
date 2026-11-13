@@ -25,7 +25,7 @@ import {
   Plus,
   Eye,
   RefreshCw,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import {
   Reveal,
   Counter,

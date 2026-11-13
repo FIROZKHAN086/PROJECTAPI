@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { Check, X, Code, Code2, Plus, Search, Sparkles } from "lucide-react";
+import { Check, X, Code, Code2, Plus, Search, Sparkles } from "@/src/Components/DynamicIcons";
 
 import { techOptions, glassInput } from "../data";
 

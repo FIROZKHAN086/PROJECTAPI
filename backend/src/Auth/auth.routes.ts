@@ -15,7 +15,7 @@ const router = Router();
 
 router.post("/register", rateLimitMiddleware, registerUser);
 router.post("/login", rateLimitMiddleware, loginUser);
-router.post("/logout", rateLimitMiddleware, logoutUser);
+router.post("/logout", rateLimitMiddleware, authMiddleware, logoutUser);
 router.get("/get-me", authMiddleware, getCurrentUser);
 router.post(
   "/verify-otp",

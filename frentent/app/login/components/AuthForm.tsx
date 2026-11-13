@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, LoaderCircle, ArrowRight, Sparkles, Mail, Lock, User } from "lucide-react";
+import { Eye, EyeOff, LoaderCircle, ArrowRight, Sparkles, Mail, Lock, User } from "@/src/Components/DynamicIcons";
 import {
   useLogin,
   useRegister,
@@ -94,7 +94,11 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
               saveOtpPending(data.user.email);
               dispatch(beginOtpVerification(data.user.email));
               toast.success("Verification code sent! Check your email ✨");
-              router.push("/login?auth=otp");
+              const otpParams = new URLSearchParams({ auth: "otp" });
+              if (redirectTarget !== "/dashboard") {
+                otpParams.set("next", redirectTarget);
+              }
+              router.push(`/login?${otpParams.toString()}`);
               return;
             }
             toast.success("Welcome aboard! 🚀");
@@ -120,6 +124,20 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
             router.push(redirectTarget);
           },
           onError: (err) => {
+            if (err.data?.code === "USER_NOT_VERIFIED") {
+              const email = formData.email.trim();
+              saveOtpPending(email);
+              dispatch(beginOtpVerification(email));
+              toast.info("Verification code sent! Check your email.");
+
+              const otpParams = new URLSearchParams({ auth: "otp" });
+              if (redirectTarget !== "/dashboard") {
+                otpParams.set("next", redirectTarget);
+              }
+              router.push(`/login?${otpParams.toString()}`);
+              return;
+            }
+
             toast.error(err.message || "Login failed. Please check your credentials.");
           },
         }

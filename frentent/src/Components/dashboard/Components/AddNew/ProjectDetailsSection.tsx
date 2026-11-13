@@ -15,7 +15,7 @@ import {
   Info,
   ArrowUpRight,
   Check,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { cn } from "@/lib/utils";
 import { glassInput } from "../data";
 
@@ -25,14 +25,11 @@ const ACCENT = {
   liveDemo: "#7FBF97",
   github: "#A78BFA",
 } as const;
-
 const DESC_MAX = 280;
-
 const seeded = (seed: number) => {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
   return x - Math.floor(x);
 };
-
 const fieldVariants: Variants = {
   hidden: (i: number) => ({
     opacity: 0,
@@ -50,7 +47,6 @@ const fieldVariants: Variants = {
     },
   }),
 };
-
 const letterVariants: Variants = {
   hidden: (i: number) => ({ opacity: 0, y: 5 + seeded(i) * 4 }),
   visible: (i: number) => ({
@@ -59,7 +55,6 @@ const letterVariants: Variants = {
     transition: { delay: 0.015 * i, duration: 0.25, ease: "easeOut" },
   }),
 };
-
 function FieldLabel({ text }: { text: string }) {
   return (
     <span className="inline-flex">
@@ -71,16 +66,14 @@ function FieldLabel({ text }: { text: string }) {
           animate="visible"
           variants={letterVariants}
         >
-          {char === " " ? "\u00A0" : char}
+          {char === " " ? " " : char}
         </motion.span>
       ))}
     </span>
   );
 }
-
 function useFocusGlow<T extends HTMLDivElement>(color: string) {
   const ref = useRef<T>(null);
-
   const onFocus = () => {
     if (!ref.current) return;
     gsap.killTweensOf(ref.current);
@@ -91,7 +84,6 @@ function useFocusGlow<T extends HTMLDivElement>(color: string) {
       ease: "elastic.out(1, 0.55)",
     });
   };
-
   const onBlur = () => {
     if (!ref.current) return;
     gsap.killTweensOf(ref.current);
@@ -102,36 +94,30 @@ function useFocusGlow<T extends HTMLDivElement>(color: string) {
       ease: "power2.out",
     });
   };
-
   const glow = (
     <div
       ref={ref}
       aria-hidden
       className="pointer-events-none absolute -inset-px scale-[0.92] rounded-xl opacity-0"
-      style={{
-        boxShadow: `0 0 0 1px ${color}66, 0 0 22px 3px ${color}33`,
-      }}
+      style={{ boxShadow: `0 0 0 1px ${color}66, 0 0 22px 3px ${color}33` }}
     />
   );
-
   return { onFocus, onBlur, glow };
 }
-
 function SectionHeader({ label, count }: { label: string; count?: string }) {
   return (
     <div className="mb-3 flex items-center gap-3">
-      <span className="h-px flex-1 bg-white/[0.06]" />
+      <span className="h-px flex-1 bg-white/6" />
       <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#9A96A6]">
         {label}
       </span>
       {count && (
         <span className="font-mono text-[10px] text-[#6B6B6B]">{count}</span>
       )}
-      <span className="h-px w-3 bg-white/[0.06]" />
+      <span className="h-px w-3 bg-white/6" />
     </div>
   );
 }
-
 function FieldShell({
   icon,
   accent,
@@ -146,16 +132,15 @@ function FieldShell({
   children: ReactNode;
 }) {
   return (
-    <div className="group/field relative rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/[0.12]">
+    <div className="group/field relative rounded-xl border border-white/6 bg-white/2 p-4 transition-colors hover:border-white/12">
       <span
         aria-hidden
-        className="absolute top-4 bottom-4 left-0 w-[2px] rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-[3px]"
+        className="absolute top-4 bottom-4 left-0 w-0.5 rounded-r-full transition-all duration-300 group-focus-within/field:top-2 group-focus-within/field:bottom-2 group-focus-within/field:w-0.75"
         style={{
           background: `linear-gradient(180deg, ${accent}, transparent)`,
           opacity: 0.75,
         }}
       />
-
       <div className="mb-3 flex items-center gap-2">
         <span
           className="flex size-6 items-center justify-center rounded-md"
@@ -163,19 +148,15 @@ function FieldShell({
         >
           {icon}
         </span>
-
         <Label className="text-sm font-medium text-[#F4F1EA]">
           <FieldLabel text={label} />
         </Label>
-
         {right && <div className="ml-auto">{right}</div>}
       </div>
-
       {children}
     </div>
   );
 }
-
 function SetChip({ show }: { show: boolean }) {
   if (!show) return null;
   return (
@@ -185,7 +166,6 @@ function SetChip({ show }: { show: boolean }) {
     </Badge>
   );
 }
-
 export const ProjectDetailsSection = ({
   title,
   setTitle,
@@ -211,7 +191,6 @@ export const ProjectDetailsSection = ({
   const descriptionGlow = useFocusGlow(ACCENT.description);
   const liveDemoGlow = useFocusGlow(ACCENT.liveDemo);
   const githubGlow = useFocusGlow(ACCENT.github);
-
   const filledCount =
     (title.trim() ? 1 : 0) +
     (description.trim() ? 1 : 0) +
@@ -219,7 +198,6 @@ export const ProjectDetailsSection = ({
     (github.trim() ? 1 : 0);
   const requiredCount = (title.trim() ? 1 : 0) + (description.trim() ? 1 : 0);
   const total = 4;
-
   const descLen = description.length;
   const descTone =
     descLen > DESC_MAX
@@ -227,14 +205,12 @@ export const ProjectDetailsSection = ({
       : descLen > DESC_MAX * 0.8
         ? "text-[#FACC15]"
         : "text-[#6B6B6B]";
-
   return (
     <motion.div variants={itemVariants} className="space-y-5">
-      <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+      <div className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/2 px-4 py-3">
         <span className="flex size-8 items-center justify-center rounded-lg border border-[#FF8A4C]/25 bg-[#FF8A4C]/10">
           <FileText className="size-3.5 text-[#FF8A4C]" />
         </span>
-
         <div className="flex-1">
           <p className="text-[13px] font-semibold text-[#F4F1EA]">
             Project details
@@ -243,7 +219,6 @@ export const ProjectDetailsSection = ({
             What it is, and where to find it
           </p>
         </div>
-
         <div className="flex items-center gap-1.5">
           {Array.from({ length: total }).map((_, i) => (
             <span
@@ -260,15 +235,12 @@ export const ProjectDetailsSection = ({
             />
           ))}
         </div>
-
         <span className="ml-1 font-mono text-[10px] text-[#6B6B6B]">
           {filledCount}/{total}
         </span>
       </div>
-
       <div>
         <SectionHeader label="Identity" count="required" />
-
         <div className="space-y-3">
           <motion.div
             custom={0}
@@ -280,11 +252,7 @@ export const ProjectDetailsSection = ({
               icon={<FileText className="size-3" />}
               accent={ACCENT.title}
               label="Project title"
-              right={
-                <div className="flex items-center gap-1.5">
-                  <SetChip show={!!title.trim()} />
-                </div>
-              }
+              right={<SetChip show={!!title.trim()} />}
             >
               <div className="relative">
                 {titleGlow.glow}
@@ -300,7 +268,6 @@ export const ProjectDetailsSection = ({
               </div>
             </FieldShell>
           </motion.div>
-
           <motion.div
             custom={1}
             initial="hidden"
@@ -338,10 +305,8 @@ export const ProjectDetailsSection = ({
           </motion.div>
         </div>
       </div>
-
       <div>
         <SectionHeader label="Links" count="optional" />
-
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           <motion.div
             custom={2}
@@ -367,7 +332,6 @@ export const ProjectDetailsSection = ({
                   className={cn(glassInput, "relative z-10")}
                 />
               </div>
-
               {liveDemo.trim() && (
                 <a
                   href={
@@ -385,7 +349,6 @@ export const ProjectDetailsSection = ({
               )}
             </FieldShell>
           </motion.div>
-
           <motion.div
             custom={3}
             initial="hidden"
@@ -410,7 +373,6 @@ export const ProjectDetailsSection = ({
                   className={cn(glassInput, "relative z-10")}
                 />
               </div>
-
               {github.trim() && (
                 <a
                   href={

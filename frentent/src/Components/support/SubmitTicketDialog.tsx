@@ -102,7 +102,7 @@ export function SubmitTicketDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto bg-[#141414] border-white/10 text-[#FFFBF4]">
+      <DialogContent className="sm:max-w-130 max-h-[90vh] overflow-y-auto bg-[#141414] border-white/10 text-[#FFFBF4]">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2 text-[#FFFBF4]">
             <MessageCircle className="w-5 h-5 text-[#4ADE80]" />

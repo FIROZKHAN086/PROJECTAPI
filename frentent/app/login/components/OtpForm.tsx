@@ -91,8 +91,11 @@ export default function OtpForm({ redirectTarget, onBack }: OtpFormProps) {
             onBack();
             return;
           }
-          if (err.code === "OTP_EXPIRED") {
-            triggerError("Code expired! Please request a new one below.");
+          if (
+            err.code === "OTP_EXPIRED" ||
+            err.code === "INVALID_OR_EXPIRED_OTP"
+          ) {
+            triggerError("Code expired or invalid! Please request a new one below.");
             return;
           }
           triggerError(err.message || "Invalid code. Please try again.");

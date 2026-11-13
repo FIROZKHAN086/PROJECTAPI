@@ -6,6 +6,8 @@ import Providers from "@/src/Components/Providers";
 import Navbar from "@/src/Components/Navbar";
 import Footer from "@/src/Components/Footer";
 import ProtectedRoute from "@/src/Components/ProtectedRoute";
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const unbounded = Unbounded({
   subsets: ["latin"],
@@ -79,7 +81,8 @@ export default function RootLayout({
       <body
         suppressHydrationWarning={true}
         className="min-h-full flex flex-col bg-[#11120D] text-[#FFFBF4]"
-      >
+      ><Analytics />
+      <SpeedInsights/>
         <Providers>
           <SmoothScrollProvider>
             <Navbar />

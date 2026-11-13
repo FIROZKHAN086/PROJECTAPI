@@ -11,7 +11,7 @@ import {
   Trash2,
   RefreshCw,
   Image as ImageIcon,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { floatAnimation } from "../../AddNewProject";
 
 export const ImageUploadSection = ({
