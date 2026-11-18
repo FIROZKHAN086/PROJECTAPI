@@ -366,13 +366,13 @@ function AuthPageContent() {
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", bounce: 0.4 }}
-                className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#4ADE80]/20 to-[#FFFBF4]/20 border border-white/15 rounded-full backdrop-blur-sm"
+                className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-[#4ADE80]/20 to-[#3B82F6]/20 border border-white/15 rounded-full backdrop-blur-sm"
               >
                 <span className="relative flex size-2.5">
                   <span className="animate-ping absolute inline-flex size-full rounded-full bg-[#4ADE80] opacity-75" />
                   <span className="relative inline-flex size-2.5 rounded-full bg-[#4ADE80]" />
                 </span>
-                <span className="text-base font-bold bg-gradient-to-r from-[#4ADE80] to-[#FFFBF4] bg-clip-text text-transparent">
+                <span className="text-base font-bold bg-gradient-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent">
                   ProjectAPI
                 </span>
               </motion.div>
@@ -389,7 +389,7 @@ function AuthPageContent() {
                 {otpRequired ? (
                   <>
                     <motion.span
-                      className="bg-gradient-to-r from-[#4ADE80] to-[#FFFBF4] bg-clip-text text-transparent"
+                      className="bg-gradient-to-r from-[#4ADE80] to-[#3B82F6] bg-clip-text text-transparent"
                       animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                       transition={{ duration: 6, repeat: Infinity }}
                       style={{ backgroundSize: "200% 200%" }}
@@ -401,7 +401,7 @@ function AuthPageContent() {
                   <>
                     Start your{" "}
                     <motion.span
-                      className="bg-gradient-to-r from-[#4ADE80] to-[#FFFBF4] bg-clip-text text-transparent"
+                      className="bg-gradient-to-r from-[#4ADE80] via-[#3B82F6] to-[#4ADE80] bg-clip-text text-transparent"
                       animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                       transition={{ duration: 6, repeat: Infinity }}
                       style={{ backgroundSize: "200% 200%" }}
@@ -413,7 +413,7 @@ function AuthPageContent() {
                   <>
                     Welcome{" "}
                     <motion.span
-                      className="bg-gradient-to-r from-[#4ADE80] to-[#FFFBF4] bg-clip-text text-transparent"
+                      className="bg-gradient-to-r from-[#4ADE80] via-[#3B82F6] to-[#4ADE80] bg-clip-text text-transparent"
                       animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                       transition={{ duration: 6, repeat: Infinity }}
                       style={{ backgroundSize: "200% 200%" }}

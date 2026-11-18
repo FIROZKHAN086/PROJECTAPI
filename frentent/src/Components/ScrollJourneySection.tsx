@@ -547,7 +547,7 @@ export default function ScrollJourneySection() {
                   <pre className="rounded-xl border border-[#FFFBF4]/10 bg-black/60 p-3.5 font-mono text-[11px] sm:text-xs leading-relaxed text-[#FFFBF4]/90 overflow-x-auto">
                     {selectedSdkTab === "nextjs" && (
                       <code>
-                        <span className="text-[#FFFBF4]/50">{"// Next.js App Router (Server Component)"}</span>{"\n"}
+                        <span className="text-[#FFFBF4]/50">// Next.js App Router (Server Component)</span>{"\n"}
                         <span className="text-[#4ADE80]">export default async function</span>{" "}
                         <span className="text-[#FFFBF4]">Portfolio()</span> {"{\n"}
                         {"  "}
@@ -571,7 +571,7 @@ export default function ScrollJourneySection() {
                     )}
                     {selectedSdkTab === "react" && (
                       <code>
-                        <span className="text-[#FFFBF4]/50">{"// React Query Hook"}</span>{"\n"}
+                        <span className="text-[#FFFBF4]/50">// React Query Hook</span>{"\n"}
                         <span className="text-[#4ADE80]">import</span> {"{ useQuery }"} from{" "}
                         <span className="text-[#D8CFBC]">&apos;@tanstack/react-query&apos;</span>;{"\n\n"}
                         <span className="text-[#4ADE80]">export function</span> useProjects() {"{\n"}

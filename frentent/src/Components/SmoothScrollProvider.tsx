@@ -47,7 +47,8 @@ export default function SmoothScrollProvider({
       rafId = requestAnimationFrame(raf);
     }
 
-    rafId = requestAnimationFrame(raf);
+    gsap.ticker.add(gsapTicker);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
       cancelAnimationFrame(rafId);
