@@ -1,431 +1,445 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowUpRight,
-  Brackets,
-  Check,
+  Terminal,
+  Play,
   Copy,
+  Check,
+  Sparkles,
+  Zap,
   Code2,
   Rocket,
-  Sparkles,
-  Terminal,
-  Zap,
+  ShieldCheck,
+  CheckCircle2,
+  Layers,
   Cpu,
   GitBranch,
-  Layers,
-  ShieldCheck,
+  ArrowRight,
+  RefreshCw,
+  Sliders,
 } from "lucide-react";
-import {
-  ScrollReveal,
-  StaggerGrid,
-  StaggerItem,
-  CharReveal,
-} from "@/src/lib/animations";
+import { ScrollReveal, StaggerGrid, StaggerItem, GlowCard } from "@/src/lib/animations";
 
-const typePhrases = [
-  "Try the playground. Build it live.",
-  "Test endpoints with zero setup.",
-  "Ship your first template in minutes.",
+const TEMPLATES = [
+  {
+    id: "portfolio",
+    name: "Featured Projects",
+    endpoint: "https://api.projectapi.dev/v1/projects?featured=true&limit=3",
+    method: "GET",
+    latency: "11ms",
+    response: {
+      status: "success",
+      total: 3,
+      page: 1,
+      data: [
+        {
+          id: "proj_01",
+          title: "AI Canvas Studio",
+          slug: "ai-canvas-studio",
+          category: "Generative AI",
+          stack: ["Next.js 15", "WebGPU", "TypeScript", "TailwindCSS"],
+          featured: true,
+          demo_url: "https://canvas.dev",
+          stars: 4820,
+        },
+        {
+          id: "proj_02",
+          title: "Distributed Edge Key-Value",
+          slug: "edge-kv",
+          category: "Infrastructure",
+          stack: ["Rust", "Wasm", "Cloudflare Workers"],
+          featured: true,
+          demo_url: "https://edgekv.sh",
+          stars: 2150,
+        },
+        {
+          id: "proj_03",
+          title: "Autonomous Agent Task Board",
+          slug: "agent-task-board",
+          category: "Developer Tools",
+          stack: ["React", "FastAPI", "PostgreSQL", "Redis"],
+          featured: true,
+          demo_url: "https://agentboard.app",
+          stars: 1890,
+        },
+      ],
+    },
+  },
+  {
+    id: "single",
+    name: "Single Project Detail",
+    endpoint: "https://api.projectapi.dev/v1/projects/ai-canvas-studio",
+    method: "GET",
+    latency: "9ms",
+    response: {
+      status: "success",
+      data: {
+        id: "proj_01",
+        title: "AI Canvas Studio",
+        slug: "ai-canvas-studio",
+        description: "Infinite collaborative vector canvas powered by local neural models.",
+        media: {
+          thumbnail: "https://cdn.projectapi.dev/media/canvas_thumb.webp",
+          gallery: [
+            "https://cdn.projectapi.dev/media/canvas_01.avif",
+            "https://cdn.projectapi.dev/media/canvas_02.avif",
+          ],
+        },
+        client: "Autonomous Systems Inc.",
+        year: 2026,
+      },
+    },
+  },
+  {
+    id: "create",
+    name: "Create Project (POST)",
+    endpoint: "https://api.projectapi.dev/v1/projects",
+    method: "POST",
+    latency: "28ms",
+    response: {
+      status: "created",
+      code: 201,
+      message: "Project successfully registered and synchronized to global edge PoPs.",
+      project_id: "proj_9941a_new",
+      cdn_invalidation: "COMPLETED",
+    },
+  },
 ];
 
-const glowVariants = {
-  idle: { opacity: 0, scale: 0.7 },
-  hover: { opacity: 1, scale: 1.2 },
-};
-
-const codeLines = [
-  { text: "const api = await ProjectAPI.create()", color: "text-[#FFFBF4]" },
-  { text: 'api.playground("portfolio-cms")', color: "text-[#4ADE80]" },
-  {
-    text: "// live endpoint is ready → try it now",
-    color: "text-[#D8CFBC]/60",
-  },
-];
-
-const templateCards = [
-  {
-    icon: Terminal,
-    title: "API Playground",
-    desc: "Test your endpoints live with a cool request builder.",
-    tag: "Workflow",
-  },
-  {
-    icon: Layers,
-    title: "Portfolio CMS",
-    desc: "Showcase your work with a typed content model.",
-    tag: "Templates",
-  },
-  {
-    icon: GitBranch,
-    title: "Versioned Docs",
-    desc: "Ship documentation that evolves with your API.",
-    tag: "Workflow",
-  },
-  {
-    icon: Cpu,
-    title: "Realtime Console",
-    desc: "Watch requests stream in — every keystroke, live.",
-    tag: "Live",
-  },
-  {
-    icon: Zap,
-    title: "Instant Deploy",
-    desc: "One click from playground to production.",
-    tag: "Deploy",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Keys by Default",
-    desc: "Scoped API keys with a cool, safe-by-design flow.",
-    tag: "Security",
-  },
-];
-
-const features = [
-  {
-    icon: Zap,
-    title: "Zero-setup",
-    desc: "No config. Start typing, it just works.",
-  },
-  {
-    icon: Code2,
-    title: "Typed API",
-    desc: "Full TypeScript types generated for you.",
-  },
-  {
-    icon: Rocket,
-    title: "Ship-ready",
-    desc: "Go from idea to deployed in one session.",
-  },
-];
+const SNIPPET_TABS = ["cURL", "Fetch", "Axios", "Next.js 15", "React Query"] as const;
 
 export default function PlaygroundPage() {
-  const [display, setDisplay] = useState("");
-  const [phraseIndex, setPhraseIndex] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [typedLine, setTypedLine] = useState(0);
+  const [selectedTemplate, setSelectedTemplate] = useState(TEMPLATES[0]);
+  const [activeTab, setActiveTab] = useState<(typeof SNIPPET_TABS)[number]>("Next.js 15");
+  const [isLoading, setIsLoading] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [copiedResponse, setCopiedResponse] = useState(false);
+  const [liveResponse, setLiveResponse] = useState(TEMPLATES[0].response);
+  const [currentLatency, setCurrentLatency] = useState(TEMPLATES[0].latency);
 
-  useEffect(() => {
-    const phrase = typePhrases[phraseIndex];
-    let timer: number | undefined;
+  const handleSelectTemplate = (template: (typeof TEMPLATES)[number]) => {
+    setSelectedTemplate(template);
+    setIsLoading(true);
+    setTimeout(() => {
+      setLiveResponse(template.response);
+      setCurrentLatency(template.latency);
+      setIsLoading(false);
+    }, 300);
+  };
 
-    if (!deleting && display.length < phrase.length) {
-      timer = window.setTimeout(
-        () => setDisplay(phrase.slice(0, display.length + 1)),
-        44
-      );
-    } else if (!deleting && display.length === phrase.length) {
-      timer = window.setTimeout(() => setDeleting(true), 1700);
-    } else if (deleting && display.length > 0) {
-      timer = window.setTimeout(
-        () => setDisplay(phrase.slice(0, display.length - 1)),
-        22
-      );
-    } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDeleting(false);
-      setPhraseIndex((phraseIndex + 1) % typePhrases.length);
+  const handleTriggerRun = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const randomLatency = Math.floor(Math.random() * 8) + 8;
+      setCurrentLatency(`${randomLatency}ms`);
+      setIsLoading(false);
+    }, 400);
+  };
+
+  const copySnippet = () => {
+    let snippet = "";
+    if (activeTab === "cURL") {
+      snippet = `curl -X ${selectedTemplate.method} "${selectedTemplate.endpoint}" \\\n  -H "Authorization: Bearer proj_live_demo_key" \\\n  -H "Accept: application/json"`;
+    } else if (activeTab === "Fetch") {
+      snippet = `const response = await fetch("${selectedTemplate.endpoint}", {\n  headers: { "Authorization": "Bearer proj_live_demo_key" }\n});\nconst data = await response.json();`;
+    } else if (activeTab === "Axios") {
+      snippet = `import axios from "axios";\n\nconst { data } = await axios.get("${selectedTemplate.endpoint}", {\n  headers: { Authorization: "Bearer proj_live_demo_key" }\n});`;
+    } else if (activeTab === "Next.js 15") {
+      snippet = `// In your Next.js Server Component or Action\nexport default async function Page() {\n  const res = await fetch("${selectedTemplate.endpoint}", {\n    headers: { Authorization: "Bearer \${process.env.PROJECTAPI_KEY}" },\n    next: { revalidate: 3600 }\n  });\n  const { data } = await res.json();\n  return <ProjectsList data={data} />;\n}`;
+    } else if (activeTab === "React Query") {
+      snippet = `import { useQuery } from "@tanstack/react-query";\n\nexport function useProjects() {\n  return useQuery({\n    queryKey: ["projects"],\n    queryFn: () => fetch("${selectedTemplate.endpoint}").then(r => r.json())\n  });\n}`;
     }
-    return () => window.clearTimeout(timer);
-  }, [display, deleting, phraseIndex]);
+    navigator.clipboard.writeText(snippet);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
+  };
 
-  useEffect(() => {
-    const timer = window.setTimeout(
-      () => setTypedLine((typedLine + 1) % (codeLines.length + 1)),
-      900
-    );
-    return () => window.clearTimeout(timer);
-  }, [typedLine]);
-
-  const copyCode = () => {
-    navigator.clipboard.writeText(codeLines.map((l) => l.text).join("\n"));
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+  const copyResponseJson = () => {
+    navigator.clipboard.writeText(JSON.stringify(liveResponse, null, 2));
+    setCopiedResponse(true);
+    setTimeout(() => setCopiedResponse(false), 2000);
   };
 
   return (
-    <div className="relative">
-      <section className="relative overflow-hidden bg-[#0A0A0A] py-24">
-        {/* ambient glow */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 0.55 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4 }}
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(720px 360px at 30% -10%, rgba(74,222,128,0.14), transparent 65%), radial-gradient(640px 320px at 90% 20%, rgba(255,255,255,0.04), transparent 60%)",
-          }}
-        />
+    <section
+      id="playground"
+      className="relative overflow-hidden bg-[#0A0A0A] py-24 sm:py-32 text-[#FFFBF4]"
+      aria-label="Interactive Developer Playground"
+    >
+      {/* Ambient Radial Spotlight */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          background:
+            "radial-gradient(800px 400px at 50% 10%, rgba(74,222,128,0.12), transparent 70%)",
+        }}
+      />
 
-        <div className="relative mx-auto w-full max-w-300 px-6">
-          {/* ---- Typewriter hero ---- */}
-          <ScrollReveal className="mb-16 max-w-3xl">
-            <div className="flex flex-col gap-5">
-              <motion.div
-                whileHover={{ x: 6 }}
-                className="flex w-fit items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.28em] text-[#4ADE80]"
-              >
-                <Sparkles className="size-3.5" />
-                Playground
-              </motion.div>
-
-              <div className="flex min-h-12 items-center gap-2 text-3xl font-semibold tracking-tight text-[#FFFBF4] md:text-5xl">
-                <span>
-                  {display}
-                  <motion.span
-                    animate={{ opacity: [1, 0, 1] }}
-                    transition={{ repeat: Infinity, duration: 0.8 }}
-                    className="ml-0.5 inline-block h-6 w-0.75 translate-y-0.5 bg-[#4ADE80] md:h-8"
-                  />
-                </span>
-              </div>
-
-              <p className="text-lg leading-relaxed text-[#D8CFBC]">
-                A playground where ideas become endpoints. Try the live
-                terminal, test a request builder, and see exactly what your
-                users get to experience — before you ship a single line.
-              </p>
+      <div className="relative mx-auto w-full max-w-6xl px-6">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-6 text-center pb-16">
+          <ScrollReveal direction="up" delay={0}>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/30 bg-[#4ADE80]/10 px-4 py-1.5 text-xs text-[#4ADE80] font-mono tracking-widest uppercase">
+              <Terminal className="h-3.5 w-3.5" />
+              <span>LIVE API STUDIO // SANDBOX</span>
             </div>
           </ScrollReveal>
 
-          {/* ---- Glass terminal mock ---- */}
-          <ScrollReveal delay={0.1}>
-            <motion.div
-              variants={glowVariants}
-              initial="idle"
-              whileHover="hover"
-              transition={{ duration: 0.3 }}
-              className="absolute -inset-px rounded-2xl bg-[#4ADE80]/10 blur-xl"
-            />
-            <motion.div
-              whileHover={{
-                y: -4,
-                boxShadow:
-                  "0 24px 80px rgba(0,0,0,0.55), 0 0 40px rgba(74,222,128,0.08)",
-              }}
-              className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0F0F0F]"
+          <ScrollReveal direction="up" delay={0.1}>
+            <h2
+              className="max-w-3xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] text-[#FFFBF4]"
+              style={{ fontFamily: "var(--font-unbounded), sans-serif" }}
             >
-              {/* window chrome */}
-              <div className="flex items-center justify-between border-b border-white/10 bg-white/3 px-5 py-3.5">
-                <div className="flex items-center gap-2">
-                  <motion.span
-                    animate={{
-                      backgroundColor: ["#FF5F57", "#FF5F57", "#FF5F57"],
-                    }}
-                    className="size-3 rounded-full bg-[#FF5F57]"
-                    data-lettter
-                  />
-                  <span className="size-3 rounded-full bg-[#FEBC2E]" />
-                  <span className="size-3 rounded-full bg-[#28C840]" />
-                </div>
-                <div className="flex items-center gap-2 font-mono text-xs text-[#D8CFBC]">
-                  <Brackets className="size-3.5 text-[#4ADE80]" />
-                  playground — ProjectAPI
-                </div>
-                <motion.button
-                  onClick={copyCode}
-                  whileTap={{ scale: 0.92 }}
-                  className="flex items-center gap-1.5 rounded-lg border border-white/10 px-2.5 py-1.5 text-xs text-[#D8CFBC] hover:text-[#FFFBF4] cursor-pointer"
-                >
-                  {copied ? (
-                    <Check className="size-3.5 text-[#4ADE80]" />
-                  ) : (
-                    <Copy className="size-3.5" />
-                  )}
-                  {copied ? "Copied" : "Copy"}
-                </motion.button>
-              </div>
-
-              {/* code body with sequential lines + blinking cursor */}
-              <div className="flex flex-col gap-4 px-5 py-6 font-mono text-sm leading-7 md:px-7 md:py-8">
-                {codeLines.map((line, i) => {
-                  const shown = typedLine > i;
-                  if (!shown)
-                    return (
-                      <div key={i} className="flex items-center gap-3">
-                        <span className="text-[#FFFBF4]/25">{i + 1}</span>
-                        <motion.span className="size-3 rounded-sm bg-[#4ADE80]/40" />
-                      </div>
-                    );
-                  return (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center gap-3"
-                    >
-                      <span className="text-[#FFFBF4]/25">{i + 1}</span>
-                      <span className={line.color}>{line.text}</span>
-                    </motion.div>
-                  );
-                })}
-                <div className="flex items-center gap-3">
-                  <span className="text-[#FFFBF4]/25">
-                    {codeLines.length + 1}
-                  </span>
-                  <motion.span
-                    animate={{ opacity: [1, 0, 1] }}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                    className="inline-block h-4 w-0.5 bg-[#4ADE80]"
-                  />
-                </div>
-              </div>
-
-              {/* status footer */}
-              <div className="flex items-center justify-between border-t border-white/10 bg-white/2 px-5 py-3 text-xs text-[#D8CFBC]">
-                <span className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
-                  Live playground active
-                </span>
-                <span className="font-mono">200 OK · 0ms</span>
-              </div>
-            </motion.div>
+              Test requests live.
+              <br />
+              <span className="text-[#4ADE80]">Zero setup required.</span>
+            </h2>
           </ScrollReveal>
 
-          {/* ---- Template / cool grid ---- */}
-          <div className="mt-16">
-            <ScrollReveal className="mb-8 flex items-end justify-between">
-              <div>
-                <p className="mb-2 text-xs uppercase tracking-[0.3em] text-[#4ADE80]">
-                  Start with a vibe
-                </p>
-                <h3 className="text-2xl font-bold text-[#FFFBF4] md:text-3xl">
-                  Cool templates, ready to run.
-                </h3>
-              </div>
-            </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.2}>
+            <p className="max-w-2xl text-base sm:text-lg leading-relaxed text-[#FFFBF4]/70">
+              Select any endpoint preset, trigger real requests against our simulated
+              edge network, and copy ready-made client snippets in one click.
+            </p>
+          </ScrollReveal>
 
-            <StaggerGrid className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {templateCards.map((card) => {
-                const Icon = card.icon;
-                return (
-                  <StaggerItem key={card.title}>
-                    <motion.div
-                      whileHover={{
-                        y: -6,
-                        borderColor: "rgba(74,222,128,0.4)",
-                      }}
-                      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/3 p-6 transition-colors"
-                    >
-                      {/* hover glow */}
-                      <motion.div
-                        variants={glowVariants}
-                        initial="idle"
-                        whileHover="hover"
-                        className="absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-                        style={{
-                          background:
-                            "radial-gradient(240px 160px at 30% 0%, rgba(74,222,128,0.12), transparent 65%)",
-                        }}
-                      />
-                      <div className="relative flex items-start justify-between">
-                        <motion.span
-                          whileHover={{ rotate: -8, scale: 1.1 }}
-                          className="flex size-11 items-center justify-center rounded-xl border border-[#4ADE80]/25 bg-[#4ADE80]/10 text-[#4ADE80]"
-                        >
-                          <Icon className="size-5" />
-                        </motion.span>
-                        <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.2em] text-[#D8CFBC]">
-                          {card.tag}
-                        </span>
-                      </div>
-                      <div className="relative mt-auto">
-                        <h4 className="flex items-center gap-1.5 text-base font-semibold text-[#FFFBF4]">
-                          {card.title}
-                          <ArrowUpRight className="size-4 text-[#4ADE80] opacity-0 transition-opacity group-hover:opacity-100" />
-                        </h4>
-                        <p className="mt-1.5 text-sm leading-relaxed text-[#D8CFBC]">
-                          {card.desc}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </StaggerItem>
-                );
-              })}
-            </StaggerGrid>
-          </div>
-
-          {/* ---- Feature row with animated counters ---- */}
-          <div className="mt-20 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {features.map((feature, i) => {
-              const Icon = feature.icon;
-              return (
-                <ScrollReveal key={feature.title} delay={0.08 * i}>
-                  <div className="flex items-start gap-4">
-                    <div className="flex size-12 items-center justify-center rounded-xl border border-white/10 bg-white/4 text-[#4ADE80]">
-                      <Icon className="size-5" />
-                    </div>
-                    <div>
-                      <h5 className="text-base font-semibold text-[#FFFBF4]">
-                        {feature.title}
-                      </h5>
-                      <p className="mt-1 text-sm text-[#D8CFBC]">
-                        {feature.desc}
-                      </p>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              );
-            })}
-          </div>
-
-          {/* ---- CTA ---- */}
-          <ScrollReveal delay={0.1}>
-            <div className="mt-24 relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-br from-[#121212] to-[#0A0A0A] p-10 text-center md:p-14">
-              <motion.div
-                className="pointer-events-none absolute -top-20 left-1/2 h-40 w-140 -translate-x-1/2 rounded-full opacity-60 blur-3xl"
-                animate={{ opacity: [0.4, 0.7, 0.4] }}
-                transition={{ repeat: Infinity, duration: 4 }}
-                style={{
-                  background:
-                    "radial-gradient(closest-side, rgba(74,222,128,0.25), transparent)",
-                }}
-              />
-              <div className="relative">
-                <motion.span
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ type: "spring", stiffness: 260, damping: 18 }}
-                  className="inline-flex size-14 items-center justify-center rounded-2xl border border-[#4ADE80]/30 bg-[#4ADE80]/10 text-[#4ADE80]"
+          {/* Template Selector Pills */}
+          <ScrollReveal direction="up" delay={0.25}>
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              {TEMPLATES.map((tpl) => (
+                <button
+                  key={tpl.id}
+                  type="button"
+                  onClick={() => handleSelectTemplate(tpl)}
+                  className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer ${
+                    selectedTemplate.id === tpl.id
+                      ? "border-[#4ADE80] bg-[#4ADE80]/15 text-[#4ADE80] shadow-[0_0_15px_rgba(74,222,128,0.25)]"
+                      : "border-[#FFFBF4]/10 bg-[#161712]/70 text-[#FFFBF4]/70 hover:text-[#FFFBF4] hover:border-[#FFFBF4]/25"
+                  }`}
                 >
-                  <Rocket className="size-6" />
-                </motion.span>
-                <h3 className="mt-6 text-2xl font-bold text-[#FFFBF4] md:text-4xl">
-                  Stop planning.{" "}
-                  <CharReveal
-                    text="Start building."
-                    className="text-[#4ADE80]"
-                    staggerDelay={0.03}
-                  />
-                </h3>
-                <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#D8CFBC]">
-                  Jump into the playground, try a template, and see your product
-                  come to life — the exact way your users will.
-                </p>
-                <motion.a
-                  href="/login"
-                  whileHover={{
-                    scale: 1.04,
-                    boxShadow: "0 0 40px rgba(74,222,128,0.4)",
-                  }}
-                  whileTap={{ scale: 0.96 }}
-                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#4ADE80] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A]"
-                >
-                  Open the playground
-                  <ArrowUpRight className="size-4" />
-                </motion.a>
-              </div>
+                  <span
+                    className={`rounded px-1.5 py-0.5 text-[10px] font-mono font-bold ${
+                      tpl.method === "POST" ? "bg-amber-400/20 text-amber-400" : "bg-[#4ADE80]/20 text-[#4ADE80]"
+                    }`}
+                  >
+                    {tpl.method}
+                  </span>
+                  <span>{tpl.name}</span>
+                </button>
+              ))}
             </div>
           </ScrollReveal>
         </div>
-      </section>
-    </div>
+
+        {/* Main Interactive Studio Card */}
+        <ScrollReveal delay={0.15}>
+          <div className="relative rounded-2xl sm:rounded-3xl border border-[#FFFBF4]/15 bg-[#12130E]/95 shadow-[0_20px_70px_rgba(0,0,0,0.85)] backdrop-blur-xl overflow-hidden">
+            {/* Top URL Request Bar */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-[#FFFBF4]/10 bg-black/50 p-4 sm:px-6">
+              <div className="flex items-center gap-2 flex-1 rounded-xl border border-[#FFFBF4]/10 bg-[#161712] px-3.5 py-2 font-mono text-xs">
+                <span
+                  className={`rounded px-2 py-0.5 text-[11px] font-bold ${
+                    selectedTemplate.method === "POST"
+                      ? "bg-amber-400/20 text-amber-400"
+                      : "bg-[#4ADE80]/20 text-[#4ADE80]"
+                  }`}
+                >
+                  {selectedTemplate.method}
+                </span>
+                <span className="text-[#FFFBF4]/90 truncate">
+                  {selectedTemplate.endpoint}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleTriggerRun}
+                  disabled={isLoading}
+                  className="flex items-center gap-2 rounded-xl bg-[#4ADE80] px-5 py-2 text-xs sm:text-sm font-bold text-[#0A0A0A] shadow-[0_0_20px_rgba(74,222,128,0.3)] transition-all hover:bg-[#86efac] cursor-pointer disabled:opacity-50"
+                >
+                  <Play className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : "fill-current"}`} />
+                  <span>{isLoading ? "Executing..." : "Send Request"}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Split Body: Left Code Snippets + Right JSON Response */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-[#FFFBF4]/10">
+              {/* Left Column: Code Integration Snippets */}
+              <div className="flex flex-col justify-between p-5 sm:p-6 bg-[#141510]/60">
+                <div className="flex items-center justify-between pb-3 border-b border-[#FFFBF4]/10">
+                  <div className="flex flex-wrap gap-1">
+                    {SNIPPET_TABS.map((tab) => (
+                      <button
+                        key={tab}
+                        type="button"
+                        onClick={() => setActiveTab(tab)}
+                        className={`rounded-lg px-2.5 py-1 text-xs font-mono transition-colors cursor-pointer ${
+                          activeTab === tab
+                            ? "bg-[#4ADE80]/20 text-[#4ADE80] font-semibold border border-[#4ADE80]/30"
+                            : "text-[#FFFBF4]/60 hover:text-[#FFFBF4]"
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={copySnippet}
+                    className="flex items-center gap-1.5 rounded-lg border border-[#FFFBF4]/10 bg-white/[0.03] px-3 py-1 text-xs text-[#FFFBF4]/80 transition-colors hover:bg-white/10 cursor-pointer"
+                  >
+                    {copiedCode ? (
+                      <>
+                        <Check className="h-3 w-3 text-[#4ADE80]" />
+                        <span className="text-[#4ADE80]">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Code Block Content */}
+                <div className="my-4 max-h-[300px] overflow-auto rounded-xl border border-[#FFFBF4]/10 bg-black/60 p-4 font-mono text-xs leading-relaxed text-[#FFFBF4]/90">
+                  {activeTab === "cURL" && (
+                    <pre>
+                      <code>
+                        <span className="text-[#FFFBF4]/50"># Terminal Request</span>{"\n"}
+                        curl -X {selectedTemplate.method} &quot;{selectedTemplate.endpoint}&quot; \{"\n"}
+                        {"  "}-H &quot;Authorization: Bearer proj_live_demo_key&quot; \{"\n"}
+                        {"  "}-H &quot;Accept: application/json&quot;
+                      </code>
+                    </pre>
+                  )}
+                  {activeTab === "Fetch" && (
+                    <pre>
+                      <code>
+                        <span className="text-[#FFFBF4]/50">// Standard Web Fetch API</span>{"\n"}
+                        <span className="text-[#4ADE80]">const</span> res ={" "}
+                        <span className="text-[#4ADE80]">await</span> fetch(&quot;{selectedTemplate.endpoint}&quot;, &#123;{"\n"}
+                        {"  "}headers: &#123;{"\n"}
+                        {"    "}&quot;Authorization&quot;: &quot;Bearer proj_live_demo_key&quot;{"\n"}
+                        {"  "}&#125;{"\n"}
+                        &#125;);{"\n"}
+                        <span className="text-[#4ADE80]">const</span> data ={" "}
+                        <span className="text-[#4ADE80]">await</span> res.json();
+                      </code>
+                    </pre>
+                  )}
+                  {activeTab === "Axios" && (
+                    <pre>
+                      <code>
+                        <span className="text-[#FFFBF4]/50">// Axios Client Request</span>{"\n"}
+                        <span className="text-[#4ADE80]">import</span> axios from &quot;axios&quot;;{"\n\n"}
+                        <span className="text-[#4ADE80]">const</span> &#123; data &#125; ={" "}
+                        <span className="text-[#4ADE80]">await</span> axios.{selectedTemplate.method.toLowerCase()}(&quot;{selectedTemplate.endpoint}&quot;, &#123;{"\n"}
+                        {"  "}headers: &#123; Authorization: &quot;Bearer proj_live_demo_key&quot; &#125;{"\n"}
+                        &#125;);
+                      </code>
+                    </pre>
+                  )}
+                  {activeTab === "Next.js 15" && (
+                    <pre>
+                      <code>
+                        <span className="text-[#FFFBF4]/50">// Next.js App Router (Server Component)</span>{"\n"}
+                        <span className="text-[#4ADE80]">export default async function</span> Showcase() &#123;{"\n"}
+                        {"  "}
+                        <span className="text-[#4ADE80]">const</span> res ={" "}
+                        <span className="text-[#4ADE80]">await</span> fetch(&quot;{selectedTemplate.endpoint}&quot;, &#123;{"\n"}
+                        {"    "}headers: &#123; Authorization: \`Bearer \$&#123;process.env.API_KEY&#125;\` &#125;,{"\n"}
+                        {"    "}next: &#123; revalidate: 3600 &#125;{"\n"}
+                        {"  "}&#125;);{"\n"}
+                        {"  "}
+                        <span className="text-[#4ADE80]">const</span> &#123; data &#125; ={" "}
+                        <span className="text-[#4ADE80]">await</span> res.json();{"\n"}
+                        {"  "}
+                        <span className="text-[#4ADE80]">return</span> &lt;ProjectsGrid items=&#123;data&#125; /&gt;;{"\n"}
+                        &#125;
+                      </code>
+                    </pre>
+                  )}
+                  {activeTab === "React Query" && (
+                    <pre>
+                      <code>
+                        <span className="text-[#FFFBF4]/50">// TanStack React Query</span>{"\n"}
+                        <span className="text-[#4ADE80]">import</span> &#123; useQuery &#125; from &quot;@tanstack/react-query&quot;;{"\n\n"}
+                        <span className="text-[#4ADE80]">export function</span> useProjects() &#123;{"\n"}
+                        {"  "}return useQuery(&#123;{"\n"}
+                        {"    "}queryKey: [&quot;projects&quot;],{"\n"}
+                        {"    "}queryFn: () =&gt; fetch(&quot;{selectedTemplate.endpoint}&quot;).then(r =&gt; r.json()){"\n"}
+                        {"  "}&#125;);{"\n"}
+                        &#125;
+                      </code>
+                    </pre>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] font-mono text-[#FFFBF4]/50">
+                  <span>Type Definition: Generated</span>
+                  <span className="text-[#4ADE80]">Zero dependencies</span>
+                </div>
+              </div>
+
+              {/* Right Column: Live Simulated Edge Response */}
+              <div className="flex flex-col justify-between p-5 sm:p-6 bg-[#0D0E09]/90">
+                <div className="flex items-center justify-between pb-3 border-b border-[#FFFBF4]/10">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-[#4ADE80] animate-pulse" />
+                    <span className="text-xs font-mono font-bold text-[#4ADE80]">
+                      200 OK · {currentLatency}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={copyResponseJson}
+                    className="flex items-center gap-1.5 rounded-lg border border-[#FFFBF4]/10 bg-white/[0.03] px-3 py-1 text-xs text-[#FFFBF4]/80 transition-colors hover:bg-white/10 cursor-pointer"
+                  >
+                    {copiedResponse ? (
+                      <>
+                        <Check className="h-3 w-3 text-[#4ADE80]" />
+                        <span className="text-[#4ADE80]">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3" />
+                        <span>Copy JSON</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Response Viewer */}
+                <div className="my-4 max-h-[300px] overflow-auto rounded-xl border border-[#FFFBF4]/10 bg-black/60 p-4 font-mono text-xs leading-relaxed text-[#FFFBF4]/90">
+                  {isLoading ? (
+                    <div className="flex flex-col items-center justify-center py-12 gap-3 text-[#FFFBF4]/60">
+                      <RefreshCw className="h-6 w-6 animate-spin text-[#4ADE80]" />
+                      <span className="text-xs font-mono">Routing through nearest Edge PoP...</span>
+                    </div>
+                  ) : (
+                    <pre>
+                      <code>{JSON.stringify(liveResponse, null, 2)}</code>
+                    </pre>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] font-mono text-[#FFFBF4]/50">
+                  <span>Server: ProjectAPI-Edge/2.4</span>
+                  <span className="text-[#4ADE80]">Cache: HIT (L1)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
   );
 }
