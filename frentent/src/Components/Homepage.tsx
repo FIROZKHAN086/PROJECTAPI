@@ -1,51 +1,45 @@
 "use client";
 
 import { motion } from "framer-motion";
-import FAQFooterPage from "@/src/Home/FAQFooterPage";
+import ScrollHUD from "@/src/Components/ScrollHUD";
 import { HeroSection } from "@/src/Page/Hero";
-import PlaygroundSection from "@/src/Home/PlaygroundPage";
-import { ProblemSolutionSection } from "@/src/Page/ProblemSolution";
+import ScrollJourneySection from "@/src/Components/ScrollJourneySection";
 import FeaturesPage from "@/src/Home/FeaturesPage";
-import { SocialProofPricingSection } from "../Page/SocialProofPricing";
-const Homepage = () => {
-  const sectionItem = {
-    initial: { opacity: 0, y: 30 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-      },
-    },
-  };
+import { ProblemSolutionSection } from "@/src/Page/ProblemSolution";
+import PlaygroundSection from "@/src/Home/PlaygroundPage";
+import { SocialProofPricingSection } from "@/src/Page/SocialProofPricing";
+import FAQFooterPage from "@/src/Home/FAQFooterPage";
 
+const Homepage = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <div
       suppressHydrationWarning={true}
-      className="bg-[#11120D] text-[#FFFBF4]"
+      className="relative min-h-screen bg-[#11120D] text-[#FFFBF4] selection:bg-[#4ADE80] selection:text-[#0A0A0A]"
     >
-      <motion.div initial={sectionItem.initial} animate={sectionItem.animate}>
-        <HeroSection />
-      </motion.div>
-      <motion.div initial={sectionItem.initial} animate={sectionItem.animate}>
-        <FeaturesPage />
-      </motion.div>
-      <motion.div initial={sectionItem.initial} animate={sectionItem.animate}>
-        <ProblemSolutionSection />
-      </motion.div>
-      <motion.div initial={sectionItem.initial} animate={sectionItem.animate}>
-        <PlaygroundSection />
-      </motion.div>
-      <motion.div initial={sectionItem.initial} animate={sectionItem.animate}>
-        <SocialProofPricingSection />
-      </motion.div>
-      <motion.div initial={sectionItem.initial} animate={sectionItem.animate}>
-        <FAQFooterPage />
-      </motion.div>
-    </motion.div>
+      {/* Global Scroll HUD: Top progress bar, ambient particle constellation & waypoint beads */}
+      <ScrollHUD />
+
+      {/* 01 // Hero Vision */}
+      <HeroSection />
+
+      {/* 02 // lets-scroll Cinematic World Flight Journey */}
+      <ScrollJourneySection />
+
+      {/* 03 // Bento Features & Architecture */}
+      <FeaturesPage />
+
+      {/* 04 // Transformation Problem vs Solution */}
+      <ProblemSolutionSection />
+
+      {/* 05 // Live Developer API Studio / Playground */}
+      <PlaygroundSection />
+
+      {/* 06 // Personas & Transparent Pricing */}
+      <SocialProofPricingSection />
+
+      {/* 07 // FAQ & Launchpad CTA */}
+      <FAQFooterPage />
+    </div>
   );
 };
 

@@ -10,6 +10,7 @@ import HeroScrollHint from "./components/HeroScrollHint";
 export default function HeroSection() {
   return (
     <section
+      id="hero"
       aria-label="ProjectAPI hero"
       className="relative min-h-screen overflow-hidden bg-[#0A0A0A] text-[#FFFBF4]"
     >

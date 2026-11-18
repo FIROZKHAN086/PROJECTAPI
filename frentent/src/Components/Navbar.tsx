@@ -115,10 +115,22 @@ const Navbar = () => {
       description: "Return to the homepage",
     },
     {
+      name: "Journey",
+      href: "#journey",
+      icon: Sparkles,
+      description: "Scroll-driven interactive flight",
+    },
+    {
       name: "Features",
       href: "#features",
       icon: Sparkles,
       description: "Discover powerful tools",
+    },
+    {
+      name: "Studio",
+      href: "#playground",
+      icon: Terminal,
+      description: "Test API playground",
     },
     {
       name: "Docs",

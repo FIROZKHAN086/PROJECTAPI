@@ -1,19 +1,15 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   FolderOpen,
   Star,
   LayoutGrid,
   Layers,
   PlusCircle,
-  AlertTriangle,
-  TrendingUp,
   Clock,
-  Users,
   Zap,
   Shield,
   Database,
@@ -21,85 +17,28 @@ import {
   ArrowUpRight,
   Activity,
   Globe,
-  Target,
   Plus,
   Eye,
   RefreshCw,
+  Terminal,
+  Sparkles,
+  CheckCircle2,
+  Cpu,
+  Radio,
+  ExternalLink,
+  Key,
 } from "lucide-react";
-import {
-  Reveal,
-  Counter,
-  GrowBar,
-  GlowCard,
-  StatCard,
-  GradientText,
-  FadeItem,
-  PageIntro,
-} from "@/src/Components/dashboard/ui";
 import { useProjects } from "@/src/hooks/useProjects";
 import type { Project } from "@/src/types/project";
-import type { LucideIcon } from "lucide-react";
-
-type Stat = {
-  label: string;
-  value: number;
-  icon: LucideIcon;
-  color: string;
-};
+import { GlowCard, Reveal } from "@/src/Components/dashboard/ui";
 
 type DashboardProject = Project & { status?: string };
-
-const VIEWERS = Math.floor(Math.random() * 50 + 10);
-
-const TypewriterText: React.FC<{ text: string; className?: string }> = ({
-  text,
-  className = "",
-}) => {
-  const [displayText, setDisplayText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (currentIndex < text.length) {
-        setDisplayText((prev) => prev + text[currentIndex]);
-        setCurrentIndex((prev) => prev + 1);
-      } else {
-        setIsComplete(true);
-      }
-    }, 30);
-
-    return () => clearTimeout(timer);
-  }, [currentIndex, text]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDisplayText("");
-      setCurrentIndex(0);
-      setIsComplete(false);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, [text]);
-
-  return (
-    <span className={`relative ${className}`}>
-      {displayText}
-      {!isComplete && (
-        <motion.span
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-          className="inline-block w-[2px] h-5 rounded bg-gradient-to-b from-[#4ADE80] to-[#22D3EE] ml-0.5"
-        />
-      )}
-    </span>
-  );
-};
 
 const timeAgo = (dateStr: string): string => {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diff = Math.floor((now - then) / 1000);
+  if (isNaN(diff)) return "recently";
   if (diff < 60) return `${diff}s ago`;
   if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
@@ -107,616 +46,465 @@ const timeAgo = (dateStr: string): string => {
   return new Date(dateStr).toLocaleDateString();
 };
 
-const ActivityItem: React.FC<{ project: DashboardProject; index: number }> = ({
-  project,
-  index,
-}) => {
-  return (
-    <Reveal delay={index * 0.06} y={16}>
-      <div className="group flex items-start gap-3.5 px-2 py-3 rounded-xl transition-colors hover:bg-white/[0.03]">
-        <div className="relative mt-0.5 shrink-0">
-          <div
-            className="flex size-9 items-center justify-center rounded-xl border"
-            style={{
-              backgroundColor: project.featured ? "#FACC1514" : "#4ADE8014",
-              borderColor: project.featured ? "#FACC1526" : "#4ADE8026",
-            }}
-          >
-            {project.featured ? (
-              <Star className="size-4 text-[#FACC15]" />
-            ) : (
-              <PlusCircle className="size-4 text-[#4ADE80]" />
-            )}
-          </div>
-          <motion.span
-            animate={{ scale: [1, 1.35, 1], opacity: [0.9, 0.4, 0.9] }}
-            transition={{ duration: 2.2, repeat: Infinity, delay: index * 0.3 }}
-            className="absolute -top-0.5 -right-0.5 size-2 rounded-full border-2 border-[#0B0B10]"
-            style={{
-              backgroundColor: project.featured ? "#FACC15" : "#4ADE80",
-            }}
-          />
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-medium text-[#FAFAFA] truncate">
-              {project.title}
-            </p>
-            {project.status === "active" && (
-              <span className="rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-[#4ADE80]">
-                Active
-              </span>
-            )}
-          </div>
-          <div className="mt-1 flex items-center gap-3 text-[11px] text-[#6B6B6B]">
-            <span className="flex items-center gap-1">
-              <Clock className="size-3" />
-              {timeAgo(project.createdAt)}
-            </span>
-            {project.category && (
-              <span className="flex items-center gap-1">
-                <FolderOpen className="size-3" />
-                {project.category}
-              </span>
-            )}
-            {project.tech && project.tech.length > 0 && (
-              <span className="hidden sm:flex items-center gap-1">
-                <Layers className="size-3" />
-                {project.tech.slice(0, 2).join(", ")}
-                {project.tech.length > 2 ? ` +${project.tech.length - 2}` : ""}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <motion.button
-          whileHover={{ scale: 1.12, rotate: 45 }}
-          whileTap={{ scale: 0.9 }}
-          className="mt-1 p-1.5 rounded-lg border border-white/10 text-[#6B6B6B] hover:text-[#4ADE80] hover:border-[#4ADE80]/30 hover:bg-[#4ADE80]/10 transition-colors opacity-0 group-hover:opacity-100"
-        >
-          <ArrowUpRight className="size-3.5" />
-        </motion.button>
-      </div>
-    </Reveal>
-  );
-};
-
-const Overview = () => {
+export default function Overview() {
   const router = useRouter();
   const { data, isLoading, error } = useProjects();
   const projects: DashboardProject[] = (data?.data ?? []) as DashboardProject[];
 
+  const [liveLatency, setLiveLatency] = useState(12);
+  const [filterCategory, setFilterCategory] = useState<string>("all");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLiveLatency(Math.floor(Math.random() * 5) + 10);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   const totalProjects = projects.length;
   const featuredCount = projects.filter((p) => p.featured).length;
-  const uniqueCategories = new Set(
-    projects.map((p) => p.category).filter(Boolean)
-  ).size;
-  const uniqueTech = new Set(projects.flatMap((p) => p.tech).filter(Boolean))
-    .size;
-  const activeProjects =
-    projects.filter((p) => p.status === "active").length || totalProjects;
-  const totalTechUsed = projects.reduce(
-    (acc: number, p) => acc + (p.tech?.length || 0),
-    0
-  );
-  const completionRate =
-    totalProjects > 0 ? Math.round((activeProjects / totalProjects) * 100) : 0;
+  const categoriesList = Array.from(new Set(projects.map((p) => p.category).filter(Boolean)));
+  const uniqueCategories = categoriesList.length;
+  const uniqueTech = new Set(projects.flatMap((p) => p.tech).filter(Boolean)).size;
 
-  const stats: Stat[] = [
-    {
-      label: "Total Projects",
-      value: totalProjects,
-      icon: FolderOpen,
-      color: "#4ADE80",
-    },
-    { label: "Featured", value: featuredCount, icon: Star, color: "#FACC15" },
-    {
-      label: "Categories",
-      value: uniqueCategories,
-      icon: LayoutGrid,
-      color: "#60A5FA",
-    },
-    { label: "Tech Stack", value: uniqueTech, icon: Layers, color: "#C084FC" },
-  ];
-
-  const miniStats = [
-    {
-      label: "Total Tech Usage",
-      value: totalTechUsed,
-      icon: Code,
-      color: "#F472B6",
-    },
-    {
-      label: "Active Projects",
-      value: activeProjects,
-      icon: Activity,
-      color: "#34D399",
-    },
-    {
-      label: "Categories Used",
-      value: uniqueCategories,
-      icon: Database,
-      color: "#FBBF24",
-    },
-    {
-      label: "Completion Rate",
-      value: completionRate,
-      icon: Target,
-      color: "#818CF8",
-      suffix: "%",
-    },
-  ];
-
-  const recentProjects = [...projects]
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-    .slice(0, 5);
-
-  const usages = [
-    {
-      label: "Projects",
-      color: "#4ADE80",
-      value: Math.min(Math.round((totalProjects / 20) * 100), 100),
-      count: `${totalProjects} / 20`,
-    },
-    {
-      label: "Categories",
-      color: "#60A5FA",
-      value: Math.min(Math.round((uniqueCategories / 10) * 100), 100),
-      count: `${uniqueCategories} / 10`,
-    },
-    {
-      label: "Tech Stack",
-      color: "#C084FC",
-      value: Math.min(Math.round((uniqueTech / 30) * 100), 100),
-      count: `${uniqueTech} / 30`,
-    },
-  ];
-
-  const quickActions = [
-    {
-      label: "Add Project",
-      icon: Plus,
-      path: "add-new-project",
-      accent: "#4ADE80",
-    },
-    { label: "View Projects", icon: Eye, path: "project", accent: "#60A5FA" },
-    {
-      label: "All Data",
-      icon: Database,
-      path: "get-all-data",
-      accent: "#C084FC",
-    },
-  ];
-
-  if (error) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center p-6">
-        <GlowCard glow="248, 113, 113, " className="w-full max-w-md">
-          <div className="flex flex-col items-center py-12 px-6 gap-4">
-            <motion.div
-              animate={{ rotate: [0, 8, -8, 0] }}
-              transition={{ duration: 0.6, repeat: Infinity }}
-              className="flex size-14 items-center justify-center rounded-2xl border border-[#F87171]/30 bg-[#F87171]/10"
-            >
-              <AlertTriangle className="size-7 text-[#F87171]" />
-            </motion.div>
-            <h3 className="text-lg font-bold text-[#FAFAFA] font-space-grotesk">
-              Failed to Load Data
-            </h3>
-            <p className="text-sm text-[#A3A3A3] text-center">
-              {error.message || "Please try again later."}
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => window.location.reload()}
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#4ADE80] to-[#22D3EE] px-5 py-2 text-sm font-semibold text-[#07110A] shadow-[0_8px_24px_-8px_rgba(74,222,128,0.7)]"
-            >
-              <RefreshCw className="size-4" />
-              Retry
-            </motion.button>
-          </div>
-        </GlowCard>
-      </div>
-    );
-  }
+  const filteredProjects =
+    filterCategory === "all"
+      ? projects
+      : projects.filter((p) => p.category === filterCategory);
 
   return (
-    <div className="space-y-6 sm:space-y-8">
-      {/* Hero */}
-      <Reveal>
-        <GlowCard className="relative overflow-hidden">
-          <div className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-[#4ADE80]/15 blur-[100px]" />
-          <div className="pointer-events-none absolute -bottom-28 -left-16 size-64 rounded-full bg-[#22D3EE]/10 blur-[100px]" />
-          <div className="relative z-10 p-6 sm:p-8">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3 py-1.5 text-[11px] font-medium text-[#4ADE80]"
-                >
-                  <span className="relative flex size-1.5">
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#4ADE80] opacity-75" />
-                    <span className="relative inline-flex size-1.5 rounded-full bg-[#4ADE80]" />
-                  </span>
-                  Live dashboard
-                </motion.div>
+    <div className="space-y-8 text-[#FFFBF4]">
+      {/* ─── Top Telemetry & Welcome Bar ──────────────────────────────────── */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#161712]/80 p-6 backdrop-blur-md shadow-xl">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#4ADE80]/30 bg-[#4ADE80]/10 px-3 py-1 text-xs font-mono text-[#4ADE80]">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ADE80] opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ADE80]" />
+            </span>
+            <span>EDGE CLUSTER // GLOBAL SYNC ACTIVE</span>
+          </div>
+          <h1
+            className="text-2xl sm:text-3xl font-bold tracking-tight text-[#FFFBF4]"
+            style={{ fontFamily: "var(--font-unbounded), sans-serif" }}
+          >
+            Dashboard Overview
+          </h1>
+          <p className="text-xs sm:text-sm text-[#FFFBF4]/60">
+            Real-time telemetry, project registries, and global edge invalidation status.
+          </p>
+        </div>
 
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#FAFAFA] font-space-grotesk leading-tight">
-                  <TypewriterText text="Dashboard Overview" />
-                </h1>
-
-                <div className="flex items-center gap-2 text-sm text-[#A3A3A3] flex-wrap">
-                  <Globe className="size-3.5 text-[#4ADE80]" />
-                  <span>Real-time insights & analytics</span>
-                  <span className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px]">
-                    <Zap className="size-2.5 text-[#FACC15]" />
-                    +12% growth
-                  </span>
-                  <span className="flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-[#6B6B6B]">
-                    <Clock className="size-2.5" />
-                    Updated now
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  {quickActions.map((action, i) => (
-                    <motion.button
-                      key={action.path}
-                      initial={{ opacity: 0, y: 14 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + i * 0.12 }}
-                      whileHover={{ y: -2, scale: 1.03 }}
-                      whileTap={{ scale: 0.96 }}
-                      onClick={() =>
-                        router.push(`/dashboard?path=${action.path}`)
-                      }
-                      className="flex items-center gap-2 rounded-xl border px-4 py-2 text-[13px] font-medium text-[#D8CFBC] transition-colors"
-                      style={{
-                        borderColor: `${action.accent}33`,
-                        backgroundColor: `${action.accent}12`,
-                      }}
-                    >
-                      <action.icon
-                        className="size-4"
-                        style={{ color: action.accent }}
-                      />
-                      {action.label}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-                className="flex items-center gap-3 flex-wrap lg:shrink-0"
-              >
-                <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                  <div className="flex -space-x-1.5">
-                    {Array.from({ length: 3 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex size-7 items-center justify-center rounded-full border-2 border-[#141414] bg-gradient-to-br from-[#D8CFBC] to-[#8A8578] text-[9px] font-bold text-[#0A0A0A]"
-                      >
-                        {String.fromCharCode(65 + i)}
-                      </div>
-                    ))}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-[#FAFAFA] leading-none">
-                      {VIEWERS}{" "}
-                      <span className="text-[#6B6B6B] font-normal">live</span>
-                    </p>
-                    <p className="mt-0.5 flex items-center gap-1 text-[10px] text-[#6B6B6B]">
-                      <Users className="size-2.5" />
-                      viewers right now
-                    </p>
-                  </div>
-                </div>
-                <div className="hidden xl:flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                  <div className="flex size-9 items-center justify-center rounded-xl border border-[#4ADE80]/30 bg-[#4ADE80]/10">
-                    <Shield className="size-4 text-[#4ADE80]" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-[#FAFAFA] leading-none">
-                      <GradientText>99.9%</GradientText>
-                    </p>
-                    <p className="mt-0.5 text-[10px] text-[#6B6B6B]">
-                      uptime guarantee
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+        {/* Live System Health Pill */}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 font-mono text-xs">
+            <Radio className="h-3.5 w-3.5 text-[#4ADE80] animate-pulse" />
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#FFFBF4]/50">EDGE LATENCY</span>
+              <span className="text-[#4ADE80] font-bold">{liveLatency}ms (Optimal)</span>
             </div>
           </div>
-        </GlowCard>
-      </Reveal>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
-        {isLoading
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 space-y-4"
-              >
-                <div className="flex items-start justify-between">
-                  <Skeleton className="h-4 w-20 bg-white/[0.06]" />
-                  <Skeleton className="size-11 rounded-xl bg-white/[0.06]" />
-                </div>
-                <Skeleton className="h-8 w-16 bg-white/[0.06]" />
-                <Skeleton className="h-1 w-full bg-white/[0.06]" />
-              </div>
-            ))
-          : stats.map((stat, index) => (
-              <Reveal key={stat.label} delay={index * 0.08} y={24}>
-                <StatCard
-                  icon={stat.icon}
-                  label={stat.label}
-                  value={stat.value}
-                  accent={stat.color}
-                  badge={
-                    index === 0
-                      ? "All time"
-                      : index === 1
-                        ? "Top rated"
-                        : undefined
-                  }
-                />
-              </Reveal>
-            ))}
+          <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 font-mono text-xs">
+            <Globe className="h-3.5 w-3.5 text-[#4ADE80]" />
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#FFFBF4]/50">COVERAGE</span>
+              <span className="text-[#FFFBF4] font-bold">300+ PoPs</span>
+            </div>
+          </div>
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => router.push("/dashboard?path=add-new-project")}
+            className="flex items-center gap-2 rounded-xl bg-[#4ADE80] px-4 py-2.5 text-xs sm:text-sm font-bold text-[#0A0A0A] shadow-[0_0_20px_rgba(74,222,128,0.25)] transition-all hover:bg-[#86efac] cursor-pointer"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add Project</span>
+          </motion.button>
+        </div>
       </div>
 
-      {/* Analytics panel */}
-      <Reveal>
-        <GlowCard>
-          <div className="p-6 sm:p-8">
-            <div className="flex items-start justify-between mb-7">
-              <div>
-                <h3 className="flex items-center gap-2 text-lg font-bold text-[#FAFAFA] font-space-grotesk">
-                  <span className="flex size-8 items-center justify-center rounded-lg border border-[#60A5FA]/30 bg-[#60A5FA]/10">
-                    <Activity className="size-4 text-[#60A5FA]" />
-                  </span>
-                  Analytics & Usage
-                </h3>
-                <p className="mt-1 text-sm text-[#A3A3A3]">
-                  Project health at a glance
-                </p>
-              </div>
-              <span className="hidden sm:flex items-center gap-1.5 rounded-full border border-[#4ADE80]/25 bg-[#4ADE80]/10 px-3 py-1 text-[10px] font-medium text-[#4ADE80]">
-                <TrendingUp className="size-3" />
-                +12.4% this week
+      {/* ─── 4-Card Bento Telemetry Grid ───────────────────────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Card 1: Total Projects */}
+        <GlowCard glow="74, 222, 128">
+          <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#161712]/70 p-5 backdrop-blur-md h-full transition-all hover:border-[#4ADE80]/30">
+            <div className="flex items-center justify-between pb-3">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#FFFBF4]/60">
+                Total Projects
               </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#4ADE80]/30 bg-[#4ADE80]/10 text-[#4ADE80]">
+                <FolderOpen className="h-4 w-4" />
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
-              {/* Mini metrics */}
-              <div className="lg:col-span-3 grid grid-cols-2 gap-3.5">
-                {miniStats.map((stat) => (
-                  <PageIntro key={stat.label}>
-                    <FadeItem>
-                      <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="flex size-9 items-center justify-center rounded-lg border"
-                            style={{
-                              backgroundColor: `${stat.color}14`,
-                              borderColor: `${stat.color}26`,
-                            }}
-                          >
-                            <stat.icon
-                              className="size-4"
-                              style={{ color: stat.color }}
-                            />
-                          </div>
-                          <div>
-                            <p className="text-lg font-bold text-[#FAFAFA] font-space-grotesk leading-none">
-                              {typeof stat.value === "number" ? (
-                                <Counter
-                                  to={stat.value}
-                                  suffix={stat.suffix ?? ""}
-                                />
-                              ) : (
-                                stat.value
-                              )}
-                            </p>
-                            <p className="mt-0.5 text-[11px] text-[#6B6B6B]">
-                              {stat.label}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </FadeItem>
-                  </PageIntro>
-                ))}
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold font-mono text-[#FFFBF4]">
+                  {isLoading ? "--" : totalProjects}
+                </span>
+                <span className="text-xs text-[#4ADE80] font-mono">active</span>
               </div>
-
-              {/* Donut + usage */}
-              <div className="lg:col-span-2 space-y-6">
-                <div className="flex items-center gap-5">
-                  <div className="relative size-32 shrink-0">
-                    <svg viewBox="0 0 128 128" className="size-32 -rotate-90">
-                      <circle
-                        cx="64"
-                        cy="64"
-                        r="54"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.07)"
-                        strokeWidth="12"
-                      />
-                      <motion.circle
-                        cx="64"
-                        cy="64"
-                        r="54"
-                        fill="none"
-                        stroke="url(#donutGrad)"
-                        strokeWidth="12"
-                        strokeLinecap="round"
-                        strokeDasharray={2 * Math.PI * 54}
-                        initial={{ strokeDashoffset: 2 * Math.PI * 54 }}
-                        whileInView={{
-                          strokeDashoffset:
-                            2 * Math.PI * 54 * (1 - completionRate / 100),
-                        }}
-                        viewport={{ once: true, amount: 0.5 }}
-                        transition={{
-                          duration: 1.4,
-                          ease: "easeOut",
-                          delay: 0.3,
-                        }}
-                      />
-                      <defs>
-                        <linearGradient
-                          id="donutGrad"
-                          x1="0%"
-                          y1="0%"
-                          x2="100%"
-                          y2="100%"
-                        >
-                          <stop offset="0%" stopColor="#4ADE80" />
-                          <stop offset="100%" stopColor="#22D3EE" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <p className="text-2xl font-bold text-[#FAFAFA] font-space-grotesk leading-none">
-                        <Counter to={completionRate} suffix="%" />
-                      </p>
-                      <p className="mt-1 text-[10px] text-[#6B6B6B]">
-                        completion
-                      </p>
-                    </div>
-                  </div>
-                  <div className="space-y-2 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 text-xs text-[#A3A3A3]">
-                      <span className="size-2 rounded-full bg-[#4ADE80]" />
-                      Healthy projects
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-[#A3A3A3]">
-                      <span className="size-2 rounded-full bg-[#FACC15]" />
-                      Needs attention
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-[#A3A3A3]">
-                      <span className="size-2 rounded-full bg-[#F87171]" />
-                      At limit
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {isLoading
-                    ? Array.from({ length: 3 }).map((_, i) => (
-                        <div key={i} className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Skeleton className="h-3 w-20 bg-white/[0.06]" />
-                            <Skeleton className="h-3 w-10 bg-white/[0.06]" />
-                          </div>
-                          <Skeleton className="h-2 w-full bg-white/[0.06]" />
-                        </div>
-                      ))
-                    : usages.map((usage) => (
-                        <div key={usage.label} className="space-y-1.5">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="text-[#D8CFBC] flex items-center gap-2">
-                              <span
-                                className="size-1.5 rounded-full"
-                                style={{
-                                  backgroundColor: usage.color,
-                                  boxShadow: `0 0 8px ${usage.color}`,
-                                }}
-                              />
-                              {usage.label}
-                            </span>
-                            <span className="font-medium text-[#FAFAFA]">
-                              {usage.count}
-                            </span>
-                          </div>
-                          <GrowBar
-                            to={usage.value}
-                            color={usage.color}
-                            height="h-2"
-                          />
-                        </div>
-                      ))}
-                </div>
-              </div>
+              <p className="text-[11px] text-[#FFFBF4]/50">Synchronized across endpoints</p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-[#FFFBF4]/50">
+              <span>Status: Online</span>
+              <span className="text-[#4ADE80]">100% Sync</span>
             </div>
           </div>
         </GlowCard>
-      </Reveal>
 
-      {/* Recent activity */}
-      <Reveal>
-        <GlowCard>
-          <div className="p-6 sm:p-8">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="flex items-center gap-2 text-lg font-bold text-[#FAFAFA] font-space-grotesk">
-                  <span className="flex size-8 items-center justify-center rounded-lg border border-[#4ADE80]/30 bg-[#4ADE80]/10">
-                    <Activity className="size-4 text-[#4ADE80]" />
-                  </span>
-                  Recent Activity
-                </h3>
-                <p className="mt-1 text-sm text-[#A3A3A3]">
-                  Latest projects and updates
-                </p>
+        {/* Card 2: Featured Highlights */}
+        <GlowCard glow="250, 204, 21">
+          <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#161712]/70 p-5 backdrop-blur-md h-full transition-all hover:border-yellow-400/30">
+            <div className="flex items-center justify-between pb-3">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#FFFBF4]/60">
+                Featured Spotlights
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-yellow-400/30 bg-yellow-400/10 text-yellow-400">
+                <Star className="h-4 w-4 fill-yellow-400/30" />
               </div>
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => router.push("/dashboard?path=project")}
-                className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs font-medium text-[#D8CFBC] hover:border-[#4ADE80]/30 hover:text-[#4ADE80] transition-colors"
-              >
-                View all
-                <ArrowUpRight className="size-3.5" />
-              </motion.button>
             </div>
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold font-mono text-[#FFFBF4]">
+                  {isLoading ? "--" : featuredCount}
+                </span>
+                <span className="text-xs text-yellow-400 font-mono">
+                  {totalProjects > 0 ? `${Math.round((featuredCount / totalProjects) * 100)}%` : "0%"}
+                </span>
+              </div>
+              <p className="text-[11px] text-[#FFFBF4]/50">Prioritized on hero feeds</p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-[#FFFBF4]/50">
+              <span>Priority Flag</span>
+              <span className="text-yellow-400">High Visibility</span>
+            </div>
+          </div>
+        </GlowCard>
 
-            {isLoading
-              ? Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-3.5 px-2 py-3">
-                    <Skeleton className="size-9 rounded-xl bg-white/[0.06]" />
-                    <div className="flex-1 space-y-2">
-                      <Skeleton className="h-3.5 w-40 bg-white/[0.06]" />
-                      <Skeleton className="h-3 w-24 bg-white/[0.06]" />
-                    </div>
-                    <Skeleton className="size-7 rounded-lg bg-white/[0.06]" />
-                  </div>
-                ))
-              : recentProjects.map((project, index) => (
-                  <ActivityItem
-                    key={project.id}
-                    project={project}
-                    index={index}
-                  />
-                ))}
+        {/* Card 3: Categories & Taxonomies */}
+        <GlowCard glow="96, 165, 250">
+          <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#161712]/70 p-5 backdrop-blur-md h-full transition-all hover:border-blue-400/30">
+            <div className="flex items-center justify-between pb-3">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#FFFBF4]/60">
+                Categories
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-blue-400/30 bg-blue-400/10 text-blue-400">
+                <LayoutGrid className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold font-mono text-[#FFFBF4]">
+                  {isLoading ? "--" : uniqueCategories}
+                </span>
+                <span className="text-xs text-blue-400 font-mono">taxonomies</span>
+              </div>
+              <p className="text-[11px] text-[#FFFBF4]/50">Organized portfolios</p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-[#FFFBF4]/50">
+              <span>Filter Query: Ready</span>
+              <span className="text-blue-400">Indexed</span>
+            </div>
+          </div>
+        </GlowCard>
 
-            {!isLoading && recentProjects.length === 0 && (
-              <p className="py-10 text-center text-sm text-[#6B6B6B]">
-                No recent activity to display.
+        {/* Card 4: Tech Stack Diversity */}
+        <GlowCard glow="192, 132, 252">
+          <div className="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#161712]/70 p-5 backdrop-blur-md h-full transition-all hover:border-purple-400/30">
+            <div className="flex items-center justify-between pb-3">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#FFFBF4]/60">
+                Tech Stack
+              </span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-purple-400/30 bg-purple-400/10 text-purple-400">
+                <Layers className="h-4 w-4" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold font-mono text-[#FFFBF4]">
+                  {isLoading ? "--" : uniqueTech}
+                </span>
+                <span className="text-xs text-purple-400 font-mono">unique tools</span>
+              </div>
+              <p className="text-[11px] text-[#FFFBF4]/50">Tagged across projects</p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-[11px] text-[#FFFBF4]/50">
+              <span>Multi-stack</span>
+              <span className="text-purple-400">Full Typed</span>
+            </div>
+          </div>
+        </GlowCard>
+      </div>
+
+      {/* ─── Central Section: Project Registry & Realtime Edge Feed ─────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left 8 Cols: Project Registry */}
+        <div className="lg:col-span-8 flex flex-col justify-between rounded-2xl border border-white/10 bg-[#161712]/80 p-6 backdrop-blur-md shadow-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/10">
+            <div>
+              <div className="flex items-center gap-2">
+                <FolderOpen className="h-4 w-4 text-[#4ADE80]" />
+                <h2 className="text-base sm:text-lg font-bold text-[#FFFBF4]">
+                  Project Registry
+                </h2>
+              </div>
+              <p className="text-xs text-[#FFFBF4]/60 mt-0.5">
+                All registered projects actively serving traffic through the REST API.
               </p>
-            )}
+            </div>
 
-            <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-white/10 pt-4 text-[11px] text-[#6B6B6B]">
-              <span>Last synced {new Date().toLocaleTimeString()}</span>
-              <span className="flex items-center gap-1.5">
-                <Shield className="size-3 text-[#4ADE80]" />
-                All systems operational
-              </span>
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setFilterCategory("all")}
+                className={`rounded-lg px-2.5 py-1 text-xs font-mono transition-colors cursor-pointer ${
+                  filterCategory === "all"
+                    ? "bg-[#4ADE80] text-[#0A0A0A] font-bold"
+                    : "text-[#FFFBF4]/60 hover:text-[#FFFBF4] bg-white/[0.03]"
+                }`}
+              >
+                All ({totalProjects})
+              </button>
+              {categoriesList.slice(0, 3).map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setFilterCategory(cat!)}
+                  className={`rounded-lg px-2.5 py-1 text-xs font-mono transition-colors cursor-pointer ${
+                    filterCategory === cat
+                      ? "bg-[#4ADE80] text-[#0A0A0A] font-bold"
+                      : "text-[#FFFBF4]/60 hover:text-[#FFFBF4] bg-white/[0.03]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
-        </GlowCard>
-      </Reveal>
+
+          {/* Project List */}
+          <div className="my-4 divide-y divide-white/5 space-y-2">
+            {isLoading ? (
+              <div className="py-12 flex flex-col items-center justify-center gap-3 text-[#FFFBF4]/50">
+                <RefreshCw className="h-6 w-6 animate-spin text-[#4ADE80]" />
+                <p className="text-xs font-mono">Fetching project schema from database...</p>
+              </div>
+            ) : filteredProjects.length === 0 ? (
+              <div className="py-12 flex flex-col items-center justify-center gap-4 text-center">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.02]">
+                  <FolderOpen className="h-6 w-6 text-[#FFFBF4]/40" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-[#FFFBF4]">No projects found</h4>
+                  <p className="text-xs text-[#FFFBF4]/50 mt-1">
+                    Create your first project to generate your REST endpoint.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => router.push("/dashboard?path=add-new-project")}
+                  className="rounded-xl bg-[#4ADE80] px-4 py-2 text-xs font-bold text-[#0A0A0A]"
+                >
+                  Add Project
+                </button>
+              </div>
+            ) : (
+              filteredProjects.slice(0, 5).map((project, idx) => (
+                <div
+                  key={project.ProjectID || idx}
+                  className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3.5 px-3 rounded-xl transition-colors hover:bg-white/[0.02]"
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div className="relative mt-0.5 shrink-0">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/40 text-[#4ADE80]">
+                        {project.featured ? (
+                          <Star className="h-4 w-4 text-yellow-400 fill-yellow-400/20" />
+                        ) : (
+                          <FolderOpen className="h-4 w-4 text-[#4ADE80]" />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="text-sm font-bold text-[#FFFBF4] group-hover:text-[#4ADE80] transition-colors">
+                          {project.title}
+                        </h4>
+                        {project.featured && (
+                          <span className="rounded-full border border-yellow-400/30 bg-yellow-400/10 px-2 py-0.5 text-[9px] font-mono text-yellow-400">
+                            Featured
+                          </span>
+                        )}
+                        {project.category && (
+                          <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] text-[#FFFBF4]/60">
+                            {project.category}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] text-[#FFFBF4]/50">
+                        <span>Updated {timeAgo(project.createdAt)}</span>
+                        {project.tech && project.tech.length > 0 && (
+                          <>
+                            <span>•</span>
+                            <span className="font-mono text-[#FFFBF4]/70">
+                              {project.tech.slice(0, 3).join(", ")}
+                              {project.tech.length > 3 ? ` +${project.tech.length - 3}` : ""}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        router.push(`/dashboard?path=edits&project=${project.ProjectID}`)
+                      }
+                      className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-[#FFFBF4]/80 transition-colors hover:bg-white/10 hover:text-[#FFFBF4] cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                    {project.liveDemo && (
+                      <a
+                        href={project.liveDemo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-lg border border-white/10 bg-white/[0.03] p-1.5 text-[#FFFBF4]/60 transition-colors hover:text-[#4ADE80] hover:bg-white/10"
+                        title="Live Preview"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs text-[#FFFBF4]/50">
+            <span>Showing top {Math.min(5, filteredProjects.length)} of {totalProjects} projects</span>
+            <button
+              type="button"
+              onClick={() => router.push("/dashboard?path=project")}
+              className="flex items-center gap-1 text-[#4ADE80] hover:underline cursor-pointer"
+            >
+              <span>View all projects</span>
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Right 4 Cols: Realtime Edge Telemetry & Quick Shortcuts */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Quick Actions Card */}
+          <div className="rounded-2xl border border-white/10 bg-[#161712]/80 p-5 backdrop-blur-md shadow-xl space-y-4">
+            <h3 className="text-sm font-bold text-[#FFFBF4] flex items-center gap-2">
+              <Zap className="h-4 w-4 text-[#4ADE80]" />
+              <span>Quick Actions</span>
+            </h3>
+
+            <div className="grid grid-cols-1 gap-2.5">
+              <button
+                type="button"
+                onClick={() => router.push("/dashboard?path=add-new-project")}
+                className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/40 text-left transition-all hover:border-[#4ADE80]/30 hover:bg-white/[0.02] cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <PlusCircle className="h-4 w-4 text-[#4ADE80]" />
+                  <div>
+                    <p className="text-xs font-semibold text-[#FFFBF4]">New Project</p>
+                    <p className="text-[10px] text-[#FFFBF4]/50">Add showcase item to API</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="h-4 w-4 text-[#FFFBF4]/40 group-hover:text-[#4ADE80]" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => router.push("/dashboard?path=api-key")}
+                className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/40 text-left transition-all hover:border-[#4ADE80]/30 hover:bg-white/[0.02] cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Key className="h-4 w-4 text-[#4ADE80]" />
+                  <div>
+                    <p className="text-xs font-semibold text-[#FFFBF4]">API Keys</p>
+                    <p className="text-[10px] text-[#FFFBF4]/50">Inspect or copy access tokens</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="h-4 w-4 text-[#FFFBF4]/40 group-hover:text-[#4ADE80]" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => router.push("/dashboard?path=view-projects")}
+                className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/40 text-left transition-all hover:border-[#4ADE80]/30 hover:bg-white/[0.02] cursor-pointer group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Eye className="h-4 w-4 text-[#4ADE80]" />
+                  <div>
+                    <p className="text-xs font-semibold text-[#FFFBF4]">Live View</p>
+                    <p className="text-[10px] text-[#FFFBF4]/50">Preview public visual cards</p>
+                  </div>
+                </div>
+                <ArrowUpRight className="h-4 w-4 text-[#FFFBF4]/40 group-hover:text-[#4ADE80]" />
+              </button>
+            </div>
+          </div>
+
+          {/* Realtime Telemetry Feed (Stageshow Style) */}
+          <div className="rounded-2xl border border-white/10 bg-[#161712]/80 p-5 backdrop-blur-md shadow-xl space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-[#FFFBF4] flex items-center gap-2">
+                <Activity className="h-4 w-4 text-[#4ADE80]" />
+                <span>Live Event Stream</span>
+              </h3>
+              <span className="text-[10px] font-mono text-[#4ADE80] flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#4ADE80] animate-pulse" />
+                STREAMING
+              </span>
+            </div>
+
+            <div className="space-y-2.5 text-xs font-mono">
+              <div className="p-2.5 rounded-lg border border-white/5 bg-black/40 space-y-1">
+                <div className="flex justify-between text-[#FFFBF4]/50 text-[10px]">
+                  <span>CACHE_PURGE_SUCCESS</span>
+                  <span>just now</span>
+                </div>
+                <p className="text-[#4ADE80] text-[11px]">
+                  Edge invalidated in 12ms across 300+ PoPs
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-lg border border-white/5 bg-black/40 space-y-1">
+                <div className="flex justify-between text-[#FFFBF4]/50 text-[10px]">
+                  <span>MEDIA_OPTIMIZER</span>
+                  <span>2m ago</span>
+                </div>
+                <p className="text-[#FFFBF4]/80 text-[11px]">
+                  AVIF &amp; WebP srcset generated (-85% bytes)
+                </p>
+              </div>
+
+              <div className="p-2.5 rounded-lg border border-white/5 bg-black/40 space-y-1">
+                <div className="flex justify-between text-[#FFFBF4]/50 text-[10px]">
+                  <span>TOKEN_AUTH_CHECK</span>
+                  <span>5m ago</span>
+                </div>
+                <p className="text-[#FFFBF4]/80 text-[11px]">
+                  JWT signature verified for incoming GET request
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Overview;
+}

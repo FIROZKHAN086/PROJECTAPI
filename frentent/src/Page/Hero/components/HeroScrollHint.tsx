@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,24 +32,36 @@ export default function HeroScrollHint() {
     return () => ctx.revert();
   }, []);
 
+  const handleScrollDown = () => {
+    const target = document.getElementById("journey");
+    if (!target) return;
+    const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(target, { duration: 1.2 });
+    } else {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="pointer-events-none absolute bottom-8 left-0 right-0 z-10 flex justify-center">
+    <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center pointer-events-auto">
       <motion.div
         ref={gsapRef}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.3, duration: 0.8 }}
-        className="flex flex-col items-center gap-3"
+        transition={{ delay: 1.1, duration: 0.8 }}
+        onClick={handleScrollDown}
+        className="flex flex-col items-center gap-2.5 cursor-pointer group select-none"
       >
-        <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/15 p-1.5">
+        <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/20 bg-white/[0.03] p-1.5 backdrop-blur-xs transition-colors group-hover:border-[#4ADE80]/60">
           <motion.span
-            animate={{ y: [0, 16, 0], opacity: [1, 0.2, 1] }}
+            animate={{ y: [0, 16, 0], opacity: [1, 0.3, 1] }}
             transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-            className="h-1.5 w-1.5 rounded-full bg-[#4ADE80]"
+            className="h-1.5 w-1.5 rounded-full bg-[#4ADE80] shadow-[0_0_8px_#4ADE80]"
           />
         </div>
-        <span className="text-[10px] uppercase tracking-[0.25em] text-[#8A8578]">
-          Scroll
+        <span className="text-[10px] uppercase font-mono tracking-[0.25em] text-[#FFFBF4]/50 group-hover:text-[#4ADE80] transition-colors">
+          Scroll To Fly
         </span>
       </motion.div>
     </div>
