@@ -133,3 +133,7 @@ export const ZoomIn = createIcon("ZoomIn");
 export const GitBranchIcon = createIcon("GitBranchIcon");
 export const Clock = createIcon("Clock");
 export const Mail = createIcon("Mail");
+export const Radio = createIcon("Radio");
+export const UploadCloud = createIcon("UploadCloud");
+
+

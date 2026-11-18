@@ -5,29 +5,26 @@ import HeroTitle from "./components/HeroTitle";
 import HeroSubtitle from "./components/HeroSubtitle";
 import HeroVisual from "./components/HeroVisual";
 import HeroScrollHint from "./components/HeroScrollHint";
-import HeroParticles from "./components/HeroParticles";
-import HeroFeatures from "./components/HeroFeatures";
+import HeroCTA from "./components/HeroCTA";
+import HeroStats from "./components/HeroStats";
 
 export default function HeroSection() {
   return (
-    <>
-      <section
-        aria-label="ProjectAPI hero"
-        className="relative min-h-screen overflow-hidden bg-[#11120D] text-[#FFFBF4]"
-      >
-        <HeroBackground />
-        <HeroParticles />
-
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-285 flex-col items-center justify-center px-6 py-24 text-center sm:py-28">
-          <HeroBadge />
-          <HeroTitle />
-          <HeroSubtitle />
-         
-          <HeroFeatures />
-          <HeroVisual />
-          <HeroScrollHint />
-        </div>
-      </section>
-    </>
+    <section
+      id="hero"
+      aria-label="ProjectAPI hero"
+      className="relative min-h-screen overflow-hidden bg-[#0A0A0A] text-[#FFFBF4]"
+    >
+      <HeroBackground />
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-285 flex-col items-center justify-center px-6 py-24 text-center sm:py-28">
+        <HeroBadge />
+        <HeroTitle />
+        <HeroSubtitle />
+        <HeroCTA />
+        <HeroStats />
+        <HeroVisual />
+        <HeroScrollHint />
+      </div>
+    </section>
   );
 }

@@ -53,6 +53,7 @@ export default function SmoothScrollProvider({
       cancelAnimationFrame(rafId);
       gsap.ticker.remove(() => lenis.raf);
       lenis.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
   }, []);
 

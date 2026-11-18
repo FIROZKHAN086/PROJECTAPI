@@ -5,77 +5,62 @@ import { motion } from "framer-motion";
 import gsap from "gsap";
 import { fadeIn, EASE_OUT } from "@/src/Page/Hero/lib/variants";
 import { useRouter } from "next/navigation";
+import { ArrowRight, BookOpen, ShieldCheck, Zap } from "lucide-react";
+
 export default function HeroCTA() {
   const router = useRouter();
+
   return (
     <motion.div
       variants={fadeIn}
       initial="hidden"
       animate="visible"
       transition={{ delay: 0.2 }}
-      className="mt-8 flex flex-wrap items-center justify-center gap-3"
+      className="mt-8 flex flex-col items-center gap-4"
     >
-      <motion.button
-        whileHover={{
-          scale: 1.04,
-          boxShadow: "0px 0px 28px rgba(74,222,128,0.35)",
-        }}
-        whileTap={{ scale: 0.96 }}
-        transition={{ duration: 0.25, ease: EASE_OUT }}
-        onClick={() => router.push("/login")}
-        className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-[#4ADE80] px-6 py-2.5 text-sm font-semibold text-[#0A0A0A] transition-colors hover:bg-[#a3e635]"
-      >
-        <span className="absolute inset-0 -z-10 bg-gradient-to-r from-[#4ADE80] via-[#a3e635] to-[#4ADE80] bg-[length:200%_100%]" />
-        <span className="relative z-10">Start Building Free</span>
-        <svg
-          viewBox="0 0 16 16"
-          fill="none"
-          className="h-4 w-4 transition-transform group-hover:translate-x-1"
-          aria-hidden="true"
+      <div className="flex flex-wrap items-center justify-center gap-3.5">
+        <motion.button
+          whileHover={{
+            scale: 1.04,
+            boxShadow: "0px 0px 32px rgba(74,222,128,0.45)",
+          }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+          onClick={() => router.push("/login")}
+          className="group inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#4ADE80] px-7 py-3 text-sm font-bold text-[#0A0A0A] shadow-[0_4px_20px_rgba(74,222,128,0.3)] transition-all hover:bg-[#86efac]"
         >
-          <path
-            d="M3 8h10m0 0L9 4m4 4-4 4"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </motion.button>
-      <motion.a
-        whileHover={{
-          scale: 1.04,
-          backgroundColor: "rgba(255,255,255,0.1)",
-          borderColor: "rgba(255,255,255,0.2)",
-        }}
-        whileTap={{ scale: 0.96 }}
-        transition={{ duration: 0.25, ease: EASE_OUT }}
-        href="/docs"
-        className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-white/[0.03] border border-white/10 px-6 py-2.5 text-sm font-medium text-[#FFFBF4]"
-      >
-        <svg
-          viewBox="0 0 16 16"
-          fill="none"
-          className="h-4 w-4"
-          aria-hidden="true"
+          <span>Start Building Free</span>
+          <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+        </motion.button>
+
+        <motion.button
+          whileHover={{
+            scale: 1.03,
+            backgroundColor: "rgba(255,255,255,0.08)",
+            borderColor: "rgba(255,255,255,0.25)",
+          }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+          onClick={() => router.push("/docs")}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#FFFBF4]/15 bg-white/[0.03] px-6 py-3 text-sm font-medium text-[#FFFBF4] backdrop-blur-sm transition-all"
         >
-          <path
-            d="M8 3v10m0 0l4-4m-4 4L4 9"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.5"
-          />
-          <path
-            d="M2 2h12"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          />
-        </svg>
-        View API Docs
-      </motion.a>
+          <BookOpen className="h-4 w-4 text-[#FFFBF4]/70" />
+          <span>Explore Documentation</span>
+        </motion.button>
+      </div>
+
+      {/* Trust micro-banner */}
+      <div className="flex items-center gap-4 text-xs text-[#FFFBF4]/50">
+        <span className="flex items-center gap-1.5">
+          <Zap className="h-3.5 w-3.5 text-[#4ADE80]" />
+          Instant Setup (30s)
+        </span>
+        <span className="text-[#FFFBF4]/20">•</span>
+        <span className="flex items-center gap-1.5">
+          <ShieldCheck className="h-3.5 w-3.5 text-[#4ADE80]" />
+          No credit card required
+        </span>
+      </div>
     </motion.div>
   );
 }
