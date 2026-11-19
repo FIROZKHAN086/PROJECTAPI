@@ -587,7 +587,7 @@ export default function ScrollJourneySection() {
                     {selectedSdkTab === "astro" && (
                       <code>
                         <span className="text-[#FFFBF4]/50">---</span>{"\n"}
-                        <span className="text-[#FFFBF4]/50">// src/pages/projects.astro</span>{"\n"}
+                        <span className="text-[#FFFBF4]/50">{"// src/pages/projects.astro"}</span>{"\n"}
                         <span className="text-[#4ADE80]">const</span> response ={" "}
                         <span className="text-[#4ADE80]">await</span> fetch(
                         <span className="text-[#D8CFBC]">&apos;https://api.projectapi.dev/v1/projects&apos;</span>);{"\n"}
@@ -601,7 +601,7 @@ export default function ScrollJourneySection() {
                     )}
                     {selectedSdkTab === "curl" && (
                       <code>
-                        <span className="text-[#FFFBF4]/50"># Direct Terminal Test</span>{"\n"}
+                        <span className="text-[#FFFBF4]/50">{"# Direct Terminal Test"}</span>{"\n"}
                         curl -X GET https://api.projectapi.dev/v1/projects \{"\n"}
                         {"  "}-H &quot;Authorization: Bearer proj_live_demo_key&quot; \{"\n"}
                         {"  "}-H &quot;Accept: application/json&quot;

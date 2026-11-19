@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GraduationCap, Briefcase, GitBranch, Building2, Sparkles, Check, ArrowRight } from "lucide-react";
-import { StaggerGrid, ScrollReveal, GlowCard, ScaleIn } from "@/src/lib/animations";
-import { useRouter } from "next/navigation";
+import {GraduationCap,Briefcase,GitBranch,Building2, Sparkles, Check, ArrowRight } from "../../Components/DynamicIcons"
+import { StaggerGrid, ScrollReveal, ScaleIn, GlowCard } from "@/src/lib/animations";
 
 import PricingHeader from "./components/PricingHeader";
 import PersonaCard from "./components/PersonaCard";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 

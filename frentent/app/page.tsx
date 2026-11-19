@@ -2,7 +2,7 @@ import Homepage from "@/src/Components/Homepage";
 
 const page = () => {
   return (
-    <main className="min-h-screen ">
+    <main suppressHydrationWarning={true} className="min-h-screen ">
       <Homepage />
     </main>
   );

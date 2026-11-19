@@ -54,20 +54,12 @@ export const generateToken = (tokenData: {
 
 export const GenerateVerifyToken = (tokenData: {
   id: string;
-  name: string;
-  email: string;
-  OneTimeID: string;
-  Role: string;
-  password: string;
+  
 }) => {
   return jwt.sign(
     {
       id: tokenData.id,
-      name: tokenData.name,
-      email: tokenData.email,
-      OneTimeID: tokenData.OneTimeID,
-      Role: tokenData.Role,
-      password: tokenData.password,
+      
     },
     JWT_SECRET,
     {

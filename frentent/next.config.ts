@@ -3,8 +3,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  images: {
+    remotePatterns: [new URL('https://ik.imagekit.io/**')],
+  },
+
+
   async rewrites() {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "https://projectapi-backend.duckdns.org";
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL as string;
     return [
       {
         source: "/api/:path*",

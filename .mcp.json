@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "type": "http",
+      "url": "https://www.shadcn.io/api/mcp"
+    },
+    "21st-dev": {
+      "type": "http",
+      "url": "https://21st.dev/api/mcp"
+    },
+    "Framelink Figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key=${FIGMA_API_KEY}",
+        "--stdio"
+      ]
+    }
+  }
+}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, LoaderCircle, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence, Easing } from "framer-motion";
+import { Eye, EyeOff, LoaderCircle, ArrowRight, Mail, Lock, User } from "@/src/Components/DynamicIcons";
+import { useRouter } from "next/navigation";
 import {
   useLogin,
   useRegister,
@@ -13,7 +14,6 @@ import {
 } from "@/src/hooks/useAuth";
 import { useAppDispatch } from "@/src/lib/hooks";
 import { setUser, beginOtpVerification } from "@/src/lib/authSlice";
-import { useRouter } from "next/navigation";
 import { toast } from "@/src/lib/toastSlice";
 import OtpForm from "./OtpForm";
 
@@ -21,6 +21,13 @@ interface AuthFormProps {
   isSignUp: boolean;
   redirectTarget: string;
 }
+
+const fieldMotion = {
+  initial: { opacity: 0, y: 8, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+  exit: { opacity: 0, y: -6, filter: "blur(4px)" },
+  transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as Easing },
+};
 
 export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
   const router = useRouter();
@@ -144,161 +151,201 @@ export default function AuthForm({ isSignUp, redirectTarget }: AuthFormProps) {
     );
   }
 
+  const inputBase =
+    "w-full h-11 bg-[#0A0A0A]/80 border rounded-xl pl-10 pr-3 text-sm text-[#FFFBF4] placeholder:text-[#8A8578] outline-none transition-all duration-200 focus:border-[#4ADE80]/50 focus:ring-2 focus:ring-[#4ADE80]/15 focus:bg-[#0A0A0A]";
+  const inputError = "border-[#F87171]/70 focus:border-[#F87171]/70 focus:ring-[#F87171]/15";
+  const inputOk = "border-white/10 hover:border-white/20";
+
   return (
-    <>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <AnimatePresence>
-          {isSignUp && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <label className="text-xs text-[#D8CFBC] block mb-1.5">
-                Full name
-              </label>
+    <motion.form
+      onSubmit={handleSubmit}
+      className="space-y-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35 }}
+    >
+      <AnimatePresence mode="popLayout">
+        {isSignUp && (
+          <motion.div key="name" {...fieldMotion} layout>
+            <label className="mb-1.5 block text-xs font-medium text-[#D8CFBC]">
+              Full name
+            </label>
+            <div className="relative">
+              <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#8A8578]" />
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="John Doe"
-                className={`w-full h-11 px-3 bg-[#0A0A0A] border ${
-                  errors.name ? "border-[#F87171]" : "border-white/10"
-                } rounded-lg text-sm text-[#FFFBF4] placeholder:text-[#8A8578] outline-none focus:border-white/30 transition-colors`}
+                autoComplete="name"
+                className={`${inputBase} ${errors.name ? inputError : inputOk}`}
               />
+            </div>
+            <AnimatePresence>
               {errors.name && (
-                <p className="text-xs text-[#F87171] mt-1">{errors.name}</p>
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="mt-1.5 text-xs text-[#F87171]"
+                >
+                  {errors.name}
+                </motion.p>
               )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <div>
-          <label className="text-xs text-[#D8CFBC] block mb-1.5">Email</label>
+      <motion.div {...fieldMotion} layout>
+        <label className="mb-1.5 block text-xs font-medium text-[#D8CFBC]">Email</label>
+        <div className="relative">
+          <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#8A8578]" />
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
             placeholder="you@example.com"
-            className={`w-full h-11 px-3 bg-[#0A0A0A] border ${
-              errors.email ? "border-[#F87171]" : "border-white/10"
-            } rounded-lg text-sm text-[#FFFBF4] placeholder:text-[#8A8578] outline-none focus:border-white/30 transition-colors`}
+            autoComplete="email"
+            className={`${inputBase} ${errors.email ? inputError : inputOk}`}
           />
-          {errors.email && (
-            <p className="text-xs text-[#F87171] mt-1">{errors.email}</p>
-          )}
         </div>
+        <AnimatePresence>
+          {errors.email && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="mt-1.5 text-xs text-[#F87171]"
+            >
+              {errors.email}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs text-[#D8CFBC]">Password</label>
-            {!isSignUp && (
-              <button
-                type="button"
-                className="text-xs text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors"
-              >
-                Forgot?
-              </button>
-            )}
-          </div>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Enter your password"
-              className={`w-full h-11 px-3 pr-10 bg-[#0A0A0A] border ${
-                errors.password ? "border-[#F87171]" : "border-white/10"
-              } rounded-lg text-sm text-[#FFFBF4] placeholder:text-[#8A8578] outline-none focus:border-white/30 transition-colors`}
-            />
+      <motion.div {...fieldMotion} layout>
+        <div className="mb-1.5 flex items-center justify-between">
+          <label className="text-xs font-medium text-[#D8CFBC]">Password</label>
+          {!isSignUp && (
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors"
+              className="text-xs text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors"
             >
-              {showPassword ? (
-                <EyeOff className="size-4" />
-              ) : (
-                <Eye className="size-4" />
-              )}
+              Forgot?
             </button>
-          </div>
-          {errors.password && (
-            <p className="text-xs text-[#F87171] mt-1">{errors.password}</p>
           )}
         </div>
-
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#8A8578]" />
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="••••••••"
+            autoComplete={isSignUp ? "new-password" : "current-password"}
+            className={`${inputBase} pr-10 ${errors.password ? inputError : inputOk}`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D8CFBC] hover:text-[#FFFBF4] transition-colors"
+          >
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
         <AnimatePresence>
-          {isSignUp && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
+          {errors.password && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="mt-1.5 text-xs text-[#F87171]"
             >
-              <label className="text-xs text-[#D8CFBC] block mb-1.5">
-                Confirm password
-              </label>
+              {errors.password}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      <AnimatePresence mode="popLayout">
+        {isSignUp && (
+          <motion.div key="confirmPassword" {...fieldMotion} layout>
+            <label className="mb-1.5 block text-xs font-medium text-[#D8CFBC]">
+              Confirm password
+            </label>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#8A8578]" />
               <input
                 type={showPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                placeholder="Confirm your password"
-                className={`w-full h-11 px-3 bg-[#0A0A0A] border ${
-                  errors.confirmPassword
-                    ? "border-[#F87171]"
-                    : "border-white/10"
-                } rounded-lg text-sm text-[#FFFBF4] placeholder:text-[#8A8578] outline-none focus:border-white/30 transition-colors`}
+                placeholder="••••••••"
+                autoComplete="new-password"
+                className={`${inputBase} ${
+                  errors.confirmPassword ? inputError : inputOk
+                }`}
               />
+            </div>
+            <AnimatePresence>
               {errors.confirmPassword && (
-                <p className="text-xs text-[#F87171] mt-1">
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="mt-1.5 text-xs text-[#F87171]"
+                >
                   {errors.confirmPassword}
-                </p>
+                </motion.p>
               )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full h-11 bg-[#FBF7F4] text-[#0A0A0A] font-semibold text-sm rounded-lg flex items-center justify-center gap-2 transition-all duration-200 hover:bg-[#e8e4df] disabled:opacity-70 cursor-pointer group"
-        >
-          {isPending ? (
-            <LoaderCircle className="size-4 animate-spin" />
-          ) : (
-            <>
-              {isSignUp ? "Create account" : "Log in"}
-              <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-            </>
-          )}
-        </button>
+      <motion.button
+        type="submit"
+        disabled={isPending}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.98 }}
+        className="group relative flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FBF7F4] text-sm font-semibold text-[#0A0A0A] transition-all duration-200 hover:bg-[#e8e4df] disabled:opacity-70 cursor-pointer overflow-hidden shadow-lg"
+      >
+        <span className="absolute inset-0 bg-gradient-to-r from-[#4ADE80]/0 via-[#4ADE80]/15 to-[#4ADE80]/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        {isPending ? (
+          <LoaderCircle className="size-4 animate-spin" />
+        ) : (
+          <>
+            <span className="relative z-10">{isSignUp ? "Create account" : "Log in"}</span>
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 relative z-10" />
+          </>
+        )}
+      </motion.button>
 
-        <div className="hidden lg:block absolute bottom-5 right-8  text-sm text-[#D8CFBC] cursor-pointer">
-          {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-          <button
-            onClick={toggleForm}
-            className="text-[#FFFBF4] underline underline-offset-4 hover:opacity-80 transition-opacity"
-          >
-            {isSignUp ? "Sign in" : "Sign up"}
-          </button>
-        </div>
-      </form>
-
-      <div className="lg:hidden mt-6 text-center text-sm text-[#D8CFBC] cursor-pointer">
+      <div className="hidden lg:block absolute bottom-5 right-8 text-sm text-[#D8CFBC] cursor-pointer">
         {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
         <button
+          type="button"
           onClick={toggleForm}
-          className="text-[#FFFBF4] underline underline-offset-4 hover:opacity-80 transition-opacity"
+          className="text-[#FFFBF4] underline underline-offset-4 hover:opacity-80 transition-opacity cursor-pointer font-medium"
         >
           {isSignUp ? "Sign in" : "Sign up"}
         </button>
       </div>
-    </>
+
+      <div className="lg:hidden mt-6 text-center text-sm text-[#D8CFBC] cursor-pointer">
+        {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+        <button
+          type="button"
+          onClick={toggleForm}
+          className="text-[#FFFBF4] underline underline-offset-4 hover:opacity-80 transition-opacity cursor-pointer font-medium"
+        >
+          {isSignUp ? "Sign in" : "Sign up"}
+        </button>
+      </div>
+    </motion.form>
   );
 }

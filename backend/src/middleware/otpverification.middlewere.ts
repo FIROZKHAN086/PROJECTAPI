@@ -1,21 +1,22 @@
 import { Request, Response, NextFunction } from "express";
+
 import jwt from "jsonwebtoken";
+import redis from "../config/redis.js";
+import { getCookieOptions } from "../utils/getCookieOptions.js";
 
 interface OtpVerificationPayload {
   id: string;
-  OneTimeID: string;
-  name: string;
-  email: string;
-  Role: string;
-  password: string;
+  iat?: number;
+  exp?: number;
 }
 
-export const otpVerificationMiddleware = (
+export const otpVerificationMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+   
     const token = req.cookies?.otp_verification;
 
     if (!token) {
@@ -26,12 +27,14 @@ export const otpVerificationMiddleware = (
       });
     }
 
+    
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET!
     ) as OtpVerificationPayload;
 
-    if (!decoded || !decoded.id || !decoded.OneTimeID) {
+    
+    if (!decoded?.id || typeof decoded.id !== "string") {
       return res.status(401).json({
         success: false,
         message: "Invalid OTP verification session.",
@@ -39,18 +42,32 @@ export const otpVerificationMiddleware = (
       });
     }
 
+    
+    const pendingKey = `pending:${decoded.id}`;
+
+    const pendingUser = await redis.get(pendingKey);
+
+    if (!pendingUser) {
+      res.clearCookie("otp_verification", getCookieOptions());
+
+      return res.status(401).json({
+        success: false,
+        message: "Registration session expired. Please register again.",
+        code: "REGISTRATION_SESSION_EXPIRED",
+      });
+    }
+
+    
     (req as any).otpUser = {
-      id: decoded.id,
-      OneTimeID: decoded.OneTimeID,
-      name: decoded.name,
-      email: decoded.email,
-      Role: decoded.Role,
-      password: decoded.password,
+      OneTimeID: decoded.id,
     };
 
-    next();
+    
+    return next();
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
+      res.clearCookie("otp_verification", getCookieOptions());
+
       return res.status(401).json({
         success: false,
         message: "OTP verification session has expired.",
@@ -58,10 +75,19 @@ export const otpVerificationMiddleware = (
       });
     }
 
-    return res.status(401).json({
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid OTP verification token.",
+        code: "INVALID_OTP_VERIFICATION_TOKEN",
+      });
+    }
+
+    console.error("OTP middleware error:", error);
+
+    return res.status(500).json({
       success: false,
-      message: "Invalid OTP verification session.",
-      code: "INVALID_OTP_VERIFICATION_TOKEN",
+      message: "Unable to verify OTP session.",
     });
   }
 };

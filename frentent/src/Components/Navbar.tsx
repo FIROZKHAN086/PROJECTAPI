@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   motion,
   AnimatePresence,
+
+  useScroll,
+
+
   useMotionValue,
   useTransform,
 } from "framer-motion";
@@ -81,6 +85,9 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+
+  useScroll();
 
 
   // Motion values for floating elements

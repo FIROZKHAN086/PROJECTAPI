@@ -12,13 +12,8 @@ import {
   Zap,
   Activity,
   Code2,
-  Terminal,
   Lock,
-  RefreshCw,
-  AlertCircle,
-  Cpu,
-  Layers,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { useAppSelector } from "@/src/lib/hooks";
 import { toast } from "@/src/lib/toastSlice";
 import { GlowCard, Reveal } from "@/src/Components/dashboard/ui";

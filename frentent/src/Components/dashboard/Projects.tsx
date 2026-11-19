@@ -14,7 +14,7 @@ import {
   Star,
   AlertTriangle,
   FolderOpen,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { useProjects, useDeleteProject } from "@/src/hooks/useProjects";
 import { toast } from "@/src/lib/toastSlice";
 import { CustomFieldsDisplay } from "./Components/CustomFieldsDrawer";

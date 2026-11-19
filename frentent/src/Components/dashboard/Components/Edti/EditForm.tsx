@@ -23,7 +23,7 @@ import {
   Globe,
   GitBranch,
   Settings2,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { pulseAnimation, item } from "../../lib/variants";
 import { CustomFieldsDrawer } from "../CustomFieldsDrawer";
 import { glassInput } from "../data";

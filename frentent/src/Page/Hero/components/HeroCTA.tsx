@@ -1,6 +1,8 @@
 "use client";
 
+import { useRef } from "react";
 import { motion } from "framer-motion";
+import gsap from "gsap";
 import { fadeIn, EASE_OUT } from "@/src/Page/Hero/lib/variants";
 import { useRouter } from "next/navigation";
 import { ArrowRight, BookOpen, ShieldCheck, Zap } from "lucide-react";

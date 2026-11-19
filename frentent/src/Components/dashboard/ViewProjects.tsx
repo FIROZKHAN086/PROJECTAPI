@@ -13,7 +13,7 @@ import {
   Globe,
   GitBranch,
   GitBranchIcon,
-} from "lucide-react";
+} from "@/src/Components/DynamicIcons";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";

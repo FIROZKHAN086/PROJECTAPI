@@ -128,3 +128,12 @@ export const X = createIcon("X");
 export const XCircle = createIcon("XCircle");
 export const XIcon = createIcon("XIcon");
 export const Zap = createIcon("Zap");
+export const ZapOff = createIcon("ZapOff");
+export const ZoomIn = createIcon("ZoomIn");
+export const GitBranchIcon = createIcon("GitBranchIcon");
+export const Clock = createIcon("Clock");
+export const Mail = createIcon("Mail");
+export const Radio = createIcon("Radio");
+export const UploadCloud = createIcon("UploadCloud");
+
+

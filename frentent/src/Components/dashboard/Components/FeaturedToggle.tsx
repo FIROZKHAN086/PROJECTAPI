@@ -2,7 +2,7 @@ import { itemVariants } from "../AddNewProject";
 
 import { motion } from "framer-motion";
 
-import { Sparkles, Star } from "lucide-react";
+import { Sparkles, Star } from "@/src/Components/DynamicIcons";
 
 export const FeaturedToggle = ({
   featured,

@@ -9,28 +9,22 @@ import {
   LayoutGrid,
   Layers,
   PlusCircle,
-  Clock,
   Zap,
-  Shield,
-  Database,
-  Code,
   ArrowUpRight,
   Activity,
   Globe,
   Plus,
   Eye,
   RefreshCw,
-  Terminal,
-  Sparkles,
-  CheckCircle2,
-  Cpu,
   Radio,
-  ExternalLink,
   Key,
-} from "lucide-react";
+  ExternalLink,
+
+} from "@/src/Components/DynamicIcons";
+
 import { useProjects } from "@/src/hooks/useProjects";
 import type { Project } from "@/src/types/project";
-import { GlowCard, Reveal } from "@/src/Components/dashboard/ui";
+import { GlowCard} from "@/src/Components/dashboard/ui";
 
 type DashboardProject = Project & { status?: string };
 

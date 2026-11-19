@@ -14,7 +14,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
-import { Tag, ChevronsUpDown, Check } from "lucide-react";
+import { Check, ChevronsUpDown, Tag } from "@/src/Components/DynamicIcons";
 import { categoryOptions } from "../data";
 
 export const CategoryCombobox = ({
@@ -46,7 +46,7 @@ export const CategoryCombobox = ({
             role="combobox"
             aria-controls={listId}
             aria-expanded={open}
-            disabled={isPending}
+             disabled={isPending}
             className={cn(
               "flex h-10 w-full cursor-pointer items-center justify-between rounded-xl border border-white/10 bg-white/4 px-4 text-[#FAFAFA] transition-colors hover:border-white/25 disabled:pointer-events-none disabled:opacity-50"
             )}

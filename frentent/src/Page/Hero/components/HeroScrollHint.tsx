@@ -10,16 +10,20 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroScrollHint() {
   const gsapRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = gsapRef.current;
+    const glow = glowRef.current;
     if (!el) return;
 
     const ctx = gsap.context(() => {
+      // Fade out on scroll
       gsap.to(el, {
         autoAlpha: 0,
         y: -24,
-        ease: "none",
+        scale: 0.8,
+        ease: "power2.in",
         scrollTrigger: {
           trigger: el.parentElement,
           start: "top 75%",
@@ -27,6 +31,17 @@ export default function HeroScrollHint() {
           scrub: true,
         },
       });
+
+      // Glow pulse
+      if (glow) {
+        gsap.to(glow, {
+          scale: 1.5,
+          opacity: 0,
+          duration: 2,
+          repeat: -1,
+          ease: "power2.out",
+        });
+      }
     }, el);
 
     return () => ctx.revert();

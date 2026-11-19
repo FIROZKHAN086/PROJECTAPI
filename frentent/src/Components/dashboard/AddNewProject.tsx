@@ -104,6 +104,7 @@ export default function AddNewProject() {
 
   useEffect(() => {
     if (!imageFile) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setImagePreviewUrl(null);
       return;
     }

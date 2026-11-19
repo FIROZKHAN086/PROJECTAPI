@@ -5,24 +5,30 @@ import { authFeatures } from "@/app/login/lib/data";
 
 export default function MobileFeatures() {
   return (
-    <div className="lg:hidden mt-4 grid grid-cols-2 gap-2">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15, duration: 0.45 }}
+      className="mt-5 grid grid-cols-2 gap-2.5 lg:hidden"
+    >
       {authFeatures.map((feature, index) => {
         const Icon = feature.icon;
         return (
           <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 + index * 0.1 }}
-            className="flex items-center gap-2 p-2 bg-[#141414] border border-white/10 rounded-lg"
+            key={feature.text}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.22 + index * 0.06, duration: 0.35 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-[#141414]/70 px-3 py-2.5 backdrop-blur-sm"
           >
-            <Icon className="size-3.5 text-[#4ADE80] shrink-0" />
-            <span className="text-[10px] text-[#D8CFBC] truncate">
-              {feature.text}
+            <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-lg border border-[#4ADE80]/20 bg-[#4ADE80]/10 text-[#4ADE80]">
+              <Icon className="size-3.5" />
             </span>
+            <span className="truncate text-xs font-medium text-[#D8CFBC]">{feature.text}</span>
           </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }

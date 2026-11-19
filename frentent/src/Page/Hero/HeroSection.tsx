@@ -1,11 +1,12 @@
+"use client";
 import HeroBackground from "./components/HeroBackground";
 import HeroBadge from "./components/HeroBadge";
 import HeroTitle from "./components/HeroTitle";
 import HeroSubtitle from "./components/HeroSubtitle";
-import HeroCTA from "./components/HeroCTA";
-import HeroStats from "./components/HeroStats";
 import HeroVisual from "./components/HeroVisual";
 import HeroScrollHint from "./components/HeroScrollHint";
+import HeroCTA from "./components/HeroCTA";
+import HeroStats from "./components/HeroStats";
 
 export default function HeroSection() {
   return (

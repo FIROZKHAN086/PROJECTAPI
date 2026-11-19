@@ -1,29 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Pencil,
-  Save,
-  Trash2,
-  FolderOpen,
-  Image as ImageIcon,
-  Tag,
-  ExternalLink,
-  GitBranch,
-  Star,
-  Plus,
-  X,
-  Loader2,
-  AlertTriangle,
-  Layers,
-  Sparkles,
-  CheckCircle2,
-  UploadCloud,
-  FileText,
-  Search,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, ExternalLink, FileText, FolderOpen, GitBranch, ImageIcon, Layers, Pencil, Save, Sparkles, Star, Tag, UploadCloud, X, Zap } from "@/src/Components/DynamicIcons";
 import {
   useProjects,
   useUpdateProject,
@@ -31,6 +11,9 @@ import {
 } from "@/src/hooks/useProjects";
 import { toast } from "@/src/lib/toastSlice";
 import { GlowCard } from "@/src/Components/dashboard/ui";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Trash2 , Loader2,  } from "@/src/Components/DynamicIcons";
+import Image from "next/image";
 
 const CATEGORIES = [
   "Web Application",
@@ -72,6 +55,7 @@ export default function EditProject() {
   // Auto-select first project if none preselected
   useEffect(() => {
     if (!selectedProjectId && projects.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedProjectId(preselectedId || projects[0].ProjectID);
     }
   }, [projects, selectedProjectId, preselectedId]);
@@ -80,38 +64,39 @@ export default function EditProject() {
     (p) => p.ProjectID === selectedProjectId
   );
 
-  useEffect(() => {
-    if (!selectedProject) return;
-    setTitle(selectedProject.title || "");
-    setDescription(selectedProject.description || "");
-    setTech(selectedProject.tech?.join(", ") || "");
-    setLiveDemo(selectedProject.liveDemo || "");
-    setGithub(selectedProject.github || "");
-    setCategory(selectedProject.category || "Web Application");
-    setFeatured(Boolean(selectedProject.featured));
-    setImagePreviewUrl(selectedProject.image || null);
-    setImageFile(null);
+  const [previousProject, setPreviousProject] = useState<typeof selectedProject>(undefined);
+  if (selectedProject !== previousProject) {
+    setPreviousProject(selectedProject);
+    if (selectedProject) {
+      setTitle(selectedProject.title || "");
+      setDescription(selectedProject.description || "");
+      setTech(selectedProject.tech?.join(", ") || "");
+      setLiveDemo(selectedProject.liveDemo || "");
+      setGithub(selectedProject.github || "");
+      setCategory(selectedProject.category || "Web Application");
+      setFeatured(Boolean(selectedProject.featured));
+      setImagePreviewUrl(selectedProject.image || null);
+      setImageFile(null);
 
-    if (
-      selectedProject.customFields &&
-      typeof selectedProject.customFields === "object"
-    ) {
-      const converted: Record<string, string> = {};
-      for (const [k, v] of Object.entries(selectedProject.customFields)) {
-        converted[k] = String(v);
+      if (
+        selectedProject.customFields &&
+        typeof selectedProject.customFields === "object"
+      ) {
+        const converted: Record<string, string> = {};
+        for (const [k, v] of Object.entries(selectedProject.customFields)) {
+          converted[k] = String(v);
+        }
+        setCustomFields(converted);
+      } else {
+        setCustomFields({});
       }
-      setCustomFields(converted);
-    } else {
-      setCustomFields({});
     }
-  }, [selectedProject]);
+  }
 
   useEffect(() => {
-    if (!imageFile) return;
-    const objectUrl = URL.createObjectURL(imageFile);
-    setImagePreviewUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [imageFile]);
+    if (!imagePreviewUrl?.startsWith("blob:")) return;
+    return () => URL.revokeObjectURL(imagePreviewUrl);
+  }, [imagePreviewUrl]);
 
   const handleAddCustomField = () => {
     if (!customKey.trim() || !customVal.trim()) return;
@@ -187,7 +172,7 @@ export default function EditProject() {
     .filter(Boolean);
 
   return (
-    <div className="space-y-8 text-[#FFFBF4]">
+    <div suppressHydrationWarning className="space-y-8 text-[#FFFBF4]">
       {/* ─── Header ────────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#161712]/80 p-6 backdrop-blur-md shadow-xl">
         <div className="space-y-1.5">
@@ -400,7 +385,9 @@ export default function EditProject() {
                   accept="image/*"
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
-                      setImageFile(e.target.files[0]);
+                      const file = e.target.files[0];
+                      setImageFile(file);
+                      setImagePreviewUrl(URL.createObjectURL(file));
                     }
                   }}
                   className="hidden"
@@ -477,9 +464,10 @@ export default function EditProject() {
             <div className="rounded-2xl border border-white/15 bg-[#161712]/95 shadow-2xl overflow-hidden">
               <div className="relative h-48 w-full bg-black/60 overflow-hidden flex items-center justify-center">
                 {imagePreviewUrl ? (
-                  <img
+                  <Image
                     src={imagePreviewUrl}
                     alt={title}
+                    fill
                     className="h-full w-full object-cover object-center"
                   />
                 ) : (

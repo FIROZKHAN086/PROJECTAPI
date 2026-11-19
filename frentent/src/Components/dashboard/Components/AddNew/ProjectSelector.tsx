@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FolderOpen, ChevronsUpDown, Star, Code, Badge } from "lucide-react";
+import { FolderOpen, ChevronsUpDown, Star, Code, Badge } from "@/src/Components/DynamicIcons";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
